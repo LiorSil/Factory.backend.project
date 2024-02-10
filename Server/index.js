@@ -6,8 +6,10 @@ const app = express();
  require('./Configs/database');
 
 
-app.use(cors());
+
 app.use(express.json());
+app.use(cors());
+app.options("*", cors());   
 
 //controllers or routes
 const authController = require('./Controllers/authController');

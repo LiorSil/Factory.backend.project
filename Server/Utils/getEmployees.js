@@ -129,12 +129,16 @@ function createTableCell(content) {
 }
 
 async function redirectToEditEmployee(employeeID) {
-  const editEmployeeURL = `./editEmployee.html?employeeID=${employeeID}`;
+  //i want to pass the employeeID to the edit_employee.html page
+  sessionStorage.setItem("employeeID", employeeID);
+  const editEmployeeURL = `./edit_employee.html`;
   window.location.href = editEmployeeURL;
 }
 
 async function redirectToEditDepartment(departmentID) {
-  const editDepartmentURL = `./editDepartment.html?departmentID=${departmentID}`;
+  //i want to pass the departmentID to the editDepartment.html page
+  sessionStorage.setItem("departmentID", departmentID);
+  const editDepartmentURL = `./edit_department.html`;
   window.location.href = editDepartmentURL;
 }
 
