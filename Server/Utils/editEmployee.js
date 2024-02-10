@@ -1,13 +1,24 @@
+const employeeID = sessionStorage.getItem("employeeID");
 const editEmployee = async () => {
   const token = sessionStorage.getItem("token");
   //TODO:: handel invalid token
   const employeeID = sessionStorage.getItem("employeeID");
 
+  //load the employee data to the form
   loadEmployeeEditPage(employeeID);
+
+  //Handling the update button
+  const updateButton = document.getElementById("updateEmployee");
+  updateButton.addEventListener("click", updateEmployee);
 };
 
-const updateEmployee = async (employeeID) => {
+//Declaration of functions
+
+const updateEmployee = async () => {
+  console.log("update employee");
+  alert("Employee updated successfully");
   //get the value of the input fields
+
   const fullName = document.getElementById("fullName").value;
   const firstName = fullName.split(" ")[0];
   const lastName = fullName.split(" ").slice(1).join(" ");
@@ -60,9 +71,12 @@ const loadEmployeeEditPage = async (employeeID) => {
   }
 };
 
+//Declaration function to fill the form with the employee data
 const nameAndDepartmentPlaceholder = async (employee) => {
   const fullName = document.getElementById("fullName");
   const department = document.getElementById("department");
+  
+  //covertDepartmentIDtoName is a function from departmentUtil.js
   const departmentName = await convertDepartmentIDtoName(employee.departmentId);
 
   fullName.value = `${employee.firstName} ${employee.lastName}`;
