@@ -112,7 +112,7 @@ async function filterByDepartment() {
       }
     );
     if (!resp.ok) {
-      throw new Error(`Failed to fetch data: ${resp.statusText}`);
+      throw new Error(`Failed to fetch data : ${resp.statusText}`);
     } else {
       const employees = await resp.json();
       fillTable(employees);
