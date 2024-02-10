@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employees Page</title>
+  <!-- Reference external CSS file -->
+  <link rel="stylesheet" href="./CSS/employees.styles.css">
+</head>
+<header></header>
+<body>
+   
+  <h1>Employees Page</h1>
+
+  <!-- Button to add a new employee -->
+  <button onclick="redirectToAddEmployee()">New Employee</button>
+
+  <!-- Dropdown to filter by department -->
+  <label for="departmentFilter">Filter by Department:</label>
+  <select id="departmentFilter" onchange="filterByDepartment()">
+    <option value="all">All Departments</option>
+    <option value="Sales">Sales</option>
+    <option value="Engineering">Engineering</option>
+    <option value="Marketing">Marketing</option>
+  </select>
+
+  <!-- Table to display employees data -->
+  <table>
+    <thead>
+      <tr>
+        <th>Full Name</th>
+        <th>Department</th>
+        <th>Shifts</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Sample row -->
+      <tr>
+        <td><a href="#" onclick="redirectToEditEmployee('employeeID')">Employee Name</a></td>
+        <td><a href="#" onclick="redirectToEditDepartment('departmentID')">Department Name</a></td>
+        <td>Date & Time</td>
+      </tr>
+    </tbody>
+
+  <!-- JavaScript functions for redirection and filtering -->
+    
+    <script src='../Utils/departmentUtil.js'></script>
+    <script src ='../Utils/clientPageOnLoadFunctions.js'></script>
+   <script src ='../Utils/getEmployees.js'>   
+    </script>
+    <script> ;</script>
+   
+</body>
+</html>

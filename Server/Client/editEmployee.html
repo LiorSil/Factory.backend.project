@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Employee Page</title>
+  <link rel="stylesheet" href="editEmployee.styles.css">
+</head>
+<body>
+
+  <h1>Edit Employee Page</h1>
+
+  <!-- Form for editing employee data -->
+  <form id="editEmployeeForm">
+    <label for="fullName">Full Name:</label>
+    <input type="text" id="fullName" name="fullName" required>
+
+    <label for="department">Department:</label>
+    <input type="text" id="department" name="department" required>
+
+    <!-- Add other fields as needed -->
+
+    <button type="button" onclick="updateEmployee()">Update</button>
+    <button type="button" onclick="deleteEmployee()">Delete</button>
+  </form>
+
+  <!-- Table for displaying shifts -->
+  <table id="shiftsTable">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Shifts data will be dynamically filled here -->
+    </tbody>
+  </table>
+
+  <!-- Option to register to an existing shift -->
+  <label for="shiftSelect">Register to Existing Shift:</label>
+  <select id="shiftSelect">
+    <!-- Options for existing shifts will be dynamically filled here -->
+  </select>
+  <button type="button" onclick="registerToShift()">Register</button>
+
+  <script src="editEmployeePage.js"></script>
+</body>
+</html>
