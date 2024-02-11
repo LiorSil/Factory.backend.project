@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Departments Page</title>
+  <!-- Reference external CSS file -->
+  <link rel="stylesheet" href="./CSS/departments.styles.css">
+</head>
+<body>
+
+  <h1>Departments Page</h1>
+
+  <!-- Button to add a new department -->
+  <button onclick="redirectToNewDepartment()">New Department</button>
+
+  <!-- Table to display departments data -->
+  <table>
+    <thead>
+      <tr>
+        <th>Department Name</th>
+        <th>Department Manager</th>
+        <th>Employees</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Sample row -->
+      <tr>
+        <td><a href="#" onclick="redirectToEditDepartment('departmentID')">Department Name</a></td>
+        <td><a href="#" onclick="redirectToEditEmployee('employeeID')">Manager Name</a></td>
+        <td>
+          <a href="#" onclick="redirectToEditEmployee('employeeID1')">Employee 1</a>,
+          <a href="#" onclick="redirectToEditEmployee('employeeID2')">Employee 2</a>,
+          <a href="#" onclick="redirectToEditEmployee('employeeID3')">Employee 3</a>
+        </td>
+      </tr>
+      <!-- Add more rows dynamically if needed -->
+    </tbody>
+  </table>
+
+  <!-- JavaScript functions for redirection -->
+  <script>
+    function redirectToNewDepartment() {
+      // Implement redirection logic to "Add Department" page
+      window.location.href = "./add_department.html";
+    }
+
+    function redirectToEditDepartment(departmentID) {
+      // Implement redirection logic to "Edit Department" page with department ID
+      window.location.href = `./edit_department.html?departmentID=${departmentID}`;
+    }
+
+    function redirectToEditEmployee(employeeID) {
+      // Implement redirection logic to "Edit Employee" page with employee ID
+      window.location.href = `./edit_employee.html?employeeID=${employeeID}`;
+    }
+  </script>
+
+</body>
+</html>

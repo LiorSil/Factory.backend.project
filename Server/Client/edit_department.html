@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Department Page</title>
+  <!-- Reference external CSS file -->
+  <link rel="stylesheet" href="./CSS/editDepartment.styles.css">
+</head>
+<body>
+
+  <h1>Edit Department Page</h1>
+
+  <!-- Form with employee data -->
+  <form id="editDepartmentForm">
+    <!-- Include form fields for editing department data -->
+    <!-- Example: -->
+    <label for="departmentName">Department Name:</label>
+    <input type="text" id="department" name="departmentName" required>
+    <br>
+    <label for="departmentManager">Department Manager:</label>
+    <input type="text" id="manager" name="departmentManager" required>
+    <br>
+    <!-- Add more form fields as needed -->
+
+    <!-- Table with shifts data -->
+    <table>
+      <thead>
+        <tr>
+          <th>Shift Date</th>
+          <th>Shift Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Sample row -->
+        <tr>
+          <td>2024-02-09</td>
+          <td>09:00 AM - 05:00 PM</td>
+        </tr>
+        <!-- Add more rows dynamically if needed -->
+      </tbody>
+    </table>
+
+    <!-- Button to update department data -->
+    <button type="button">Update Department</button>
+
+    <!-- Button to delete department data -->
+    <button type="button">Delete Department</button>
+
+    <!-- Option to register to an existing shift -->
+    <label for="existingShift">Register to Existing Shift:</label>
+    <select id="existingShift">
+      <option value="shiftID1">Shift Date 1 - Time 1</option>
+      <option value="shiftID2">Shift Date 2 - Time 2</option>
+      <!-- Add more options dynamically if needed -->
+    </select>
+    <button type="button" >Register to Shift</button>
+  </form>
+
+  <!-- JavaScript functions for updating, deleting, and registering to shift -->
+  <script src ="../Utils/editDepartment.js"></script>
+  <script src = "../Utils/clientPageOnLoadFunctions.js"></script>
+  <script src ="../Utils/departmentUtil.js"></script>
+  <script src ="../Utils/employeeUtil.js"></script>
+
+</body>
+</html>

@@ -79,8 +79,8 @@ const nameAndDepartmentPlaceholder = async (employee) => {
   //covertDepartmentIDtoName is a function from departmentUtil.js
   const departmentName = await convertDepartmentIDtoName(employee.departmentId);
 
-  fullName.value = `${employee.firstName} ${employee.lastName}`;
-  department.value = departmentName;
+  fullName.placeholder = `${employee.firstName} ${employee.lastName}`;
+  department.placeholder = departmentName;
 };
 
 window.onload = editEmployee;

@@ -6,7 +6,7 @@ function displayUserAndLogout() {
   // Check if the user is logged in
   if (userName) {
     // Create an element to display the user's name
-    const userElement = document.createElement("div");
+  const userElement = document.createElement("div");
     userElement.textContent = `Welcome, ${userName}!`;
     userElement.style.fontWeight = "bold";
     userElement.style.padding = "10px";

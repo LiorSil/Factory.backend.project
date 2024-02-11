@@ -37,11 +37,12 @@ function fillTable(employees) {
       redirectToEditEmployee(employee._id)
     );
 
-    const departmentName = await convertDepartmentIDtoName(
-      employee.departmentId
-    );
-    const departmentCell = createClickableTableCell(departmentName || "", () =>
-      redirectToEditDepartment(employee.departmentId)
+    const departmentID = await employee.departmentId;
+
+    const departmentName = await convertDepartmentIDtoName(departmentID);
+    const departmentCell = await createClickableTableCell(
+      departmentName || "",
+      () => redirectToEditDepartment(departmentID)
     );
 
     const shiftsCell = createTableCell(
@@ -120,10 +121,9 @@ async function filterByDepartment() {
   }
 }
 
-
 // Function to create a table cell with content
 function createTableCell(content) {
-  const cell = document.createElement('td');
+  const cell = document.createElement("td");
   cell.textContent = content;
   return cell;
 }
