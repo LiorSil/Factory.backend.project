@@ -1,4 +1,10 @@
 // Function to fetch employees from the server and fill the table
+
+const startUpEmployees = async () => {
+  const employees = await getEmployees();
+  fillTable(employees);
+};
+
 async function getEmployees() {
   try {
     const token = sessionStorage.getItem("token");
@@ -18,7 +24,7 @@ async function getEmployees() {
     }
 
     const employees = await resp.json();
-    fillTable(employees);
+    return employees;
   } catch (error) {
     console.error(error);
     // Handle errors as needed
@@ -26,7 +32,7 @@ async function getEmployees() {
 }
 
 // Function to fill the table with employee data
-function fillTable(employees) {
+async function fillTable(employees) {
   const tableBody = document.querySelector("table tbody");
   tableBody.innerHTML = ""; // Clear existing rows
 
@@ -142,6 +148,5 @@ async function redirectToEditDepartment(departmentID) {
   window.location.href = editDepartmentURL;
 }
 
-
 // Call the getEmployees function when the page loads
-window.onload = getEmployees;
+window.onload = startUpEmployees;

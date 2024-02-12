@@ -29,7 +29,11 @@ const getEditDepartment = async () => {
 
     departmentManagerPlaceholder(departmentManagerName);
   }
+
+  await fillOptionsWithEmployees();
 };
+
+//End of getEditDepartment function
 
 const departmentNamePlaceholder = async (departmentName) => {
   console.log(`departmentName: ${departmentName}`);
@@ -41,6 +45,32 @@ const departmentManagerPlaceholder = async (departmentManagerName) => {
   console.log(`departmentManagerName: ${departmentManagerName}`);
   const departmentManagerElement = document.getElementById("manager");
   departmentManagerElement.placeholder = departmentManagerName;
+};
+
+const fillOptionsWithEmployees = async () => {
+  const notBelongingEmployees = await getEmployeesNotInDepartment();
+  const employeeDropdown = document.getElementById("employeeDropdown");
+
+  notBelongingEmployees.forEach(async (employee) => {
+    const option = document.createElement("option");
+    const fullName = `${employee.firstName} ${employee.lastName}`;
+    option.value = fullName;
+    option.text = fullName;
+    employeeDropdown.add(option);
+  });
+};
+
+const getEmployeesNotInDepartment = async () => {
+  const departmentID = sessionStorage.getItem("departmentID");
+  const employees = await getEmployees();
+
+  //return employees that are not in the department
+  const employeesNotInDepartment = employees.filter(
+    (employee) => employee.departmentId !== departmentID
+  );
+
+
+  return await employeesNotInDepartment;
 };
 
 // Call the getEmployees function when the page loads

@@ -7,7 +7,7 @@
   <!-- Reference external CSS file -->
   <link rel="stylesheet" href="./CSS/editDepartment.styles.css">
 </head>
-<body>
+<br>
 
   <h1>Edit Department Page</h1>
 
@@ -23,23 +23,7 @@
     <br>
     <!-- Add more form fields as needed -->
 
-    <!-- Table with shifts data -->
-    <table>
-      <thead>
-        <tr>
-          <th>Shift Date</th>
-          <th>Shift Time</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Sample row -->
-        <tr>
-          <td>2024-02-09</td>
-          <td>09:00 AM - 05:00 PM</td>
-        </tr>
-        <!-- Add more rows dynamically if needed -->
-      </tbody>
-    </table>
+  
 
     <!-- Button to update department data -->
     <button type="button">Update Department</button>
@@ -47,14 +31,26 @@
     <!-- Button to delete department data -->
     <button type="button">Delete Department</button>
 
-    <!-- Option to register to an existing shift -->
-    <label for="existingShift">Register to Existing Shift:</label>
-    <select id="existingShift">
-      <option value="shiftID1">Shift Date 1 - Time 1</option>
-      <option value="shiftID2">Shift Date 2 - Time 2</option>
-      <!-- Add more options dynamically if needed -->
-    </select>
-    <button type="button" >Register to Shift</button>
+  <!-- Dropdown to select employees -->
+  <label for="employeeDropdown">Select Employee:</label>
+  <select id="employeeDropdown">
+    <!-- Option to add a new employee -->
+    <!-- <option value="addNew">Add New Employee</option> -->
+    <!-- Add existing employees dynamically here -->
+    <!-- Example: -->
+    <!-- <option value="employee1">Employee 1</option> -->
+    <!-- <option value="employee2">Employee 2</option> -->
+    <!-- Add more options as needed -->
+  </select>
+
+  <!-- Input field for a new employee -->
+  <div id="newEmployeeInput" style="display: none;">
+    <label for="newEmployeeName">New Employee Name:</label>
+    <input type="text" id="newEmployeeName" placeholder="Enter name">
+  </div>
+
+  <!-- Button to add the selected employee to the department -->
+  <button onclick="addEmployeeToDepartment()">Add Employee to Department</button>
   </form>
 
   <!-- JavaScript functions for updating, deleting, and registering to shift -->
@@ -63,5 +59,8 @@
   <script src ="../Utils/departmentUtil.js"></script>
   <script src ="../Utils/employeeUtil.js"></script>
 
+
+  
+ 
 </body>
 </html>

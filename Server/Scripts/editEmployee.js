@@ -1,4 +1,4 @@
-const employeeID = sessionStorage.getItem("employeeID");
+const employeeID = sessionStorage.getItem("employeeIDgetEmpl");
 const editEmployee = async () => {
   const token = sessionStorage.getItem("token");
   //TODO:: handel invalid token
@@ -75,7 +75,7 @@ const loadEmployeeEditPage = async (employeeID) => {
 const nameAndDepartmentPlaceholder = async (employee) => {
   const fullName = document.getElementById("fullName");
   const department = document.getElementById("department");
-  
+
   //covertDepartmentIDtoName is a function from departmentUtil.js
   const departmentName = await convertDepartmentIDtoName(employee.departmentId);
 
