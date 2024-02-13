@@ -7,7 +7,7 @@
   <!-- Reference external CSS file -->
   <link rel="stylesheet" href="./CSS/editDepartment.styles.css">
 </head>
-<br>
+<body> <!-- Add the opening body tag here -->
 
   <h1>Edit Department Page</h1>
 
@@ -16,14 +16,11 @@
     <!-- Include form fields for editing department data -->
     <!-- Example: -->
     <label for="departmentName">Department Name:</label>
-    <input type="text" id="department" name="departmentName" required>
-    <br>
-    <label for="departmentManager">Department Manager:</label>
-    <input type="text" id="manager" name="departmentManager" required>
-    <br>
+<input type="text" id="department" name="departmentName" >
+<br>
+<label for="departmentManager">Department Manager:</label>
+<input type="text" id="manager" name="departmentManager" >
     <!-- Add more form fields as needed -->
-
-  
 
     <!-- Button to update department data -->
     <button type="button">Update Department</button>
@@ -31,26 +28,26 @@
     <!-- Button to delete department data -->
     <button type="button">Delete Department</button>
 
-  <!-- Dropdown to select employees -->
-  <label for="employeeDropdown">Select Employee:</label>
-  <select id="employeeDropdown">
-    <!-- Option to add a new employee -->
-    <!-- <option value="addNew">Add New Employee</option> -->
-    <!-- Add existing employees dynamically here -->
-    <!-- Example: -->
-    <!-- <option value="employee1">Employee 1</option> -->
-    <!-- <option value="employee2">Employee 2</option> -->
-    <!-- Add more options as needed -->
-  </select>
+    <!-- Dropdown to select employees -->
+    <label for="employeeDropdown">Select Employee:</label>
+    <select id="employeeDropdown">
+      <!-- Option to add a new employee -->
+      <!-- <option value="addNew">Add New Employee</option> -->
+      <!-- Add existing employees dynamically here -->
+      <!-- Example: -->
+      <!-- <option value="employee1">Employee 1</option> -->
+      <!-- <option value="employee2">Employee 2</option> -->
+      <!-- Add more options as needed -->
+    </select>
 
-  <!-- Input field for a new employee -->
-  <div id="newEmployeeInput" style="display: none;">
-    <label for="newEmployeeName">New Employee Name:</label>
-    <input type="text" id="newEmployeeName" placeholder="Enter name">
-  </div>
+    <!-- Input field for a new employee -->
+    <div id="newEmployeeInput" style="display: none;">
+      <label for="newEmployeeName">New Employee Name:</label>
+      <input type="text" id="newEmployeeName" placeholder="Enter name">
+    </div>
 
-  <!-- Button to add the selected employee to the department -->
-  <button onclick="addEmployeeToDepartment()">Add Employee to Department</button>
+    <!-- Button to add the selected employee to the department -->
+    <button id="addEmployeeButton">Add Employee to Department</button>
   </form>
 
   <!-- JavaScript functions for updating, deleting, and registering to shift -->
@@ -59,8 +56,24 @@
   <script src ="../Utils/departmentUtil.js"></script>
   <script src ="../Utils/employeeUtil.js"></script>
 
+  <script>
+let chosenEmployee =null
 
+document
+      .getElementById("employeeDropdown")
+      .addEventListener("change", async () => {
+        const e = await getChosenEmployee();
+        chosenEmployee = e.id;
+      });
   
- 
-</body>
+document.getElementById("addEmployeeButton")
+.addEventListener("click", async ()=>{
+console.log("test");
+ fetchDatePut()
+}
+ )
+
+    
+  </script>
+</body> <!-- Add the closing body tag here -->
 </html>

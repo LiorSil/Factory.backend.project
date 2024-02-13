@@ -20,14 +20,24 @@ const getEmployeesByDepartment = async (departmentName) => {
   console.log(`Department ID: ${departmentId}`);
   const employees = await getEmployees();
 
-
-  //const employeesInDepartment = employees.filter((employee) => employee.departmentId === departmentId)
-  const mongoose = require("mongoose");
-
-const employeesInDepartment = employees.filter(employee =>
-     employee.departmentId.equals(departmentId));
+  const employeesInDepartment = employees.filter((employee) =>
+    employee.departmentId.equals(departmentId)
+  );
 
   return employeesInDepartment;
+};
+
+const updateEmployeeDepartment = async (departmentId, employeeId) => {
+  try {
+    const department = await employeeRepo.updateEmployeeDepartment(
+      departmentId,
+      employeeId
+    );
+    console.log(`Service success: ${department}`);
+    return department;
+  } catch (error) {
+    console.log(`Service error: ${error}`);
+  }
 };
 
 module.exports = {
@@ -35,4 +45,5 @@ module.exports = {
   getEmployeeByID,
   getEmployees,
   getEmployeesByDepartment,
+  updateEmployeeDepartment,
 };

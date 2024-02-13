@@ -1,6 +1,5 @@
 async function getEmployees() {
   try {
-    console.log(`second test`);
     const token = sessionStorage.getItem("token");
     if (!token) {
       throw new Error("No token found");

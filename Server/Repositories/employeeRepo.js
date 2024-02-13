@@ -1,43 +1,61 @@
-const employeeModel = require('../Models/employeeModel');   
+const employeeModel = require("../Models/employeeModel");
 
-const getEmployee = async (id) => { 
-    return  await employeeModel.findById(id)
-}
+const getEmployee = async (id) => {
+  return await employeeModel.findById(id);
+};
 
 const getEmployees = async () => {
   return await employeeModel.find();
-};   
+};
 
 const deleteEmployee = async (id) => {
-    const employeeName = await getEmployeeName(id);
-    console.log(`Deleting employee: ${employeeName}`    );
-    await employeeModel.findByIdAndDelete(id);  
-}
+  const employeeName = await getEmployeeName(id);
+  console.log(`Deleting employee: ${employeeName}`);
+  await employeeModel.findByIdAndDelete(id);
+};
 
 const getEmployeeName = async (id) => {
-    const employee = await employeeModel.findById(id);
-    console.log("Getting employee name by id...");
-    return employee.firstName + " " + employee.lastName;
-}
+  const employee = await employeeModel.findById(id);
+  console.log("Getting employee name by id...");
+  return employee.firstName + " " + employee.lastName;
+};
 
-const createEmployee = async (firstName, lastName, startWorkYear, departmentId) => {    
-    console.log(`Creating employee: ${firstName} ${lastName} with startWorkYear: ${startWorkYear} and departmentId: ${departmentId}`);
-    const newEmployee = new employeeModel({firstName, lastName, startWorkYear, departmentId});
-    await newEmployee.save();
-}   
+const createEmployee = async (
+  firstName,
+  lastName,
+  startWorkYear,
+  departmentId
+) => {
+  console.log(
+    `Creating employee: ${firstName} ${lastName} with startWorkYear: ${startWorkYear} and departmentId: ${departmentId}`
+  );
+  const newEmployee = new employeeModel({
+    firstName,
+    lastName,
+    startWorkYear,
+    departmentId,
+  });
+  await newEmployee.save();
+};
 const getShifts = async (id) => {
-    const employee = await getEmployee(id);
-    return employee.shifts;
-}
+  const employee = await getEmployee(id);
+  return employee.shifts;
+};
 
-
+const updateEmployeeDepartment = async (departmentId, employeeId) => {
+  console.log(`Updating employee department to: ${departmentId}`);
+  const employee = await getEmployee(employeeId);
+  employee.departmentId = departmentId;
+  await employee.save();
+  return employee;
+};
 
 module.exports = {
-    getEmployee,
-    deleteEmployee,
-    getEmployeeName,
-    createEmployee,
-    getShifts,
-    getEmployees
-}
-        
+  getEmployee,
+  deleteEmployee,
+  getEmployeeName,
+  createEmployee,
+  getShifts,
+  getEmployees,
+  updateEmployeeDepartment,
+};
