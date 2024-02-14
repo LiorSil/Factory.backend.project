@@ -7,6 +7,7 @@ const getEditDepartment = async () => {
   // async way to set placeholder for department name
 
   //get the department manager
+  let departmentManagerID = null;
   const resp = await fetch(
     `http://localhost:3000/departments/${departmentID}`,
     {
@@ -22,15 +23,11 @@ const getEditDepartment = async () => {
   } else {
     const department = await resp.json();
     // Call the function to fill the form with the department date
-    const departmentManagerID = await department.manager;
-    const departmentManagerName = await convertEmployeeIDtoName(
-      departmentManagerID
-    );
-
-    departmentManagerPlaceholder(departmentManagerName);
+    departmentManagerID = await department.manager;
   }
 
-  await fillOptionsWithEmployees();
+  await addEmployeesToSelect();
+  await addManagerToSelect(departmentManagerID);
 };
 
 //End of getEditDepartment function
@@ -38,27 +35,30 @@ const getEditDepartment = async () => {
 const departmentNamePlaceholder = async (departmentName) => {
   console.log(`departmentName: ${departmentName}`);
   const departmentNameElement = document.getElementById("department");
+
   departmentNameElement.placeholder = departmentName;
 };
 
-const departmentManagerPlaceholder = async (departmentManagerName) => {
-  console.log(`departmentManagerName: ${departmentManagerName}`);
-  const departmentManagerElement = document.getElementById("manager");
-  departmentManagerElement.placeholder = departmentManagerName;
-};
-
-const fillOptionsWithEmployees = async () => {
-  const notBelongingEmployees = await getEmployeesNotInDepartment();
-  const employeeDropdown = document.getElementById("employeeDropdown");
-
-  notBelongingEmployees.forEach(async (employee) => {
+const fillOptionsWithEmployees = async (employees, dropdown) => {
+  employees.forEach(async (employee) => {
     const option = document.createElement("option");
     const fullName = `${employee.firstName} ${employee.lastName}`;
     option.value = fullName;
     option.text = fullName;
     option.id = employee._id;
-    employeeDropdown.add(option);
+    dropdown.add(option);
   });
+};
+
+const getEmployeesInDepartment = async () => {
+  const departmentID = sessionStorage.getItem("departmentID");
+  const employees = await getEmployees();
+
+  //return employees that are in the department
+  const employeesInDepartment = employees.filter(
+    (employee) => employee.departmentId === departmentID
+  );
+  return await employeesInDepartment;
 };
 
 const getEmployeesNotInDepartment = async () => {
@@ -71,6 +71,20 @@ const getEmployeesNotInDepartment = async () => {
   );
 
   return await employeesNotInDepartment;
+};
+
+const addManagerToSelect = async (departmentManagerID) => {
+  const departmentEmployees = await getEmployeesInDepartment();
+  const managerDropdown = document.getElementById("departmentManagerDropdown");
+  await fillOptionsWithEmployees(departmentEmployees, managerDropdown);
+  //set current manager as selected option
+  managerDropdown.value = await convertEmployeeIDtoName(departmentManagerID);
+};
+
+const addEmployeesToSelect = async () => {
+  const notBelongingEmployees = await getEmployeesNotInDepartment();
+  const employeeDropdown = document.getElementById("employeeDropdown");
+  await fillOptionsWithEmployees(notBelongingEmployees, employeeDropdown);
 };
 
 const getChosenEmployee = async () => {
@@ -86,7 +100,7 @@ const getChosenEmployee = async () => {
   return employee;
 };
 
-const fetchDatePut = async () => {
+const updateDataToDB = async () => {
   try {
     const department = sessionStorage.getItem("departmentID");
     const chosenEmployee = await getChosenEmployee();
@@ -113,19 +127,6 @@ const fetchDatePut = async () => {
   } catch (error) {
     console.log(`Error1: ${error}`);
   }
-  // try {
-  //   const resp2 = await fetch("http://localhost:3000/employees/test", {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   });
-
-  //   const status2 = await resp2.json();
-  //   console.log(`Status2: ${status2.message}`);
-  // } catch (error) {
-  //   console.log(`Error2: ${error}`);
-  // }
 };
 
 // Call the getEmployees function when the page loads

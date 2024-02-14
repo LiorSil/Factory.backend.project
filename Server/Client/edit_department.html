@@ -16,10 +16,10 @@
     <!-- Include form fields for editing department data -->
     <!-- Example: -->
     <label for="departmentName">Department Name:</label>
-<input type="text" id="department" name="departmentName" >
+<input type="text" id="department" name="departmentName" disabled = 'true' >
 <br>
-<label for="departmentManager">Department Manager:</label>
-<input type="text" id="manager" name="departmentManager" >
+<label for="departmentManagerDropdown">Department Manager:</label>
+<select id="departmentManagerDropdown" >  </select>
     <!-- Add more form fields as needed -->
 
     <!-- Button to update department data -->
@@ -30,15 +30,7 @@
 
     <!-- Dropdown to select employees -->
     <label for="employeeDropdown">Select Employee:</label>
-    <select id="employeeDropdown">
-      <!-- Option to add a new employee -->
-      <!-- <option value="addNew">Add New Employee</option> -->
-      <!-- Add existing employees dynamically here -->
-      <!-- Example: -->
-      <!-- <option value="employee1">Employee 1</option> -->
-      <!-- <option value="employee2">Employee 2</option> -->
-      <!-- Add more options as needed -->
-    </select>
+    <select id="employeeDropdown"></select>
 
     <!-- Input field for a new employee -->
     <div id="newEmployeeInput" style="display: none;">
@@ -68,8 +60,7 @@ document
   
 document.getElementById("addEmployeeButton")
 .addEventListener("click", async ()=>{
-console.log("test");
- fetchDatePut()
+ updateDataToDB()
 }
  )
 
