@@ -101,6 +101,7 @@ const getChosenEmployee = async () => {
 };
 
 const updateDataToDB = async () => {
+  console.log("update department");
   try {
     const department = sessionStorage.getItem("departmentID");
     const chosenEmployee = await getChosenEmployee();
