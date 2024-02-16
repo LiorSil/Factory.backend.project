@@ -23,7 +23,7 @@
     <!-- Add more form fields as needed -->
 
     <!-- Button to update department data -->
-    <button type="button">Update Department</button>
+    <button id="updateDepartmentButton" type="button">Update Department</button>
 
     <!-- Button to delete department data -->
     <button type="button">Delete Department</button>
@@ -50,19 +50,48 @@
 
   <script>
 let chosenEmployee =null
+let chosenManager = null
+  
+  
+
+
+document
+.getElementById("departmentManagerDropdown")
+.addEventListener("change", async () => {
+  const ce = await getChosenEmployee("departmentManagerDropdown");
+  chosenManager = ce.id;
+});
+
+document.getElementById("updateDepartmentButton")
+.addEventListener("click", async (e) => {
+  e.preventDefault(); 
+  updateDepartmentManger();
+  window.location.reload();
+  if(chosenManager != null){
+    window.location.reload();
+  }
+
+});
 
 document
       .getElementById("employeeDropdown")
       .addEventListener("change", async () => {
-        const e = await getChosenEmployee();
-        chosenEmployee = e.id;
+        const ce = await getChosenEmployee("employeeDropdown");
+        chosenEmployee = ce.id;
       });
   
 document.getElementById("addEmployeeButton")
-.addEventListener("click", async ()=>{
- updateDataToDB()
-}
- )
+.addEventListener("click", async (e)=>{
+  e.preventDefault();
+ updateEmployeeDepartment()
+ if(chosenEmployee != null){
+  window.location.reload();
+ }
+ 
+})
+
+
+
 
     
   </script>

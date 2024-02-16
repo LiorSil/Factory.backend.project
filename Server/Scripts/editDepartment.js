@@ -87,8 +87,8 @@ const addEmployeesToSelect = async () => {
   await fillOptionsWithEmployees(notBelongingEmployees, employeeDropdown);
 };
 
-const getChosenEmployee = async () => {
-  const employeeDropdown = document.getElementById("employeeDropdown");
+const getChosenEmployee = async (elementID) => {
+  const employeeDropdown = document.getElementById(elementID);
   const employeeChosen = employeeDropdown.value;
   const employeeID =
     employeeDropdown.options[employeeDropdown.selectedIndex].id;
@@ -100,11 +100,12 @@ const getChosenEmployee = async () => {
   return employee;
 };
 
-const updateDataToDB = async () => {
+const updateEmployeeDepartment = async () => {
   console.log("update department");
   try {
     const department = sessionStorage.getItem("departmentID");
-    const chosenEmployee = await getChosenEmployee();
+    const dropdownID = "employeeDropdown";
+    const chosenEmployee = await getChosenEmployee(dropdownID);
 
     console.log(`department: ${department}`);
     console.log(`chosenEmployee: ${chosenEmployee.id}`);
@@ -127,6 +128,53 @@ const updateDataToDB = async () => {
     console.log(status.success);
   } catch (error) {
     console.log(`Error1: ${error}`);
+  }
+};
+
+const updateDepartmentManger = async () => {
+  console.log("update department manager");
+  try {
+    const department = sessionStorage.getItem("departmentID");
+    const dropdownID = "departmentManagerDropdown";
+    const chosenEmployee = await getChosenEmployee(dropdownID);
+
+    console.log(`department: ${department}`);
+    console.log(`chosenManager: ${chosenEmployee.id}`);
+
+    const resp = await fetch(
+      "http://localhost:3000/departments/updateManager",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          departmentId: department,
+          employeeId: chosenEmployee.id,
+        }),
+      }
+    );
+
+    const status = await resp.json();
+    console.log(`manager status: ${status.success}`);
+  } catch (error) {
+    console.log(`Error1: ${error}`);
+  }
+};
+
+const isManager = async (employeeID) => {
+  const resp = await fetch(`http://localhost:3000/employees/${employeeID}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch data : ${resp.statusText}`);
+  } else {
+    const employee = await resp.json();
+    return employee.isManager;
   }
 };
 

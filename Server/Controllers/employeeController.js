@@ -55,8 +55,4 @@ router.put("/updateDepartment", async (req, res) => {
   }
 });
 
-router.get("/test", async (req, res) => {
-  return res.json({ message: "Employee test route" });
-});
-
 module.exports = router;

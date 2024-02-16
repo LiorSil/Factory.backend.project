@@ -46,6 +46,21 @@ const getManager = async (id) => {
   return department.manager; // returns the id of the manager
 };
 
+const getAllManagers = async () => {
+  const departments = await departmentModel.find();
+  let managers = [];
+  departments.forEach((department) => {
+    managers.push(department.manager);
+  });
+  return managers;
+};
+
+const updateManager = async (departmentId, employeeId) => {
+  const department = await departmentModel.findById(departmentId);
+  department.manager = employeeId;
+  await department.save();
+};
+
 module.exports = {
   getDepartmentName,
   getDepartment,
@@ -54,4 +69,6 @@ module.exports = {
   createDepartment,
   getManager,
   getDepartmentID,
+  updateManager,
+  getAllManagers,
 };
