@@ -19,7 +19,6 @@ router.get("/department/:departmentName", async (req, res) => {
   const employees = await employeeService.getEmployeesByDepartment(
     departmentName
   );
-  console.log(`Employees: ${employees}`);
   return res.json(employees);
 });
 
@@ -51,7 +50,12 @@ router.put("/updateDepartment", async (req, res) => {
     };
     return res.json(status);
   } catch (error) {
-    console.log(`Service error: ${error}`);
+    const status = {
+      success: "false",
+      message: error.message,
+      employee: null,
+    };
+    return res.json(status);
   }
 });
 

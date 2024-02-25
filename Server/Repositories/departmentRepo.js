@@ -6,9 +6,7 @@ const getDepartmentID = async (departmentName) => {
       name: departmentName,
     });
     return department._id;
-  } catch (error) {
-    console.log(`Error in getDepartmentID: ${error}`);
-  }
+  } catch (error) {}
 };
 
 const getDepartmentName = async (id) => {
@@ -22,7 +20,6 @@ const getDepartment = async (id) => {
 
 const updateDepartment = async (id, name, manager) => {
   const department = await departmentModel.findById(id);
-  console.log("Updating department" + department.name + " to " + name);
   department.name = name;
   department.manager = manager;
 
@@ -31,12 +28,10 @@ const updateDepartment = async (id, name, manager) => {
 
 const deleteDepartment = async (id) => {
   const departmentName = await getDepartmentName(id);
-  console.log("Deleting department: " + departmentName);
   await departmentModel.findByIdAndDelete(id);
 };
 
 const createDepartment = async (name, manager) => {
-  console.log("Creating department: " + name + " with manager: " + manager);
   const newDepartment = new departmentModel({ name, manager });
   await newDepartment.save();
 };

@@ -32,9 +32,9 @@ router.put("/updateManager", async (req, res) => {
   }
 });
 
-router.get("/isManager", async (req, res) => {
+router.get("/isManager/:id", async (req, res) => {
   try {
-    const isManager = await departmentService.isManager(req.body.employeeId);
+    const isManager = await departmentService.isManager(req.params.id);
     return res.json({ isManager: isManager });
   } catch (error) {
     return res

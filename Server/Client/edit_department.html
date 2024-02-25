@@ -1,99 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Department Page</title>
-  <!-- Reference external CSS file -->
-  <link rel="stylesheet" href="./CSS/editDepartment.styles.css">
-</head>
-<body> <!-- Add the opening body tag here -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Department Page</title>
+    <!-- Reference external CSS file -->
+    <link rel="stylesheet" href="./CSS/editDepartment.styles.css" />
+  </head>
+  <body>
+    <!-- Add the opening body tag here -->
 
-  <h1>Edit Department Page</h1>
+    <h1>Edit Department Page</h1>
 
-  <!-- Form with employee data -->
-  <form id="editDepartmentForm">
-    <!-- Include form fields for editing department data -->
-    <!-- Example: -->
-    <label for="departmentName">Department Name:</label>
-<input type="text" id="department" name="departmentName" disabled = 'true' >
-<br>
-<label for="departmentManagerDropdown">Department Manager:</label>
-<select id="departmentManagerDropdown" >  </select>
-    <!-- Add more form fields as needed -->
+    <!-- Form with employee data -->
+    <form id="editDepartmentForm">
+      <!-- Include form fields for editing department data -->
+      <!-- Example: -->
+      <label for="departmentName">Department Name:</label>
+      <input
+        type="text"
+        id="department"
+        name="departmentName"
+        disabled="true"
+      />
+      <br />
+      <label for="departmentManagerDropdown">Department Manager:</label>
+      <select id="departmentManagerDropdown"></select>
+      <!-- Add more form fields as needed -->
 
-    <!-- Button to update department data -->
-    <button id="updateDepartmentButton" type="button">Update Department</button>
+      <!-- Button to update department data -->
+      <button id="updateDepartmentButton" type="button">
+        Update Department
+      </button>
 
-    <!-- Button to delete department data -->
-    <button type="button">Delete Department</button>
+      <!-- Button to delete department data -->
+      <button id="deleteDepartmentButton" type="button">
+        Delete Department
+      </button>
 
-    <!-- Dropdown to select employees -->
-    <label for="employeeDropdown">Select Employee:</label>
-    <select id="employeeDropdown"></select>
+      <!-- Dropdown to select employees -->
+      <label for="employeeDropdown">Select Employee:</label>
+      <select id="employeeDropdown"></select>
 
-    <!-- Input field for a new employee -->
-    <div id="newEmployeeInput" style="display: none;">
-      <label for="newEmployeeName">New Employee Name:</label>
-      <input type="text" id="newEmployeeName" placeholder="Enter name">
-    </div>
+      <!-- Input field for a new employee -->
+      <div id="newEmployeeInput" style="display: none">
+        <label for="newEmployeeName">New Employee Name:</label>
+        <input type="text" id="newEmployeeName" placeholder="Enter name" />
+      </div>
 
-    <!-- Button to add the selected employee to the department -->
-    <button id="addEmployeeButton">Add Employee to Department</button>
-  </form>
+      <!-- Button to add the selected employee to the department -->
+      <button id="addEmployeeButton">Add Employee to Department</button>
+    </form>
 
-  <!-- JavaScript functions for updating, deleting, and registering to shift -->
-  <script src ="../Scripts/editDepartment.js"></script>
-  <script src = "../Utils/clientPageOnLoadFunctions.js"></script>
-  <script src ="../Utils/departmentUtil.js"></script>
-  <script src ="../Utils/employeeUtil.js"></script>
+    <!-- JavaScript functions for updating, deleting, and registering to shift -->
+    <script src="../Scripts/editDepartment.js"></script>
+    <script src="../Utils/clientPageOnLoadFunctions.js"></script>
+    <script src="../Utils/departmentUtil.js"></script>
+    <script src="../Utils/employeeUtil.js"></script>
 
-  <script>
-let chosenEmployee =null
-let chosenManager = null
-  
-  
+    <script>
+      let chosenEmployee = null;
+      let chosenManager = null;
 
+      document
+        .getElementById("departmentManagerDropdown")
+        .addEventListener("change", async () => {
+          const selectedEmployee = await getChosenEmployee(
+            "departmentManagerDropdown"
+          );
+          chosenManager = selectedEmployee.id;
+        });
 
-document
-.getElementById("departmentManagerDropdown")
-.addEventListener("change", async () => {
-  const ce = await getChosenEmployee("departmentManagerDropdown");
-  chosenManager = ce.id;
-});
+      document
+        .getElementById("updateDepartmentButton")
+        .addEventListener("click", async (e) => {
+          e.preventDefault();
+          updateDepartmentManger();
 
-document.getElementById("updateDepartmentButton")
-.addEventListener("click", async (e) => {
-  e.preventDefault(); 
-  updateDepartmentManger();
-  window.location.reload();
-  if(chosenManager != null){
-    window.location.reload();
-  }
+          window.location.reload();
+          if (chosenManager != null) {
+            window.location.reload();
+          }
+        });
 
-});
+      document
+        .getElementById("employeeDropdown")
+        .addEventListener("change", async () => {
+          const selectedEmployee = await getChosenEmployee("employeeDropdown");
+          chosenEmployee = selectedEmployee.id;
+        });
 
-document
-      .getElementById("employeeDropdown")
-      .addEventListener("change", async () => {
-        const ce = await getChosenEmployee("employeeDropdown");
-        chosenEmployee = ce.id;
-      });
-  
-document.getElementById("addEmployeeButton")
-.addEventListener("click", async (e)=>{
-  e.preventDefault();
- updateEmployeeDepartment()
- if(chosenEmployee != null){
-  window.location.reload();
- }
- 
-})
+      document
+        .getElementById("addEmployeeButton")
+        .addEventListener("click", async (e) => {
+          e.preventDefault();
+          /*
+          updateEmployeeDepartment function is called and test if the chosen
+          employee is not a manager in the session storage
+           */
+          updateEmployeeDepartment();
 
+          window.location.reload();
+        });
 
+      document
+        .getElementById("deleteDepartmentButton")
+        .addEventListener("click", async (e) => {
+          e.preventDefault();
 
-
-    
-  </script>
-</body> <!-- Add the closing body tag here -->
+          const userConfirmed = confirm(
+            "Are you sure you want to delete this department?"
+          );
+          if (userConfirmed) {
+            const departmentId = sessionStorage.getItem("departmentId");
+            deleteDepartment(departmentId);
+            window.location.href = "employees.html";
+          }
+        });
+    </script>
+  </body>
+  <!-- Add the closing body tag here -->
 </html>

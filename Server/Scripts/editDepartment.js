@@ -1,15 +1,12 @@
 const getEditDepartment = async () => {
-  const departmentID = await sessionStorage.getItem("departmentID");
-  const departmentName = await convertDepartmentIDtoName(departmentID);
-
-  departmentNamePlaceholder(departmentName);
-
-  // async way to set placeholder for department name
+  const departmentId = await sessionStorage.getItem("departmentId");
+  const departmentName = await convertDepartmentIDtoName(departmentId);
+  await departmentNamePlaceholder(departmentName);
 
   //get the department manager
   let departmentManagerID = null;
   const resp = await fetch(
-    `http://localhost:3000/departments/${departmentID}`,
+    `http://localhost:3000/departments/${departmentId}`,
     {
       method: "GET",
       headers: {
@@ -19,7 +16,9 @@ const getEditDepartment = async () => {
   );
 
   if (!resp.ok) {
-    throw new Error(`Failed to fetch data : ${resp.statusText}`);
+    throw new Error(
+      `Failed to fetch data and get managerID : ${resp.statusText}`
+    );
   } else {
     const department = await resp.json();
     // Call the function to fill the form with the department date
@@ -28,12 +27,17 @@ const getEditDepartment = async () => {
 
   await addEmployeesToSelect();
   await addManagerToSelect(departmentManagerID);
+
+  const selectedEmployee = await getChosenEmployee("employeeDropdown");
+
+  sessionStorage.setItem("departmentName", departmentName);
+  sessionStorage.setItem("selectedEmployeeId", selectedEmployee.id);
+  sessionStorage.setItem("selectedEmployeeName", selectedEmployee.name);
 };
 
 //End of getEditDepartment function
 
 const departmentNamePlaceholder = async (departmentName) => {
-  console.log(`departmentName: ${departmentName}`);
   const departmentNameElement = document.getElementById("department");
 
   departmentNameElement.placeholder = departmentName;
@@ -50,29 +54,6 @@ const fillOptionsWithEmployees = async (employees, dropdown) => {
   });
 };
 
-const getEmployeesInDepartment = async () => {
-  const departmentID = sessionStorage.getItem("departmentID");
-  const employees = await getEmployees();
-
-  //return employees that are in the department
-  const employeesInDepartment = employees.filter(
-    (employee) => employee.departmentId === departmentID
-  );
-  return await employeesInDepartment;
-};
-
-const getEmployeesNotInDepartment = async () => {
-  const departmentID = sessionStorage.getItem("departmentID");
-  const employees = await getEmployees();
-
-  //return employees that are not in the department
-  const employeesNotInDepartment = employees.filter(
-    (employee) => employee.departmentId !== departmentID
-  );
-
-  return await employeesNotInDepartment;
-};
-
 const addManagerToSelect = async (departmentManagerID) => {
   const departmentEmployees = await getEmployeesInDepartment();
   const managerDropdown = document.getElementById("departmentManagerDropdown");
@@ -87,60 +68,32 @@ const addEmployeesToSelect = async () => {
   await fillOptionsWithEmployees(notBelongingEmployees, employeeDropdown);
 };
 
-const getChosenEmployee = async (elementID) => {
-  const employeeDropdown = document.getElementById(elementID);
-  const employeeChosen = employeeDropdown.value;
-  const employeeID =
-    employeeDropdown.options[employeeDropdown.selectedIndex].id;
+const getChosenEmployee = async (dropdownID) => {
+  const employeeDropdown = await document.getElementById(dropdownID);
+  const employeeChosen = await employeeDropdown.value;
+  const employeeID = await employeeDropdown.options[
+    employeeDropdown.selectedIndex
+  ].id;
+  const eIsManager = await isManager(employeeID);
 
   const employee = {
-    name: employeeChosen,
     id: employeeID,
+    name: employeeChosen,
+    isManager: eIsManager || false,
   };
+  sessionStorage.setItem("selectedEmployeeId", employee.id);
+  sessionStorage.setItem("selectedEmployeeName", employee.name);
+  sessionStorage.setItem("isManager", employee.isManager);
+
   return employee;
 };
 
-const updateEmployeeDepartment = async () => {
-  console.log("update department");
-  try {
-    const department = sessionStorage.getItem("departmentID");
-    const dropdownID = "employeeDropdown";
-    const chosenEmployee = await getChosenEmployee(dropdownID);
-
-    console.log(`department: ${department}`);
-    console.log(`chosenEmployee: ${chosenEmployee.id}`);
-
-    const resp = await fetch(
-      "http://localhost:3000/employees/updateDepartment",
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          departmentId: department,
-          employeeId: chosenEmployee.id,
-        }),
-      }
-    );
-
-    const status = await resp.json();
-    console.log(status.success);
-  } catch (error) {
-    console.log(`Error1: ${error}`);
-  }
-};
-
 const updateDepartmentManger = async () => {
-  console.log("update department manager");
+  const department = sessionStorage.getItem("departmentId");
+  const dropdownID = "departmentManagerDropdown";
+  const chosenEmployee = await getChosenEmployee(dropdownID);
+
   try {
-    const department = sessionStorage.getItem("departmentID");
-    const dropdownID = "departmentManagerDropdown";
-    const chosenEmployee = await getChosenEmployee(dropdownID);
-
-    console.log(`department: ${department}`);
-    console.log(`chosenManager: ${chosenEmployee.id}`);
-
     const resp = await fetch(
       "http://localhost:3000/departments/updateManager",
       {
@@ -156,25 +109,58 @@ const updateDepartmentManger = async () => {
     );
 
     const status = await resp.json();
-    console.log(`manager status: ${status.success}`);
+  } catch (error) {}
+};
+
+const updateEmployeeDepartment = async () => {
+  const departmentId = sessionStorage.getItem("departmentId");
+  const selectedEmployeeId = sessionStorage.getItem("selectedEmployeeId");
+  const selectedEmployeeIsManager = await isManager(selectedEmployeeId);
+  sessionStorage.setItem("isManager", selectedEmployeeIsManager);
+  try {
+    if (!selectedEmployeeIsManager) {
+      const resp = await fetch(
+        "http://localhost:3000/employees/updateDepartment",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            departmentId: departmentId,
+            employeeId: selectedEmployeeId,
+          }),
+        }
+      );
+
+      const status = await resp.json();
+    } else {
+      const status = await resp.json();
+    }
   } catch (error) {
     console.log(`Error1: ${error}`);
   }
 };
 
-const isManager = async (employeeID) => {
-  const resp = await fetch(`http://localhost:3000/employees/${employeeID}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+const deleteDepartment = async (departmentId) => {
+  try {
+    const resp = await fetch(
+      "http://localhost:3000/departments/deleteDepartmentAndEmployees",
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          departmentId: departmentId,
+        }),
+      }
+    );
 
-  if (!resp.ok) {
-    throw new Error(`Failed to fetch data : ${resp.statusText}`);
-  } else {
-    const employee = await resp.json();
-    return employee.isManager;
+    const status = await resp.json();
+    console.log(`status: ${status.message}`);
+  } catch (error) {
+    console.log(`Error2: ${error}`);
   }
 };
 

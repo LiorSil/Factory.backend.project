@@ -26,7 +26,7 @@
     <tbody>
       <!-- Sample row -->
       <tr>
-        <td><a href="#" onclick="redirectToEditDepartment('departmentID')">Department Name</a></td>
+        <td><a href="#" onclick="redirectToEditDepartment('departmentId')">Department Name</a></td>
         <td><a href="#" onclick="redirectToEditEmployee('employeeID')">Manager Name</a></td>
         <td>
           <a href="#" onclick="redirectToEditEmployee('employeeID1')">Employee 1</a>,
@@ -45,9 +45,9 @@
       window.location.href = "./add_department.html";
     }
 
-    function redirectToEditDepartment(departmentID) {
+    function redirectToEditDepartment(departmentId) {
       // Implement redirection logic to "Edit Department" page with department ID
-      window.location.href = `./edit_department.html?departmentID=${departmentID}`;
+      window.location.href = `./edit_department.html?departmentId=${departmentId}`;
     }
 
     function redirectToEditEmployee(employeeID) {

@@ -35,7 +35,7 @@ async function getEmployees() {
 async function fillTable(employees) {
   const tableBody = document.querySelector("table tbody");
   tableBody.innerHTML = ""; // Clear existing rows
-
+  if (!employees) return console.log("No employees found");
   employees.forEach(async (employee) => {
     const row = document.createElement("tr");
     const fullName = `${employee.firstName} ${employee.lastName}`;
@@ -43,12 +43,12 @@ async function fillTable(employees) {
       redirectToEditEmployee(employee._id)
     );
 
-    const departmentID = await employee.departmentId;
+    const departmentId = await employee.departmentId;
 
-    const departmentName = await convertDepartmentIDtoName(departmentID);
+    const departmentName = await convertDepartmentIDtoName(departmentId);
     const departmentCell = await createClickableTableCell(
       departmentName || "",
-      () => redirectToEditDepartment(departmentID)
+      () => redirectToEditDepartment(departmentId)
     );
 
     const shiftsCell = createTableCell(
@@ -141,9 +141,9 @@ async function redirectToEditEmployee(employeeID) {
   window.location.href = editEmployeeURL;
 }
 
-async function redirectToEditDepartment(departmentID) {
-  //i want to pass the departmentID to the editDepartment.html page
-  sessionStorage.setItem("departmentID", departmentID);
+async function redirectToEditDepartment(departmentId) {
+  //i want to pass the departmentId to the editDepartment.html page
+  sessionStorage.setItem("departmentId", departmentId);
   const editDepartmentURL = `./edit_department.html`;
   window.location.href = editDepartmentURL;
 }

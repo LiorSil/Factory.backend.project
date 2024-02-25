@@ -22,7 +22,12 @@ const deleteDepartmentAndEmployees = async (departmentId) => {
   //delete all employees in the department
   const employees = await employeeRepo.getEmployees();
   employees.forEach(async (employee) => {
-    if (employee.departmentId === departmentId) {
+    console.log(`employee.name: ${employee.firstName} ${employee.lastName}`);
+    console.log(`employee.departmentId: ${employee.departmentId}`);
+    if (employee.departmentId.equals(departmentId)) {
+      console.log(
+        `Deleting employee: ${employee.firstName} ${employee.lastName}`
+      );
       await employeeRepo.deleteEmployee(employee._id);
     }
   });
@@ -31,9 +36,14 @@ const deleteDepartmentAndEmployees = async (departmentId) => {
 
 const isManager = async (employeeId) => {
   const managers = await departmentRepo.getAllManagers();
-  const isManager = managers.includes(employeeId);
-  return isManager;
+
+  // Convert ObjectIDs to strings
+  const managerStrings = managers.map((manager) => manager.toString());
+
+  // Check if the string employeeId is included in the managerStrings array
+  return managerStrings.includes(employeeId);
 };
+
 
 module.exports = {
   getDepartments,
