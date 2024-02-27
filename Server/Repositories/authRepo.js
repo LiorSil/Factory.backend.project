@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-//get all users from the API
+//get all users from the API sas
 const getUsers = async (username, email) => {
 
     const URL = `https://jsonplaceholder.typicode.com/users`;
@@ -9,12 +9,12 @@ const getUsers = async (username, email) => {
     return users
 }
 
-const getUserByUsername = async (username) => {
+const getEmployeeByUsername = async (username) => {
     const users = await getUsers();
     return users.find((user) => user.username === username);
 }
 
 
 module.exports = {
-  getUserByUsername,
+  getEmployeeByUsername,
 };

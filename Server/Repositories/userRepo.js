@@ -1,6 +1,7 @@
 const userModel = require("../Models/userModel");
 
 
+
 const getFullname = async (id) => { 
     const user = await userModel.findById(id);
     return user.fullname;
@@ -17,11 +18,16 @@ const updateNumOfActions = async (id, newNum) => {
     await user.save();
 }
 
+const getUsers = async () => {
+  return await userModel.find();
+};
+
 module.exports = {
-    getFullname,
-    getNumOfActions,
-    updateNumOfActions
-}   
+  getFullname,
+  getNumOfActions,
+  updateNumOfActions,
+  getUsers,
+};   
 
 
 

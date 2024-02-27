@@ -28,6 +28,7 @@
         });
 
         const status = await resp.json();
+        
         sessionStorage.setItem("token", status.token);
         sessionStorage.setItem("username", username);
         sessionStorage.setItem("name", status.name);

@@ -4,6 +4,8 @@ const getEmployee = async (id) => {
   return await employeeModel.findById(id);
 };
 
+
+
 const getEmployees = async () => {
   return await employeeModel.find();
 };
