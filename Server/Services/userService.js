@@ -10,7 +10,13 @@ const getUserByEmployeeId = async (employeeId) => {
   return user;
 };
 
+const getUsername = async (id) => {
+  const username = await User.findById(id).select("username");
+  return username;
+};
+
 export default {
   getUserById,
   getUserByEmployeeId,
+  getUsername,
 };
