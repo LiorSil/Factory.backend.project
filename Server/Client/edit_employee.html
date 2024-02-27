@@ -35,8 +35,8 @@
       <!-- Add other fields as needed -->
 
       <div class="form-buttons">
-        <button id="updateEmployee" type="button" class="btn btn-primary">Update</button>
-        <button type="button" onclick="deleteEmployee()" class="btn btn-danger">Delete</button>
+        <button id="updateEmployee" type="button" class="btn btn-primary" >Update</button>
+        <button id ="deleteEmployee" type="button" class="btn btn-danger" onclick="deleteEmployeeFunc()">Delete</button>
       </div>
     </form>
 
@@ -63,10 +63,21 @@
     </div>
   </div>
 
-  <script src ="../Utils/clientPageOnLoadFunctions.js"></script>
-  <script src="../Scripts/editEmployee.js"></script>
+  <script>
+    const deleteEmployeeFunc = async () => {
+      const status = deleteSelectedEmployee()
+      if (status) {
+        window.location.href = "./employees.html";
+      } else {
+        alert("Failed to delete employee");
+      }
+    }
+    
+  </script
+  <script src="../Utils/clientPageOnLoadFunctions.js"></script>
   <script src="../Utils/departmentUtil.js"></script>
   <script src="../Utils/employeeUtil.js"></script>
+  <script src="../Scripts/editEmployee.js"></script> <!-- Make sure this is included after deleteEmployee function definition -->
   
 </body>
 </html>

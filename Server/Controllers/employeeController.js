@@ -87,4 +87,19 @@ router.put("/update_employee", async (req, res) => {
   }
 });
 
+router.delete("/delete", async (req, res) => {
+  try {
+    if (employee) {
+      const statusOK = {
+        success: "true",
+        message: "Employee deleted successfully",
+        employee: employee,
+      };
+      return res.json(statusOK);
+    }
+  } catch (error) {
+    return res.json({ message: "Error deleting employee: " });
+  }
+});
+
 module.exports = router;

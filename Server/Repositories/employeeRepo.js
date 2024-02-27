@@ -1,23 +1,19 @@
 const employeeModel = require("../Models/employeeModel");
 
-const getEmployee = async (id) => {
-  return await employeeModel.findById(id);
+const getEmployee = async (employeeId) => {
+  return await employeeModel.findById(employeeId);
 };
-
-
 
 const getEmployees = async () => {
   return await employeeModel.find();
 };
 
-const deleteEmployee = async (id) => {
-  const employeeName = await getEmployeeName(id);
-  console.log(`Deleting employee: ${employeeName}`);
-  await employeeModel.findByIdAndDelete(id);
+const deleteEmployee = async (employeeId) => {
+  await employeeModel.findByIdAndDelete(employeeId);
 };
 
-const getEmployeeName = async (id) => {
-  const employee = await employeeModel.findById(id);
+const getEmployeeName = async (employeeId) => {
+  const employee = await employeeModel.findById(employeeId);
   console.log("Getting employee name by id...");
   return employee.firstName + " " + employee.lastName;
 };

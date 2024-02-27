@@ -1,9 +1,10 @@
 const editEmployee = async () => {
   const employeeId = sessionStorage.getItem("employeeID");
   const employee = await getEmployeeByID(employeeId);
+  console.log(employee._id);
 
   try {
-    // Retrieve necessary data from session storage
+    //TODO: Retrieve necessary data from session storage
     const token = sessionStorage.getItem("token");
 
     // Load the employee data into the form
@@ -11,19 +12,24 @@ const editEmployee = async () => {
 
     // Handle the update button
     const updateButton = document.getElementById("updateEmployee");
-    updateButton.addEventListener("click", () => updateEmployee(employeeId));
+    updateButton.addEventListener("click", () => updateEmployee(employee));
   } catch (error) {
     console.error("Error editing employee:", error.message);
     // Handle the error accordingly (e.g., display an error message to the user)
   }
 };
 
-const updateEmployee = async (employeeId) => {
-  console.log("test");
-  const firstName = document.getElementById("firstName").value;
-  const lastName = document.getElementById("lastName").value;
+const updateEmployee = async (employee) => {
+  let firstName = document.getElementById("firstName").value;
+  let lastName = document.getElementById("lastName").value;
+
+  // If the user didn't enter a new first name or last name, use the old one
+  firstName = firstName || employee.firstName;
+  lastName = lastName || employee.lastName;
+
   const department = document.getElementById("departmentPicker").value;
   const departmentId = await convertDepartmentNameToId(department);
+  const employeeId = employee._id;
 
   try {
     const resp = await fetch(
@@ -119,6 +125,30 @@ const createSelectDepartment = async (employeeDepartmentId) => {
     selectDepartment.appendChild(option);
   });
   return selectDepartment;
+};
+
+const deleteSelectedEmployee = async () => {
+  const id = sessionStorage.getItem("employeeID");
+  try {
+    const resp = await fetch(`http://localhost:3000/employees/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+      }),
+    });
+    const status = await resp.json();
+    if (!resp.ok) {
+      throw new Error(`Failed to delete employee: ${status.message}`);
+    } else {
+      return true;
+    }
+  } catch (error) {
+    console.error("Error deleting employee:", error.message);
+    // Handle the error accordingly (e.g., display an error message to the user)
+  }
 };
 
 

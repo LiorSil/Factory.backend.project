@@ -54,6 +54,16 @@ const updateEmployee = async (id, details) => {
   }
 };
 
+const deleteEmployee = async (employeeId) => {
+  try {
+    await employeeRepo.deleteEmployee(employeeId);
+    return true;
+  } catch (error) {
+    console.log(`Service error: ${error}`);
+    return false;
+  }
+};
+
 module.exports = {
   getEmployeeShiftsByID,
   getEmployeeByID,
@@ -61,4 +71,5 @@ module.exports = {
   getEmployeesByDepartment,
   updateEmployeeDepartment,
   updateEmployee,
+  deleteEmployee,
 };
