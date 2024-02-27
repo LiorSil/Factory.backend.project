@@ -44,13 +44,15 @@ const getShifts = async (id) => {
   return employee.shifts;
 };
 
-const updateEmployeeDepartment = async (departmentId, employeeId) => {
+const updateEmployeeDepartment = async (employeeId, departmentId) => {
   console.log(`Updating employee department to: ${departmentId}`);
   const employee = await getEmployee(employeeId);
   employee.departmentId = departmentId;
   await employee.save();
   return employee;
 };
+
+
 const updateEmployeeFirstName = async (id, firstName) => {
   try {
     console.log(`Updating employee first name to: ${firstName}`);

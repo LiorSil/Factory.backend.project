@@ -41,6 +41,12 @@ body {
   border: 1px solid #ccc;
 }
 
+.form-group select {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
 .form-buttons {
   display: flex;
   justify-content: flex-end;

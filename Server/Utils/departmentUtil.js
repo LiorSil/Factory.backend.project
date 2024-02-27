@@ -28,6 +28,32 @@ async function convertDepartmentIDtoName(departmentId) {
   }
 }
 
+const convertDepartmentNameToId = async (departmentName) => {
+  try {
+    const resp = await fetch(`http://localhost:3000/departments`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!resp.ok) {
+      throw new Error(`Failed to fetch departments: ${resp.statusText}`);
+    } else {
+      const departments = await resp.json();
+      const department = departments.find(
+        (department) => department.name === departmentName
+      );
+      return department._id;
+    }
+  } catch (error) {
+    console.log(`Error fetching department: ${error}`);
+  }
+};
+
+
+
+
 const getEmployeesInDepartment = async () => {
   const departmentId = sessionStorage.getItem("departmentId");
   const employees = await getEmployees();

@@ -2,7 +2,19 @@ const departmentService = require("../Services/departmentService");
 const express = require("express");
 const router = express.Router();
 
-// http://localhost:3000/departments/${id}
+// http://localhost:3000/departments/
+
+//get all
+router.get("/", async (req, res) => {
+  try {
+    const departments = await departmentService.getDepartments();
+    console.log( `departments: ${departments}`);
+    return res.json(departments);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
 
 //get by id
 router.get("/:id", async (req, res) => {

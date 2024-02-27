@@ -61,11 +61,12 @@ router.put("/updateDepartment", async (req, res) => {
 
 router.put("/update_employee", async (req, res) => {
   try {
-    const { id, firstName, lastName, department } = req.body;
+    const { id, firstName, lastName, departmentId } = req.body;
+    console.log(`departmentId: ${departmentId}`);
     const employee = await employeeService.updateEmployee(id, {
       firstName,
       lastName,
-      department,
+      departmentId,
     });
 
     if (employee) {

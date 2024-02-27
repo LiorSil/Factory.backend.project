@@ -3,7 +3,6 @@ const editEmployee = async () => {
     // Retrieve necessary data from session storage
     const token = sessionStorage.getItem("token");
     const employeeID = sessionStorage.getItem("employeeID");
-    console.log(`Employee ID: ${employeeID}`);
 
     // Load the employee data into the form
     await loadEmployeeEditPage(employeeID);
@@ -20,7 +19,7 @@ const editEmployee = async () => {
 const updateEmployee = async () => {
   const firstName = document.getElementById("firstName").value;
   const lastName = document.getElementById("lastName").value;
-  const department = document.getElementById("department").value;
+  const departmentId = sessionStorage.getItem("selectedDepartmentId");
   const employeeID = sessionStorage.getItem("employeeID");
 
   try {
@@ -35,7 +34,7 @@ const updateEmployee = async () => {
           id: employeeID, // Make sure employeeID is in scope
           firstName: firstName,
           lastName: lastName,
-          department: "test",
+          departmentId: departmentId,
         }),
       }
     );
@@ -79,22 +78,31 @@ const loadEmployeeEditPage = async (employeeID) => {
 };
 
 const nameAndDepartmentPlaceholder = async (employee) => {
+  const firstName = document.getElementById("firstName");
+  const lastName = document.getElementById("lastName");
+  // Convert department ID to name using a function from departmentUtil.js
+  sessionStorage.setItem("selectedDepartmentId", employee.departmentId);
+  // const departmentName = await convertDepartmentIDtoName(employee.departmentId);
+  // console.log(`departmentName: ${departmentName}`);
+
   try {
-    const firstName = document.getElementById("firstName");
-    const lastName = document.getElementById("lastName");
-    const department = document.getElementById("department");
-
-    // Convert department ID to name using a function from departmentUtil.js
-    const departmentName = await convertDepartmentIDtoName(
-      employee.departmentId
-    );
-
     // Set placeholders for the input fields
     firstName.placeholder = employee.firstName;
     lastName.placeholder = employee.lastName;
-    department.placeholder = departmentName;
   } catch (error) {
     console.error("Error setting placeholders:", error.message);
+    // Handle the error accordingly (e.g., display an error message to the user)
+  }
+};
+
+const selectDepartment = async () => {
+  try {
+    const department = document.getElementById("departmentPicker");
+    const departmentName = department.options[department.selectedIndex].value;
+    const departmentID = await convertDepartmentNameToId(departmentName);
+    sessionStorage.setItem("selectedDepartmentId", departmentID);
+  } catch (error) {
+    console.error("Error selecting department:", error.message);
     // Handle the error accordingly (e.g., display an error message to the user)
   }
 };

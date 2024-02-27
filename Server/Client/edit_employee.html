@@ -22,10 +22,19 @@
         <label for="lastName">Last Name:</label>
         <input type="text" id="lastName" name="lastName" required>
       </div>
+
+      
+      <!-- select a department -->
       <div class="form-group">
-        <label for="department">Department:</label>
-        <input type="text" id="department" name="department" required>
-      </div>
+          <label for="department">Department:</label> 
+          <select id="departmentPicker" onchange="selectDepartment()">
+            <option value="Sales">Sales</option>
+            <option value="Engineering">Engineering</option>
+            <option value="Marketing">Marketing</option>
+          </select>
+          </div>
+
+
       <!-- Add other fields as needed -->
 
       <div class="form-buttons">

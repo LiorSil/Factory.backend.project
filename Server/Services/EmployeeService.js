@@ -45,6 +45,7 @@ const updateEmployee = async (id, details) => {
   try {
     await employeeRepo.updateEmployeeFirstName(id, details.firstName);
     await employeeRepo.updateEmployeeLastName(id, details.lastName);
+    await employeeRepo.updateEmployeeDepartment(id, details.departmentId);
     const employee = await getEmployeeByID(id);
     return employee;
   } catch (error) {

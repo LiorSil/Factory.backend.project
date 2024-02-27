@@ -1,5 +1,9 @@
 const departmentModel = require("../Models/departmentModel");
 
+const getDepartments = async () => {
+  return await departmentModel.find();
+};
+
 const getDepartmentID = async (departmentName) => {
   try {
     const department = await departmentModel.findOne({
@@ -66,4 +70,5 @@ module.exports = {
   getDepartmentID,
   updateManager,
   getAllManagers,
+  getDepartments,
 };
