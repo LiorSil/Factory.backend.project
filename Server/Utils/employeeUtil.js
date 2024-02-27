@@ -25,8 +25,8 @@ async function getEmployees() {
   }
 }
 
-const convertEmployeeIDtoName = async (employeeID) => {
-  const resp = await fetch(`http://localhost:3000/employees/${employeeID}`, {
+const convertEmployeeIDtoName = async (employeeId) => {
+  const resp = await fetch(`http://localhost:3000/employees/${employeeId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -38,6 +38,27 @@ const convertEmployeeIDtoName = async (employeeID) => {
     const employee = await resp.json();
     employeeName = `${employee.firstName} ${employee.lastName}`;
     return employeeName;
+  }
+};
+
+const getEmployeeByID = async (employeeId) => {
+  try {
+    const resp = await fetch(`http://localhost:3000/employees/${employeeId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!resp.ok) {
+      throw new Error(`Failed to fetch employee data: ${resp.statusText}`);
+    }
+
+    const employee = await resp.json();
+    return employee;
+  } catch (error) {
+    console.error(error);
+    // Handle errors as needed
   }
 };
 

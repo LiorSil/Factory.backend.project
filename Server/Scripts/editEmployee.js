@@ -1,26 +1,29 @@
 const editEmployee = async () => {
+  const employeeId = sessionStorage.getItem("employeeID");
+  const employee = await getEmployeeByID(employeeId);
+
   try {
     // Retrieve necessary data from session storage
     const token = sessionStorage.getItem("token");
-    const employeeID = sessionStorage.getItem("employeeID");
 
     // Load the employee data into the form
-    await loadEmployeeEditPage(employeeID);
+    await loadEmployeeEditPage(employee);
 
     // Handle the update button
     const updateButton = document.getElementById("updateEmployee");
-    updateButton.addEventListener("click", updateEmployee);
+    updateButton.addEventListener("click", () => updateEmployee(employeeId));
   } catch (error) {
     console.error("Error editing employee:", error.message);
     // Handle the error accordingly (e.g., display an error message to the user)
   }
 };
 
-const updateEmployee = async () => {
+const updateEmployee = async (employeeId) => {
+  console.log("test");
   const firstName = document.getElementById("firstName").value;
   const lastName = document.getElementById("lastName").value;
-  const departmentId = sessionStorage.getItem("selectedDepartmentId");
-  const employeeID = sessionStorage.getItem("employeeID");
+  const department = document.getElementById("departmentPicker").value;
+  const departmentId = await convertDepartmentNameToId(department);
 
   try {
     const resp = await fetch(
@@ -31,7 +34,7 @@ const updateEmployee = async () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id: employeeID, // Make sure employeeID is in scope
+          id: employeeId, // Make sure employeeId is in scope
           firstName: firstName,
           lastName: lastName,
           departmentId: departmentId,
@@ -52,25 +55,14 @@ const updateEmployee = async () => {
   }
 };
 
-const loadEmployeeEditPage = async (employeeID) => {
+const loadEmployeeEditPage = async (employee) => {
   try {
-    const resp = await fetch(
-      `http://localhost:3000/employees/edit_employee/${employeeID}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (!resp.ok) {
-      throw new Error(`Failed to fetch employee data: ${resp.statusText}`);
-    }
-
-    const employee = await resp.json();
-    // Fill the form with the employee data
     await nameAndDepartmentPlaceholder(employee);
+    const selectDepartment = await createSelectDepartment(
+      employee.departmentId
+    );
+    const departmentPickerDiv = document.getElementById("departmentPickerDiv");
+    departmentPickerDiv.appendChild(selectDepartment);
   } catch (error) {
     console.error("Error loading employee data:", error.message);
     // Handle the error accordingly (e.g., display an error message to the user)
@@ -80,10 +72,9 @@ const loadEmployeeEditPage = async (employeeID) => {
 const nameAndDepartmentPlaceholder = async (employee) => {
   const firstName = document.getElementById("firstName");
   const lastName = document.getElementById("lastName");
+
   // Convert department ID to name using a function from departmentUtil.js
   sessionStorage.setItem("selectedDepartmentId", employee.departmentId);
-  // const departmentName = await convertDepartmentIDtoName(employee.departmentId);
-  // console.log(`departmentName: ${departmentName}`);
 
   try {
     // Set placeholders for the input fields
@@ -106,5 +97,35 @@ const selectDepartment = async () => {
     // Handle the error accordingly (e.g., display an error message to the user)
   }
 };
+
+const createSelectDepartment = async (employeeDepartmentId) => {
+  const dName = await convertDepartmentIDtoName(employeeDepartmentId);
+  const selectDepartment = document.createElement("select");
+  selectDepartment.id = "departmentPicker";
+
+  const departments = await getDepartments();
+  const departmentsNames = departments.map((department) => department.name);
+  //reorder the departments such that the employee's department is the first one
+  const noEmployeeDepartment = departmentsNames.filter((department) => {
+    return department !== dName;
+  });
+
+  const reorderedDepartments = [dName, ...noEmployeeDepartment];
+
+  reorderedDepartments.forEach((department) => {
+    const option = document.createElement("option");
+    option.value = department;
+    option.text = department;
+    selectDepartment.appendChild(option);
+  });
+  return selectDepartment;
+};
+
+
+
+
+
+
+
 
 window.onload = editEmployee;

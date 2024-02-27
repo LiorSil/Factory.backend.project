@@ -102,3 +102,24 @@ const isManager = async (employeeID) => {
     return false;
   }
 };
+
+const getDepartments = async () => {
+  try {
+    const resp = await fetch("http://localhost:3000/departments", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!resp.ok) {
+      throw new Error(`Failed to fetch data: ${resp.statusText}`);
+    }
+
+    const departments = await resp.json();
+    return departments;
+  } catch (error) {
+    console.error(error);
+    // Handle errors as needed
+  }
+};
