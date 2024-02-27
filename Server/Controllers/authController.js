@@ -8,10 +8,17 @@ router.post("/login", async (req, res) => {
   const { username, email } = req.body;
   const result = await authService.authUser(username, email);
   if (!result.success)
-   return res.status(401).json({ message: "user not found" });
+    return res
+      .status(401)
+      .json({ message: "user not found", success: result.success });
 
   const token = jwt.sign({ username }, "secret");
-  return res.json({ message: result.message, token: token, name: result.name});
+  return res.json({
+    message: result.message,
+    token: token,
+    name: result.name,
+    success: true,
+  });
 });
 
 module.exports = router;

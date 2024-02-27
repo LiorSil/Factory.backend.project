@@ -1,65 +1,107 @@
-/* Add your styles here */
+/* CSS file for editEmployee.html */
+
+/* Use a custom font */
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+/* Set the font and background color for the whole page */
 body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f0f0f0;
 }
 
-h1 {
-  color: #333;
+/* Center the container div and give it some padding and margin */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-form {
-  max-width: 400px;
+/* Style the form elements */
+.form {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 20px;
   margin-bottom: 20px;
 }
 
-label {
-  display: block;
-  margin-bottom: 8px;
+.form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 16px;
-  box-sizing: border-box;
+.form-group label {
+  width: 150px;
+  font-weight: bold;
 }
 
-button {
-  background-color: #007BFF;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  cursor: pointer;
-  margin-right: 8px;
+.form-group input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
 }
 
-button:hover {
-  background-color: #0056b3;
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
 }
 
-table {
+/* Style the table elements */
+.table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  background-color: white;
+  margin-bottom: 20px;
 }
 
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
+.table th, .table td {
+  padding: 10px;
+  border: 1px solid #ccc;
   text-align: left;
 }
 
-th {
-  background-color: #4CAF50;
+/* Style the shift select elements */
+.shift-select {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+}
+
+.shift-select label {
+  width: 200px;
+  font-weight: bold;
+}
+
+.shift-select select {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+/* Style the buttons */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #007bff;
   color: white;
 }
 
-select {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 16px;
-  box-sizing: border-box;
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
 }
 
-/* Add more styles as needed */
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}

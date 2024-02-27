@@ -10,7 +10,8 @@
     <input id="username" type="text" placeholder="username" /> <br />
     <input id="email" type="email" placeholder="name@email.com" /> <br />
     <button onclick="login()">Login</button>
-
+    <br /><br />
+    <a href="https://jsonplaceholder.typicode.com/users">users</a>
     <script>
       async function login() {
         const username = document.getElementById("username").value;
@@ -27,10 +28,14 @@
         });
 
         const status = await resp.json();
-        sessionStorage.setItem("token", status.token)
-        sessionStorage.setItem("username", username)
-        sessionStorage.setItem("name",status.name)
-        window.location.href = "./home.html"
+        sessionStorage.setItem("token", status.token);
+        sessionStorage.setItem("username", username);
+        sessionStorage.setItem("name", status.name);
+        if (status.token) {
+          window.location.href = "./home.html";
+        } else {
+          alert("Invalid username or email");
+        }
       }
     </script>
   </body>

@@ -14,3 +14,4 @@ const authUser = async (username, email) => {
 module.exports = {
     authUser
 }
+ 
