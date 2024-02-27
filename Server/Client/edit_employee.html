@@ -15,8 +15,12 @@
     <!-- Form for editing employee data -->
     <form id="editEmployeeForm" class="form">
       <div class="form-group">
-        <label for="fullName">Full Name:</label>
-        <input type="text" id="fullName" name="fullName" required>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+      </div>
+      <div class="form-group">
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
       </div>
       <div class="form-group">
         <label for="department">Department:</label>
@@ -25,7 +29,7 @@
       <!-- Add other fields as needed -->
 
       <div class="form-buttons">
-        <button id = "updateEmployee" type="button" class="btn btn-primary">Update</button>
+        <button id="updateEmployee" type="button" class="btn btn-primary">Update</button>
         <button type="button" onclick="deleteEmployee()" class="btn btn-danger">Delete</button>
       </div>
     </form>

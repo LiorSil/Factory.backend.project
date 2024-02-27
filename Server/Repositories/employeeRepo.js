@@ -51,6 +51,25 @@ const updateEmployeeDepartment = async (departmentId, employeeId) => {
   await employee.save();
   return employee;
 };
+const updateEmployeeFirstName = async (id, firstName) => {
+  try {
+    console.log(`Updating employee first name to: ${firstName}`);
+    console.log(`id: ${id}`);
+    const employee = await getEmployee(id);
+    employee.firstName = firstName;
+    await employee.save();
+    return;
+  } catch (error) {
+    console.log(`Error updating employee first name: ${error}`);
+  }
+};
+
+const updateEmployeeLastName = async (id, lastName) => {
+  const employee = await getEmployee(id);
+  employee.lastName = lastName;
+  await employee.save();
+  return;
+};
 
 module.exports = {
   getEmployee,
@@ -60,4 +79,6 @@ module.exports = {
   getShifts,
   getEmployees,
   updateEmployeeDepartment,
+  updateEmployeeFirstName,
+  updateEmployeeLastName,
 };

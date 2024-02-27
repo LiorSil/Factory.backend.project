@@ -59,4 +59,31 @@ router.put("/updateDepartment", async (req, res) => {
   }
 });
 
+router.put("/update_employee", async (req, res) => {
+  try {
+    const { id, firstName, lastName, department } = req.body;
+    const employee = await employeeService.updateEmployee(id, {
+      firstName,
+      lastName,
+      department,
+    });
+
+    if (employee) {
+      const statusOK = {
+        success: "true",
+        message: "Employee updated successfully",
+        employee: employee,
+      };
+      return res.json(statusOK);
+    }
+  } catch (error) {
+    // const statusNotOK = {
+    //   success: "false",
+    //   message: error.message,
+    //   employee: null,
+    // };
+    return res.json({ message: "Error updating employee: " });
+  }
+});
+
 module.exports = router;

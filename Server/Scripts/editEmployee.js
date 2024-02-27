@@ -1,86 +1,102 @@
-const employeeID = sessionStorage.getItem("employeeIDgetEmpl");
 const editEmployee = async () => {
-  const token = sessionStorage.getItem("token");
-  //TODO:: handel invalid token
-  const employeeID = sessionStorage.getItem("employeeID");
+  try {
+    // Retrieve necessary data from session storage
+    const token = sessionStorage.getItem("token");
+    const employeeID = sessionStorage.getItem("employeeID");
+    console.log(`Employee ID: ${employeeID}`);
 
-  //load the employee data to the form
-  loadEmployeeEditPage(employeeID);
+    // Load the employee data into the form
+    await loadEmployeeEditPage(employeeID);
 
-  //Handling the update button
-  const updateButton = document.getElementById("updateEmployee");
-  updateButton.addEventListener("click", updateEmployee);
+    // Handle the update button
+    const updateButton = document.getElementById("updateEmployee");
+    updateButton.addEventListener("click", updateEmployee);
+  } catch (error) {
+    console.error("Error editing employee:", error.message);
+    // Handle the error accordingly (e.g., display an error message to the user)
+  }
 };
 
-//Declaration of functions
-
 const updateEmployee = async () => {
-  console.log("update employee");
-  alert("Employee updated successfully");
-  //get the value of the input fields
-
-  const fullName = document.getElementById("fullName").value;
-  const firstName = fullName.split(" ")[0];
-  const lastName = fullName.split(" ").slice(1).join(" ");
-
+  const firstName = document.getElementById("firstName").value;
+  const lastName = document.getElementById("lastName").value;
   const department = document.getElementById("department").value;
-  //create json object to insert to body
-  const newData = JSON.stringify({
-    firstName: firstName || "John",
-    lastName: lastName || "Doe",
-    department: department,
-  });
+  const employeeID = sessionStorage.getItem("employeeID");
 
-  const resp = await fetch(
-    `http://localhost:3000/employees/edit_employee/${employeeID}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: newData,
+  try {
+    const resp = await fetch(
+      "http://localhost:3000/employees/update_employee",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: employeeID, // Make sure employeeID is in scope
+          firstName: firstName,
+          lastName: lastName,
+          department: "test",
+        }),
+      }
+    );
+
+    if (!resp.ok) {
+      throw new Error(`Failed to update employee: ${resp.statusText}`);
+    } else {
+      alert("Employee updated successfully");
+      // Redirect the user to another page after successful update
+      // window.location.href = "http://localhost:3000/employees";
     }
-  );
-  //response handling
-  if (!resp.ok) {
-    throw new Error(`Failed to fetch data : ${resp.statusText}`);
-  } else {
-    alert("Employee updated successfully");
-    //TODO: test the redirection
-    // window.location.href = "http://localhost:3000/employees";
+  } catch (error) {
+    console.error("Error updating employee:", error.message);
+    // Handle the error accordingly (e.g., display an error message to the user)
   }
 };
 
 const loadEmployeeEditPage = async (employeeID) => {
-  const resp = await fetch(
-    `http://localhost:3000/employees/edit_employee/${employeeID}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  try {
+    const resp = await fetch(
+      `http://localhost:3000/employees/edit_employee/${employeeID}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  if (!resp.ok) {
-    throw new Error(`Failed to fetch data : ${resp.statusText}`);
-  } else {
+    if (!resp.ok) {
+      throw new Error(`Failed to fetch employee data: ${resp.statusText}`);
+    }
+
     const employee = await resp.json();
-    // Call the function to fill the form with the employee data
-    nameAndDepartmentPlaceholder(employee);
+    // Fill the form with the employee data
+    await nameAndDepartmentPlaceholder(employee);
+  } catch (error) {
+    console.error("Error loading employee data:", error.message);
+    // Handle the error accordingly (e.g., display an error message to the user)
   }
 };
 
-//Declaration function to fill the form with the employee data
 const nameAndDepartmentPlaceholder = async (employee) => {
-  const fullName = document.getElementById("fullName");
-  const department = document.getElementById("department");
+  try {
+    const firstName = document.getElementById("firstName");
+    const lastName = document.getElementById("lastName");
+    const department = document.getElementById("department");
 
-  //covertDepartmentIDtoName is a function from departmentUtil.js
-  const departmentName = await convertDepartmentIDtoName(employee.departmentId);
+    // Convert department ID to name using a function from departmentUtil.js
+    const departmentName = await convertDepartmentIDtoName(
+      employee.departmentId
+    );
 
-  fullName.placeholder = `${employee.firstName} ${employee.lastName}`;
-  department.placeholder = departmentName;
+    // Set placeholders for the input fields
+    firstName.placeholder = employee.firstName;
+    lastName.placeholder = employee.lastName;
+    department.placeholder = departmentName;
+  } catch (error) {
+    console.error("Error setting placeholders:", error.message);
+    // Handle the error accordingly (e.g., display an error message to the user)
+  }
 };
 
 window.onload = editEmployee;

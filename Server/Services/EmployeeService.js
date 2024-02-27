@@ -33,10 +33,23 @@ const updateEmployeeDepartment = async (departmentId, employeeId) => {
       departmentId,
       employeeId
     );
+
     console.log(`Service success: ${department}`);
     return department;
   } catch (error) {
     console.log(`Service error: ${error}`);
+  }
+};
+
+const updateEmployee = async (id, details) => {
+  try {
+    await employeeRepo.updateEmployeeFirstName(id, details.firstName);
+    await employeeRepo.updateEmployeeLastName(id, details.lastName);
+    const employee = await getEmployeeByID(id);
+    return employee;
+  } catch (error) {
+    console.log(`Service error: ${error}`);
+    return null;
   }
 };
 
@@ -46,4 +59,5 @@ module.exports = {
   getEmployees,
   getEmployeesByDepartment,
   updateEmployeeDepartment,
+  updateEmployee,
 };
