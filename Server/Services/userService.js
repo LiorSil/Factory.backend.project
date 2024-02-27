@@ -12,6 +12,7 @@ const getUserByEmployeeId = async (employeeId) => {
 
 const getUsername = async (id) => {
   const username = await User.findById(id).select("username");
+  console.log("test");
   return username;
 };
 
