@@ -10,9 +10,19 @@ const getShiftByID = async (id) => {
     return shift;
 }
 
+const getUnassignedShifts = async () => {
+  const shifts = await shiftRepo.getUnassignedShifts();
+  return shifts;
+};
 
+const test = async (shiftId) => {
+  const status = await shiftRepo.assignShift(shiftId);
+  return status;
+};
 
 module.exports = {
-    getShifts,
-    getShiftByID
-}   
+  getShifts,
+  getShiftByID,
+  getUnassignedShifts,
+  test,
+};   

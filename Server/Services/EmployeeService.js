@@ -1,5 +1,6 @@
 const employeeRepo = require("../Repositories/employeeRepo");
 const departmentRepo = require("../Repositories/departmentRepo");
+const shiftRepo = require("../Repositories/shiftRepo");
 const mongoose = require("mongoose");
 
 const getEmployeeShiftsByID = async (id) => {
@@ -64,6 +65,20 @@ const deleteEmployee = async (employeeId) => {
   }
 };
 
+const assignShift = async (shiftId, employeeId) => {
+  try {
+    const shift = await employeeRepo.assignShift(shiftId, employeeId);
+    const status = await shiftRepo.assignShift(shiftId);
+    if (status) {
+      return shift;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.log(`Service error: ${error}`);
+  }
+};
+
 module.exports = {
   getEmployeeShiftsByID,
   getEmployeeByID,
@@ -72,4 +87,5 @@ module.exports = {
   updateEmployeeDepartment,
   updateEmployee,
   deleteEmployee,
+  assignShift,
 };

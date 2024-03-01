@@ -164,5 +164,7 @@ const deleteDepartment = async (departmentId) => {
   }
 };
 
+
+
 // Call the getEmployees function when the page loads
 window.onload = getEditDepartment;

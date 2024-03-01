@@ -69,6 +69,14 @@ const updateEmployeeLastName = async (id, lastName) => {
   return;
 };
 
+
+const assignShift = async (shiftId, employeeId) => {
+  const employee = await getEmployee(employeeId);
+  employee.shifts.push(shiftId);
+  await employee.save();
+  return employee;
+};
+
 module.exports = {
   getEmployee,
   deleteEmployee,
@@ -79,4 +87,5 @@ module.exports = {
   updateEmployeeDepartment,
   updateEmployeeFirstName,
   updateEmployeeLastName,
+  assignShift,
 };

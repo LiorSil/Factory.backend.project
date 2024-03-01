@@ -56,10 +56,10 @@
     <!-- Option to register to an existing shift -->
     <div class="shift-select">
       <label for="shiftSelect">Register to Existing Shift:</label>
-      <select id="shiftSelect" class="select">
+      <select id="shiftPicker" class="select">
         <!-- Options for existing shifts will be dynamically filled here -->
       </select>
-      <button type="button" onclick="registerToShift()" class="btn btn-secondary">Register</button>
+      <button id = "registerShift" type="button" class="btn btn-secondary">Register</button>
     </div>
   </div>
 
@@ -71,13 +71,14 @@
       } else {
         alert("Failed to delete employee");
       }
-    }
+    } 
     
   </script
   <script src="../Utils/clientPageOnLoadFunctions.js"></script>
   <script src="../Utils/departmentUtil.js"></script>
   <script src="../Utils/employeeUtil.js"></script>
   <script src="../Scripts/editEmployee.js"></script> <!-- Make sure this is included after deleteEmployee function definition -->
+  <script src="../Utils/shiftUtil.js"></script>
   
 </body>
 </html>

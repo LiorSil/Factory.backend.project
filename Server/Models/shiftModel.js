@@ -1,18 +1,22 @@
 const mongoose = require('mongoose');
 
 const shiftSchema = new mongoose.Schema({
-    date: {
-        type: Date,
-        required: true
-    },
-    startingHour: {
-        type: Number,
-        required: true
-    },
-    endingHour: {
-        type: Number,
-        required: true
-    }
+  date: {
+    type: Date,
+    required: true,
+  },
+  startingHour: {
+    type: Number,
+    required: true,
+  },
+  endingHour: {
+    type: Number,
+    required: true,
+  },
+  assigned: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Shift = mongoose.model('Shift', shiftSchema);

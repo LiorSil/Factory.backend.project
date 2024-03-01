@@ -22,8 +22,8 @@ const deleteDepartmentAndEmployees = async (departmentId) => {
   //delete all employees in the department
   const employees = await employeeRepo.getEmployees();
   employees.forEach(async (employee) => {
-    console.log(`employee.name: ${employee.firstName} ${employee.lastName}`);
-    console.log(`employee.departmentId: ${employee.departmentId}`);
+    // console.log(`employee.name: ${employee.firstName} ${employee.lastName}`);
+    // console.log(`employee.departmentId: ${employee.departmentId}`);
     if (employee.departmentId.equals(departmentId)) {
       console.log(
         `Deleting employee: ${employee.firstName} ${employee.lastName}`

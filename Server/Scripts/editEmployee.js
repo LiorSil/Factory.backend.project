@@ -2,21 +2,20 @@ const editEmployee = async () => {
   const employeeId = sessionStorage.getItem("employeeID");
   const employee = await getEmployeeByID(employeeId);
   console.log(employee._id);
+  selectUnassignedShifts();
 
-  try {
-    //TODO: Retrieve necessary data from session storage
-    const token = sessionStorage.getItem("token");
+  //TODO: Retrieve necessary data from session storage
+  const token = sessionStorage.getItem("token");
 
-    // Load the employee data into the form
-    await loadEmployeeEditPage(employee);
+  // Load the employee data into the form
+  await loadEmployeeEditPage(employee);
 
-    // Handle the update button
-    const updateButton = document.getElementById("updateEmployee");
-    updateButton.addEventListener("click", () => updateEmployee(employee));
-  } catch (error) {
-    console.error("Error editing employee:", error.message);
-    // Handle the error accordingly (e.g., display an error message to the user)
-  }
+  // Handle the update button
+  const updateButton = document.getElementById("updateEmployee");
+  updateButton.addEventListener("click", () => updateEmployee(employee));
+
+  const registerShiftButton = document.getElementById("registerShift");
+  registerShiftButton.addEventListener("click", () => registerShift(employee));
 };
 
 const updateEmployee = async (employee) => {
@@ -149,6 +148,16 @@ const deleteSelectedEmployee = async () => {
     console.error("Error deleting employee:", error.message);
     // Handle the error accordingly (e.g., display an error message to the user)
   }
+};
+
+const registerShift = async (employee) => {
+  const shiftId = document.getElementById("shiftPicker").value;
+  console.log(shiftId);
+  const employeeId = employee._id;
+  await assignShift(shiftId, employeeId);
+  //refresh page
+
+  console.log("Shift registered successfully");
 };
 
 
