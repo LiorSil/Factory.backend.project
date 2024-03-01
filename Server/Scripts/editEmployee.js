@@ -1,14 +1,15 @@
 const editEmployee = async () => {
   const employeeId = sessionStorage.getItem("employeeID");
   const employee = await getEmployeeByID(employeeId);
-  console.log(`Employee: ${employee}`);
-  selectUnassignedShifts();
+  console.log(`Employee: ${employeeId}`);
 
   //TODO: Retrieve necessary data from session storage
   const token = sessionStorage.getItem("token");
 
   // Load the employee data into the form
   await loadEmployeeEditPage(employee);
+  await fillShiftsTable(employee, "shiftsTableBody");
+  selectUnassignedShifts();
 
   // Handle the update button
   const updateButton = document.getElementById("updateEmployee");
@@ -158,6 +159,9 @@ const registerShift = async (employee) => {
 
   location.reload();
 };
+
+
+  
 
 
 

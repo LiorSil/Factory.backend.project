@@ -6,6 +6,7 @@ const getShifts = async () => {
 }  
 
 const getShiftByID = async (id) => {
+    console.log(`Service: ${id}`);
     const shift = await shiftRepo.getShift(id);
     return shift;
 }

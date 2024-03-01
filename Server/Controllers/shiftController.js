@@ -31,11 +31,13 @@ router.put("/assign", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const shift = await shiftService.getShiftByID(req.params.id);
+
     return res.json(shift);
   } catch (error) {
     return res.status(500).json({ message: error.message, test: "test" });
   }
 });
+
 
 
 module.exports = router;

@@ -1,7 +1,6 @@
 const employeeRepo = require("../Repositories/employeeRepo");
 const departmentRepo = require("../Repositories/departmentRepo");
 const shiftRepo = require("../Repositories/shiftRepo");
-const mongoose = require("mongoose");
 
 const getEmployeeShiftsByID = async (id) => {
   const shifts = await employeeRepo.getShifts(id);

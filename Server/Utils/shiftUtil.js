@@ -66,3 +66,73 @@ const assignShift = async (shiftId, employeeId) => {
     // Handle the error accordingly (e.g., display an error message to the user)
   }
 };
+
+
+async function getShiftsList(shifts) {
+  const shiftDetails = await Promise.all(
+    shifts.map(async (shiftId) => {
+      const resp = await fetch(`http://localhost:3000/shifts/${shiftId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!resp.ok) {
+        throw new Error(`Failed to fetch shift: ${resp.statusText}`);
+      }
+
+      const shift = await resp.json();
+      const fDate = new Date(shift.date).toLocaleDateString("en-GB");
+      return `[${fDate} ${shift.startingHour} - ${shift.endingHour}]`;
+    })
+  );
+
+  return shiftDetails.join(", ");
+}
+
+const getShiftByID = async (shiftId) => {
+  try {
+    const resp = await fetch(`http://localhost:3000/shifts/${shiftId}`, {
+      method: "GET",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!resp.ok) {
+      throw new Error(`Failed to fetch shift: ${resp.statusText}`);
+    }
+
+    const shift = await resp.json();
+    return shift;
+  } catch (error) {
+    console.error("Error getting shift by ID:", error.message);
+    // Handle the error accordingly (e.g., display an error message to the user)
+  }
+};
+
+const fillShiftsTable = async (employee, tBodyId) => {
+  const shiftsIds = await employee.shifts;
+  const shifts = await Promise.all(
+    shiftsIds.map(async (shiftId) => {
+      const shift = await getShiftByID(shiftId);
+      return shift;
+    })
+  );
+
+  //fill the shifts table
+  const tableBody = document.getElementById(tBodyId);
+  shifts.forEach((shift) => {
+    const row = document.createElement("tr");
+    const date = document.createElement("td");
+    const hours = document.createElement("td");
+    const fDate = formatDate(shift.date);
+    date.innerHTML = fDate;
+    hours.innerHTML = `${shift.startingHour} - ${shift.endingHour}`;
+    row.appendChild(date);
+    row.appendChild(hours);
+    tableBody.appendChild(row);
+  });
+};

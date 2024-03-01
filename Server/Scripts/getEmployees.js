@@ -75,28 +75,7 @@ function createClickableTableCell(content, clickHandler) {
 }
 
 // Function to get a list of shifts and format them
-async function getShiftsList(shifts) {
-  const shiftDetails = await Promise.all(
-    shifts.map(async (shiftId) => {
-      const resp = await fetch(`http://localhost:3000/shifts/${shiftId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
 
-      if (!resp.ok) {
-        throw new Error(`Failed to fetch shift: ${resp.statusText}`);
-      }
-
-      const shift = await resp.json();
-      const fDate = new Date(shift.date).toLocaleDateString("en-GB");
-      return `[${fDate} ${shift.startingHour} - ${shift.endingHour}]`;
-    })
-  );
-
-  return shiftDetails.join(", ");
-}
 
 // Function to redirect to the "Add Employee" page
 function redirectToAddEmployee() {
