@@ -67,18 +67,27 @@ const deleteEmployee = async (employeeId) => {
 
 const assignShift = async (shiftId, employeeId) => {
   try {
-    const shift = await employeeRepo.assignShift(shiftId, employeeId);
-    const status = await shiftRepo.assignShift(shiftId);
-    if (status) {
-      return shift;
+    //test if the shift is available
+    const assignedShift = await shiftRepo.assignShift(shiftId);
+    if (!assignedShift) {
+      await employeeRepo.addShiftToEmployee(shiftId, employeeId);
+      return {
+        message: `Shift ${shiftId} assigned to employee ${employeeId}`,
+        status: "success",
+      };
     } else {
-      return false;
+      return {
+        message: `Shift ${shiftId} is already assigned`,
+        status: "failed",
+      };
     }
   } catch (error) {
-    console.log(`Service error: ${error}`);
+    return {
+      message: `Failed to assign shift: ${error} unknown error`,
+      status: false,
+    };
   }
-};
-
+}
 module.exports = {
   getEmployeeShiftsByID,
   getEmployeeByID,

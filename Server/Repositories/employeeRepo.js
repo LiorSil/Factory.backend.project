@@ -70,7 +70,7 @@ const updateEmployeeLastName = async (id, lastName) => {
 };
 
 
-const assignShift = async (shiftId, employeeId) => {
+const addShiftToEmployee = async (shiftId, employeeId) => {
   const employee = await getEmployee(employeeId);
   employee.shifts.push(shiftId);
   await employee.save();
@@ -87,5 +87,5 @@ module.exports = {
   updateEmployeeDepartment,
   updateEmployeeFirstName,
   updateEmployeeLastName,
-  assignShift,
+  addShiftToEmployee,
 };

@@ -18,26 +18,14 @@ router.put("/assign", async (req, res) => {
   try {
     const shiftId = req.body.shiftId;
     const employeeId = req.body.employeeId;
-    const status = await employeesService.assignShift(shiftId, employeeId);
+    const result = await employeesService.assignShift(shiftId, employeeId);
 
-    return res.json({
-      message: `Shift ${shiftId} assigned to employee ${employeeId}`,
-      status: status,
-    });
+    return res.json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 });
 
-router.put("/test", async (req, res) => {
-  try {
-    const shiftId = "65e2260244c8c01d7c824d48";
-    const status = await shiftService.test(shiftId);
-    return res.json({ message: `Shift ${shiftId} assigned`, status: status });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
 
 //get by id
 router.get("/:id", async (req, res) => {

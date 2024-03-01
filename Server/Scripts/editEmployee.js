@@ -1,7 +1,7 @@
 const editEmployee = async () => {
   const employeeId = sessionStorage.getItem("employeeID");
   const employee = await getEmployeeByID(employeeId);
-  console.log(employee._id);
+  console.log(`Employee: ${employee}`);
   selectUnassignedShifts();
 
   //TODO: Retrieve necessary data from session storage
@@ -152,12 +152,11 @@ const deleteSelectedEmployee = async () => {
 
 const registerShift = async (employee) => {
   const shiftId = document.getElementById("shiftPicker").value;
-  console.log(shiftId);
+
   const employeeId = employee._id;
   await assignShift(shiftId, employeeId);
-  //refresh page
 
-  console.log("Shift registered successfully");
+  location.reload();
 };
 
 

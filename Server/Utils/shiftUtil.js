@@ -1,5 +1,4 @@
 const selectUnassignedShifts = async () => {
-  console.log("selectUnassignedShifts");
   try {
     const unassignedShifts = await getUnassignedShifts();
     const shiftPicker = document.getElementById("shiftPicker");
@@ -53,10 +52,13 @@ const assignShift = async (shiftId, employeeId) => {
         employeeId: employeeId,
       }),
     });
-    const status = await resp.json();
+    const result = await resp.json();
     if (!resp.ok) {
-      throw new Error(`Failed to assign shift: ${status}`);
+      throw new Error(`Failed to assign shift: ${result.message}`);
     } else {
+      console.log(
+        `Status: ${result.status}, Shift assigned: ${result.message} `
+      );
       return true;
     }
   } catch (error) {
