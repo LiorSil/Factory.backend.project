@@ -4,6 +4,15 @@ const express = require("express");
 const router = express.Router();
 
 // http://localhost:3000/shifts
+router.get("/get_shifts", async (req, res) => {
+  try {
+    const shifts = await shiftService.getShifts();
+    return res.json(shifts);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
 router.get("/unassigned_shifts", async (req, res) => {
   try {
     const shifts = await shiftService.getUnassignedShifts();
@@ -26,7 +35,6 @@ router.put("/assign", async (req, res) => {
   }
 });
 
-
 //get by id
 router.get("/:id", async (req, res) => {
   try {
@@ -37,6 +45,20 @@ router.get("/:id", async (req, res) => {
     return res.status(500).json({ message: error.message, test: "test" });
   }
 });
+
+//create
+router.post("/", async (req, res) => {
+  try {
+    const shift = req.body;
+    const result = await shiftService.createShift(shift);
+
+    return res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+
 
 
 

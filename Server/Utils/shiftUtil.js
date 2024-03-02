@@ -136,3 +136,36 @@ const fillShiftsTable = async (employee, tBodyId) => {
     tableBody.appendChild(row);
   });
 };
+
+const getShifts = async () => {
+  try {
+    const response = await fetch("http://localhost:3000/shifts/get_shifts");
+    const shifts = await response.json();
+    return shifts;
+  } catch (error) {
+    console.error("Error getting shifts:", error.message);
+    // Handle the error accordingly (e.g., display an error message to the user)
+  }
+};
+
+const createShift = async (newShift) => {
+  try {
+    const resp = await fetch("http://localhost:3000/shifts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newShift),
+    });
+    const result = await resp.json();
+    if (!resp.ok) {
+      throw new Error(`Failed to create shift: ${result.message}`);
+    } else {
+      console.log(`Status: ${result.status}, Shift created: ${result.message}`);
+      return true;
+    }
+  } catch (error) {
+    console.error("Error creating shift:", error.message);
+    // Handle the error accordingly (e.g., display an error message to the user)
+  }
+};

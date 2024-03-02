@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shifts</title>
+    <link rel="stylesheet" href="./CSS/shifts.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Shifts</h1>
+
+        <!-- Form for creating new shift -->
+        <h2>Create New Shift</h2>
+        <form id="createShiftForm">
+            <label for="newDate">Date:</label>
+            <input type="date" id="newDate" name="newDate" required>
+            <label for="newStartHour">Starting Hour (7-23):</label>
+            <input type="number" id="newStartHour" name="newStartHour" min="7" max="23" required>
+            <label for="newEndHour">Ending Hour (7-23):</label>
+            <input type="number" id="newEndHour" name="newEndHour" min="7" max="23" required>
+            <button id = "createShiftButton" type="submit">Create Shift</button>
+        </form>
+
+        <!-- Table for displaying shifts -->
+        <h2>Shifts</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Starting Hour</th>
+                    <th>Ending Hour</th>
+                    <th>Assigned</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="shiftsTableBody">
+                <!-- Shifts data will be populated dynamically -->
+            </tbody>
+        </table>
+    </div>
+    <script src="../Scripts/shifts.js"></script>
+    <script src="../Utils/shiftUtil.js"></script>
+</body>
+</html>

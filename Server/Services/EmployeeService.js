@@ -4,6 +4,7 @@ const shiftRepo = require("../Repositories/shiftRepo");
 
 const getEmployeeShiftsByID = async (id) => {
   const shifts = await employeeRepo.getShifts(id);
+  return shifts;
 };
 
 const getEmployeeByID = async (id) => {

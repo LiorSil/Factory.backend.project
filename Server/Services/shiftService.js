@@ -16,9 +16,14 @@ const getUnassignedShifts = async () => {
   return shifts;
 };
 
+const createShift = async (shift) => {
+  const result = await shiftRepo.createShift(shift);
+  return result;
+};
 
 module.exports = {
   getShifts,
   getShiftByID,
   getUnassignedShifts,
+  createShift,
 };   
