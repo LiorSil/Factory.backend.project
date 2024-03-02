@@ -8,22 +8,20 @@ const startUpEmployees = async () => {
 
 // Function to fill the table with employee data
 async function fillTable(employees) {
-  const tableBody = document.querySelector("table tbody");
-  tableBody.innerHTML = ""; // Clear existing rows
-  if (!employees) return console.log("No employees found");
+  const tableBody = document.getElementById("employeesTbody");
   employees.forEach(async (employee) => {
     const row = document.createElement("tr");
     const fullName = `${employee.firstName} ${employee.lastName}`;
     const fullNameCell = createClickableTableCell(fullName, () =>
       redirectToEditEmployee(employee._id)
     );
+    //i want to add the first column as
 
     const departmentId = await employee.departmentId;
 
     const departmentName = await convertDepartmentIDtoName(departmentId);
-    const departmentCell = createClickableTableCell(
-      departmentName || "",
-      () => redirectToEditDepartment(departmentId)
+    const departmentCell = createClickableTableCell(departmentName || "", () =>
+      redirectToEditDepartment(departmentId)
     );
 
     const shiftsCell = createTableCell(
