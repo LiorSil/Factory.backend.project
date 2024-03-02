@@ -54,8 +54,7 @@ const convertDepartmentNameToId = async (departmentName) => {
 
 
 
-const getEmployeesInDepartment = async () => {
-  const departmentId = sessionStorage.getItem("departmentId");
+const getEmployeesInDepartment = async (departmentId) => {
   const employees = await getEmployees();
 
   //return employees that are in the department
@@ -122,4 +121,6 @@ const getDepartments = async () => {
     console.error(error);
     // Handle errors as needed
   }
+
+  // const getEmployeesInDepartment
 };

@@ -1,5 +1,5 @@
 const getEditDepartment = async () => {
-  const departmentId = await sessionStorage.getItem("departmentId");
+  const departmentId = sessionStorage.getItem("departmentId");
   const departmentName = await convertDepartmentIDtoName(departmentId);
   await departmentNamePlaceholder(departmentName);
 
@@ -26,7 +26,7 @@ const getEditDepartment = async () => {
   }
 
   await addEmployeesToSelect();
-  await addManagerToSelect(departmentManagerID);
+  await addManagerToSelect(departmentManagerID, departmentId);
 
   const selectedEmployee = await getChosenEmployee("employeeDropdown");
 
@@ -54,8 +54,8 @@ const fillOptionsWithEmployees = async (employees, dropdown) => {
   });
 };
 
-const addManagerToSelect = async (departmentManagerID) => {
-  const departmentEmployees = await getEmployeesInDepartment();
+const addManagerToSelect = async (departmentManagerID, departmentId) => {
+  const departmentEmployees = await getEmployeesInDepartment(departmentId);
   const managerDropdown = document.getElementById("departmentManagerDropdown");
   await fillOptionsWithEmployees(departmentEmployees, managerDropdown);
   //set current manager as selected option

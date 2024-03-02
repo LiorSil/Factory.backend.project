@@ -23,22 +23,18 @@
         <th>Employees</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id = "departmentsTableBody">
       <!-- Sample row -->
-      <tr>
-        <td><a href="#" onclick="redirectToEditDepartment('departmentId')">Department Name</a></td>
-        <td><a href="#" onclick="redirectToEditEmployee('employeeID')">Manager Name</a></td>
-        <td>
-          <a href="#" onclick="redirectToEditEmployee('employeeID1')">Employee 1</a>,
-          <a href="#" onclick="redirectToEditEmployee('employeeID2')">Employee 2</a>,
-          <a href="#" onclick="redirectToEditEmployee('employeeID3')">Employee 3</a>
-        </td>
-      </tr>
+
       <!-- Add more rows dynamically if needed -->
     </tbody>
   </table>
 
   <!-- JavaScript functions for redirection -->
+  <script src = "../Scripts/departments.js"></script>
+  <script src = "../Utils/departmentUtil.js"></script>
+  <script src = "../Utils/employeeUtil.js"></script>
+
   <script>
     function redirectToNewDepartment() {
       // Implement redirection logic to "Add Department" page
