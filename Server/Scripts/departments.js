@@ -17,7 +17,7 @@ const fillDepartments = async () => {
     // Create a clickable link for the department name
     const departmentLink = document.createElement("a");
     departmentLink.textContent = department.name;
-    departmentLink.href = `../Client/edit_department.html`;
+    departmentLink.href = `./edit_department.html`;
 
     // Add an event listener to handle click events
     departmentLink.addEventListener("click", (event) => {
@@ -41,7 +41,7 @@ const fillDepartments = async () => {
       // Create a clickable link for each employee's name
       const employeeLink = document.createElement("a");
       employeeLink.textContent = `${employee.firstName} ${employee.lastName}`;
-      employeeLink.href = `../Client/edit_employee.html`; // Set the appropriate URL
+      employeeLink.href = `./edit_employee.html`; // Set the appropriate URL
 
       // Add an event listener to handle click events
       employeeLink.addEventListener("click", (event) => {

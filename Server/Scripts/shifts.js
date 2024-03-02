@@ -65,7 +65,7 @@ const unassignBtnHandler = async (shiftId) => {
 
 const editBtnHandler = async (shiftId) => {
   sessionStorage.setItem("shiftId", shiftId);
-  window.location.href = "../Client/edit_shift.html";
+  window.location.href = "./edit_shift.html";
 };
 
 window.onload = loadShifts;
