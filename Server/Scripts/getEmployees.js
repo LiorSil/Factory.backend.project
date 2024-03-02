@@ -5,55 +5,64 @@ const startUpEmployees = async () => {
   fillTable(employees);
 };
 
-
 // Function to fill the table with employee data
 async function fillTable(employees) {
   const tableBody = document.getElementById("employeesTbody");
-  employees.forEach(async (employee) => {
-    const row = document.createElement("tr");
-    const fullName = `${employee.firstName} ${employee.lastName}`;
-    const fullNameCell = createClickableTableCell(fullName, () =>
-      redirectToEditEmployee(employee._id)
-    );
-    //i want to add the first column as
+  //clear the table
+  tableBody.innerHTML = "";
 
-    const departmentId = await employee.departmentId;
+  // Use Promise.all() to handle asynchronous operations concurrently
+  await Promise.all(
+    employees.map(async (employee) => {
+      const row = document.createElement("tr");
 
-    const departmentName = await convertDepartmentIDtoName(departmentId);
-    const departmentCell = createClickableTableCell(departmentName || "", () =>
-      redirectToEditDepartment(departmentId)
-    );
+      // Create full name cell
+      const fullName = `${employee.firstName} ${employee.lastName}`;
+      const fullNameHref = document.createElement("a");
+      fullNameHref.href = `./edit_employee.html?id=${employee._id}`;
+      fullNameHref.textContent = fullName;
+      const fullNameCell = document.createElement("td");
+      fullNameCell.appendChild(fullNameHref);
 
-    const shiftsCell = createTableCell(
-      employee.shifts ? await getShiftsList(employee.shifts) : ""
-    );
+      // Retrieve department name asynchronously
+      const departmentId = employee.departmentId;
+      const departmentPromise = convertDepartmentIDtoName(departmentId);
+      const departmentLink = document.createElement("a");
+      departmentLink.href = `./edit_department.html?id=${departmentId}`;
+      const departmentCell = document.createElement("td");
+      departmentCell.appendChild(departmentLink);
 
-    row.appendChild(fullNameCell);
-    row.appendChild(departmentCell);
-    row.appendChild(shiftsCell);
+      // Retrieve employee shifts asynchronously
+      const shiftsPromise = employeeShifts(employee.shifts);
+      const shiftCell = document.createElement("td");
 
-    tableBody.appendChild(row);
-  });
+      // Wait for department name and shifts to resolve
+      const [departmentName, shifts] = await Promise.all([
+        departmentPromise,
+        shiftsPromise,
+      ]);
+
+      // Populate department name and shifts
+      departmentLink.textContent = departmentName;
+      shiftCell.textContent = shifts;
+
+      // Append cells to the row
+      row.appendChild(fullNameCell);
+      row.appendChild(departmentCell);
+      row.appendChild(shiftCell);
+
+      // Append the row to the table body
+      tableBody.appendChild(row);
+    })
+  );
 }
-
-// Function to create a clickable table cell
-function createClickableTableCell(content, clickHandler) {
-  const cell = document.createElement("td");
-  const link = document.createElement("a");
-  link.href = "#";
-  link.textContent = content;
-  link.onclick = clickHandler;
-  cell.appendChild(link);
-  return cell;
-}
-
 
 // Function to filter the table based on the selected department
 async function filterByDepartment(filterId) {
   const selectedDepartment = document.getElementById(filterId).value;
   let employees = await getEmployees();
   if (selectedDepartment === "all") {
-    return employees
+    return employees;
   } else {
     const resp = await fetch(
       `http://localhost:3000/employees/department/${selectedDepartment}`,
@@ -74,12 +83,11 @@ async function filterByDepartment(filterId) {
   }
 }
 
-// Function to create a table cell with content
-function createTableCell(content) {
-  const cell = document.createElement("td");
-  cell.textContent = content;
-  return cell;
-}
+const employeeShifts = async (shiftsIds) => {
+  const shifts = getShiftsList(shiftsIds);
+  return shifts;
+};
+
 
 
 
