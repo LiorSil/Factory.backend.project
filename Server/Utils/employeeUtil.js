@@ -1,10 +1,5 @@
 async function getEmployees() {
   try {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      throw new Error("No token found");
-    }
-
     const resp = await fetch("http://localhost:3000/employees", {
       method: "GET",
       headers: {
@@ -17,11 +12,9 @@ async function getEmployees() {
     }
 
     const employees = await resp.json();
-
     return employees;
   } catch (error) {
     console.error(error);
-    // Handle errors as needed
   }
 }
 
@@ -74,3 +67,16 @@ const createEmployeesSelect = async (selectId) => {
 };
 
 //
+async function redirectToEditEmployee(employeeID) {
+  //i want to pass the employeeID to the edit_employee.html page
+  sessionStorage.setItem("employeeID", employeeID);
+  const editEmployeeURL = `./edit_employee.html`;
+  window.location.href = editEmployeeURL;
+}
+
+async function redirectToEditDepartment(departmentId) {
+  //i want to pass the departmentId to the editDepartment.html page
+  sessionStorage.setItem("departmentId", departmentId);
+  const editDepartmentURL = `./edit_department.html`;
+  window.location.href = editDepartmentURL;
+}

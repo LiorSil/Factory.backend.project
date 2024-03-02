@@ -5,31 +5,6 @@ const startUpEmployees = async () => {
   fillTable(employees);
 };
 
-async function getEmployees() {
-  try {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      throw new Error("No token found");
-    }
-
-    const resp = await fetch("http://localhost:3000/employees", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!resp.ok) {
-      throw new Error(`Failed to fetch data: ${resp.statusText}`);
-    }
-
-    const employees = await resp.json();
-    return employees;
-  } catch (error) {
-    console.error(error);
-    // Handle errors as needed
-  }
-}
 
 // Function to fill the table with employee data
 async function fillTable(employees) {
@@ -46,7 +21,7 @@ async function fillTable(employees) {
     const departmentId = await employee.departmentId;
 
     const departmentName = await convertDepartmentIDtoName(departmentId);
-    const departmentCell = await createClickableTableCell(
+    const departmentCell = createClickableTableCell(
       departmentName || "",
       () => redirectToEditDepartment(departmentId)
     );
@@ -74,19 +49,13 @@ function createClickableTableCell(content, clickHandler) {
   return cell;
 }
 
-// Function to get a list of shifts and format them
-
-
-// Function to redirect to the "Add Employee" page
-function redirectToAddEmployee() {
-  window.location.href = "./add_employee.html";
-}
 
 // Function to filter the table based on the selected department
-async function filterByDepartment() {
-  const selectedDepartment = document.getElementById("departmentFilter").value;
+async function filterByDepartment(filterId) {
+  const selectedDepartment = document.getElementById(filterId).value;
+  let employees = await getEmployees();
   if (selectedDepartment === "all") {
-    getEmployees();
+    return employees
   } else {
     const resp = await fetch(
       `http://localhost:3000/employees/department/${selectedDepartment}`,
@@ -97,11 +66,12 @@ async function filterByDepartment() {
         },
       }
     );
+
     if (!resp.ok) {
       throw new Error(`Failed to fetch data : ${resp.statusText}`);
     } else {
-      const employees = await resp.json();
-      fillTable(employees);
+      const filteredEmployeesByDepartment = await resp.json();
+      return filteredEmployeesByDepartment;
     }
   }
 }
@@ -113,19 +83,7 @@ function createTableCell(content) {
   return cell;
 }
 
-async function redirectToEditEmployee(employeeID) {
-  //i want to pass the employeeID to the edit_employee.html page
-  sessionStorage.setItem("employeeID", employeeID);
-  const editEmployeeURL = `./edit_employee.html`;
-  window.location.href = editEmployeeURL;
-}
 
-async function redirectToEditDepartment(departmentId) {
-  //i want to pass the departmentId to the editDepartment.html page
-  sessionStorage.setItem("departmentId", departmentId);
-  const editDepartmentURL = `./edit_department.html`;
-  window.location.href = editDepartmentURL;
-}
 
 // Call the getEmployees function when the page loads
 window.onload = startUpEmployees;

@@ -16,7 +16,7 @@
 
   <!-- Dropdown to filter by department -->
   <label for="departmentFilter">Filter by Department:</label>
-  <select id="departmentFilter" onchange="filterByDepartment()">
+  <select id="departmentFilter" onchange="filterDepartment()">
     <option value="all">All Departments</option>
     <option value="Sales">Sales</option>
     <option value="Engineering">Engineering</option>
@@ -41,8 +41,16 @@
   <script src ="../../Utils//shiftUtil.js"></script>
   <script src ='../../Utils/clientPageOnLoadFunctions.js'></script>
   <script src ='../../scripts/getEmployees.js'></script>
+  <script src ='../../Utils/redirects.js'></script>
+  <script> 
+  const filterDepartment =async ()=>{
+    const employees= await filterByDepartment("departmentFilter")
+    await fillTable(employees)
+
+  }
+  </script>
   
  
-  </script>
+  
 </body>
 </html>
