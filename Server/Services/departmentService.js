@@ -44,6 +44,21 @@ const isManager = async (employeeId) => {
   return managerStrings.includes(employeeId);
 };
 
+const createDepartment = async (departmentName) => {
+  if (!departmentName) return null;
+  if (departmentName.length < 3) return null;
+  //test if department exists
+  const departmentAlreadyExist = await departmentRepo.getDepartmentByName(
+    departmentName
+  );
+  if (departmentAlreadyExist) return false;
+  else {
+    const newDepartment = await departmentRepo.createDepartment(departmentName);
+    return {
+      department: newDepartment,
+    };
+  }
+};
 
 module.exports = {
   getDepartments,
@@ -51,4 +66,5 @@ module.exports = {
   setDepartmentManager,
   deleteDepartmentAndEmployees,
   isManager,
+  createDepartment,
 };

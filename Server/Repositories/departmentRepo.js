@@ -60,6 +60,12 @@ const updateManager = async (departmentId, employeeId) => {
   await department.save();
 };
 
+const getDepartmentByName = async (name) => {
+  const isExist = await departmentModel.findOne({ name: name });
+  if (isExist) return true;
+  return false;
+};
+
 module.exports = {
   getDepartmentName,
   getDepartment,
@@ -71,4 +77,5 @@ module.exports = {
   updateManager,
   getAllManagers,
   getDepartments,
+  getDepartmentByName,
 };

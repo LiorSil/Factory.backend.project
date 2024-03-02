@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Department</title>
+    <link rel="stylesheet" href="./CSS/addDepartment.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Add Department</h1>
+        <form id="departmentForm">
+            <div class="form-group">
+                <label for="departmentName">Department Name:</label>
+                <input type="text" id="departmentName" name="departmentName"  placeholder="department" required >
+            </div>
+            <button id = "addDepartmentButton" type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script src="../Scripts/addDepartment.js"></script>
+    <script>
+    const departmentInput = document.getElementById("departmentName");
+    const addDepartmentButton = document.getElementById("addDepartmentButton");
+    addDepartmentButton.addEventListener("click", async () => {
+    const newDepartmentName = departmentInput.value;
+      const resp = await createDepartment(newDepartmentName);
+  });
+
+    </script>
+</body>
+</html>
