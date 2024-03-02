@@ -1,5 +1,12 @@
 const employeeModel = require("../Models/employeeModel");
 
+const removeShiftFromEmployee = async (shiftId, employeeId) => {
+  const employee = await getEmployee(employeeId);
+  employee.shifts = employee.shifts.filter((id) => !id.equals(shiftId));
+  await employee.save();
+  return employee;
+};
+
 const getEmployee = async (employeeId) => {
   return await employeeModel.findById(employeeId);
 };
@@ -48,7 +55,6 @@ const updateEmployeeDepartment = async (employeeId, departmentId) => {
   return employee;
 };
 
-
 const updateEmployeeFirstName = async (id, firstName) => {
   try {
     console.log(`Updating employee first name to: ${firstName}`);
@@ -69,7 +75,6 @@ const updateEmployeeLastName = async (id, lastName) => {
   return;
 };
 
-
 const addShiftToEmployee = async (shiftId, employeeId) => {
   const employee = await getEmployee(employeeId);
   employee.shifts.push(shiftId);
@@ -88,4 +93,5 @@ module.exports = {
   updateEmployeeFirstName,
   updateEmployeeLastName,
   addShiftToEmployee,
+  removeShiftFromEmployee,
 };

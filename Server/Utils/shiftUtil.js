@@ -169,3 +169,50 @@ const createShift = async (newShift) => {
     // Handle the error accordingly (e.g., display an error message to the user)
   }
 };
+
+const unassignShift = async (shiftId) => {
+  const resp = await fetch(
+    "http://localhost:3000/employees/unassign_shift_from_employee",
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ shiftId: shiftId }),
+    }
+  );
+  const result = await resp.json();
+  if (!resp.ok) {
+    throw new Error(`Failed to unassign shift: ${result.message}`);
+  } else {
+    console.log(
+      `Status: ${result.status}, Shift unassigned: ${result.message}`
+    );
+  }
+};
+
+const updateShift = async (shiftId, updatedShift) => {
+  try {
+    const resp = await fetch(
+      `http://localhost:3000/shifts/update_shift/${shiftId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedShift),
+      }
+    );
+    const result = await resp.json();
+    if (!resp.ok) {
+      throw new Error(`Failed to update shift: ${result.message}`);
+    } else {
+      console.log(`Status: ${result.status}, Shift updated: ${result.message}`);
+      return true;
+    }
+  } catch (error) {
+    console.error("Error updating shift:", error.message);
+    // Handle the error accordingly (e.g., display an error message to the user)
+  }
+};
+

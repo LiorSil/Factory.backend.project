@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Shift</title>
+    <link rel="stylesheet" href="./CSS/edit_shift.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Shift</h1>
+        <form id="editShiftForm">
+            <label for="editDate">Date:</label>
+            <input type="date" id="editDate" name="editDate" required>
+            <label for="editStartHour">Starting Hour (7-23):</label>
+            <input type="number" id="editStartHour" name="editStartHour" min="7" max="23" required>
+            <label for="editEndHour">Ending Hour (7-23):</label>
+            <input type="number" id="editEndHour" name="editEndHour" min="7" max="23" required>
+            <label for="editAssigned">Assigned:</label>
+            <select id="editAssigned" name="editAssigned" required>
+                <option id="assigned" value=0 >Unassigned</option>
+            </select>
+            <button id = submitEditShift type="submit">Save Changes</button>
+        </form>
+    </div>
+    <script src = "../Scripts/editShift.js"></script>
+    <script src = "../Utils/employeeUtil.js"></script>
+    <script src = "../Utils/shiftUtil.js"></script>
+    <script>
+        const shiftId = sessionStorage.getItem('shiftId');
+        createEmployeesSelect("editAssigned")
+    </script>
+
+    
+</body>
+</html>

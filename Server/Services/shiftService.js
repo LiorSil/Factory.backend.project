@@ -6,10 +6,9 @@ const getShifts = async () => {
 }  
 
 const getShiftByID = async (id) => {
-    console.log(`Service: ${id}`);
-    const shift = await shiftRepo.getShift(id);
-    return shift;
-}
+  const shift = await shiftRepo.getShift(id);
+  return shift;
+};
 
 const getUnassignedShifts = async () => {
   const shifts = await shiftRepo.getUnassignedShifts();
@@ -21,9 +20,20 @@ const createShift = async (shift) => {
   return result;
 };
 
+const unassignShift = async (shiftId) => {
+  const result = await shiftRepo.unassignShift(shiftId);
+  return result;
+};
+const updateShift = async (shiftId, updatedShift) => {
+  const result = await shiftRepo.updateShift(shiftId, updatedShift);
+  return result;
+};
+
 module.exports = {
   getShifts,
   getShiftByID,
   getUnassignedShifts,
   createShift,
+  unassignShift,
+  updateShift,
 };   

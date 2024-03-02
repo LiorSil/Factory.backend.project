@@ -1,6 +1,7 @@
 const employeeRepo = require("../Repositories/employeeRepo");
 const departmentRepo = require("../Repositories/departmentRepo");
 const shiftRepo = require("../Repositories/shiftRepo");
+const Shift = require("../Models/shiftModel");
 
 const getEmployeeShiftsByID = async (id) => {
   const shifts = await employeeRepo.getShifts(id);
@@ -87,7 +88,24 @@ const assignShift = async (shiftId, employeeId) => {
       status: false,
     };
   }
-}
+};
+
+const unassignShift = async (shiftId) => {
+  const employees = await getEmployees();
+  try {
+    employees.forEach(async (employee) => {
+      if (employee.shifts.includes(shiftId)) {
+        console.log(`Employee ${employee._id} has shift ${shiftId}`);
+        await employeeRepo.removeShiftFromEmployee(shiftId, employee._id);
+        return shiftId;
+      }
+    });
+  } catch (error) {
+    console.error("Error unassigning shift from employee:", error.message);
+    return null;
+  }
+};
+
 module.exports = {
   getEmployeeShiftsByID,
   getEmployeeByID,
@@ -97,4 +115,5 @@ module.exports = {
   updateEmployee,
   deleteEmployee,
   assignShift,
+  unassignShift,
 };

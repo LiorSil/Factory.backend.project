@@ -1,4 +1,5 @@
 const employeeService = require("../Services/EmployeeService");
+const shiftService = require("../Services/shiftService");
 const express = require("express");
 const router = express.Router();
 
@@ -99,6 +100,23 @@ router.delete("/delete", async (req, res) => {
     }
   } catch (error) {
     return res.json({ message: "Error deleting employee: " });
+  }
+});
+
+router.put("/unassign_shift_from_employee", async (req, res) => {
+  try {
+    const shiftId = req.body.shiftId;
+    const unassignShiftFromEmployee = await employeeService.unassignShift(
+      shiftId
+    );
+    const unassignShiftFromShifts = await shiftService.unassignShift(shiftId);
+    const result = {
+      employee: unassignShiftFromEmployee,
+      shift: unassignShiftFromShifts,
+    };
+    return res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 });
 

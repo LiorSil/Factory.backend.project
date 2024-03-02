@@ -62,4 +62,15 @@ const getEmployeeByID = async (employeeId) => {
   }
 };
 
+const createEmployeesSelect = async (selectId) => {
+  const employees = await getEmployees();
+  const select = document.getElementById(selectId);
+  employees.forEach((employee) => {
+    const option = document.createElement("option");
+    option.value = employee._id;
+    option.text = `${employee.firstName} ${employee.lastName}`;
+    select.appendChild(option);
+  });
+};
+
 //
