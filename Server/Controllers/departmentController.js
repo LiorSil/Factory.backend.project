@@ -8,7 +8,6 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const departments = await departmentService.getDepartments();
-    console.log( `departments: ${departments}`);
     return res.json(departments);
   } catch (error) {
     return res.status(500).json({ message: error.message });

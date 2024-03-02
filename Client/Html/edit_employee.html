@@ -66,7 +66,9 @@
 
   <script>
     const deleteEmployeeFunc = async () => {
-      const status = deleteSelectedEmployee()
+      const url = new URL(window.location.href);
+      const employeeId = url.searchParams.get("id");
+      const status = deleteEmployeeById(employeeId)
       if (status) {
         window.location.href = "./employees.html";
       } else {

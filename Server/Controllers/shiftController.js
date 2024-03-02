@@ -16,7 +16,6 @@ router.get("/get_shifts", async (req, res) => {
 router.get("/unassigned_shifts", async (req, res) => {
   try {
     const shifts = await shiftService.getUnassignedShifts();
-    console.log(`shifts: ${shifts}`);
     return res.json(shifts);
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -25,13 +24,11 @@ router.get("/unassigned_shifts", async (req, res) => {
 
 router.put("/assign", async (req, res) => {
   try {
-    const shiftId = req.body.shiftId;
-    const employeeId = req.body.employeeId;
+    const { shiftId, employeeId } = req.body;
     const result = await employeesService.assignShift(shiftId, employeeId);
-
-    return res.json(result);
+    res.json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message, status: "failed" });
   }
 });
 

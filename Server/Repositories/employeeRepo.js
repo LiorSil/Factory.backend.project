@@ -31,9 +31,7 @@ const createEmployee = async (
   startWorkYear,
   departmentId
 ) => {
-  console.log(
-    `Creating employee: ${firstName} ${lastName} with startWorkYear: ${startWorkYear} and departmentId: ${departmentId}`
-  );
+
   const newEmployee = new employeeModel({
     firstName,
     lastName,

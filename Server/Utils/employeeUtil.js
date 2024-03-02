@@ -80,3 +80,26 @@ async function redirectToEditDepartment(departmentId) {
   const editDepartmentURL = `./edit_department.html`;
   window.location.href = editDepartmentURL;
 }
+
+const deleteEmployeeById = async (employeeId) => {
+  try {
+    const resp = await fetch(`http://localhost:3000/employees/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: employeeId,
+      }),
+    });
+    const status = await resp.json();
+    if (!resp.ok) {
+      throw new Error(`Failed to delete employee: ${status.message}`);
+    } else {
+      return true;
+    }
+  } catch (error) {
+    console.error("Error deleting employee:", error.message);
+    // Handle the error accordingly (e.g., display an error message to the user)
+  }
+};

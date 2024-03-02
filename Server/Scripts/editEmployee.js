@@ -24,9 +24,7 @@ const updateEmployee = async (employee) => {
     document.getElementById("firstName").value || employee.firstName;
   let lastName = document.getElementById("lastName").value || employee.lastName;
 
-  const departmentId = await convertDepartmentNameToId(
-    document.getElementById("departmentPicker").value
-  );
+  const departmentId = document.getElementById("departmentPicker").value;
   try {
     const resp = await fetch(
       "http://localhost:3000/employees/update_employee",
@@ -72,18 +70,6 @@ const loadEmployeeEditPage = async (employee) => {
   departmentPickerLabel.insertAdjacentElement("afterend", selectDepartment);
 };
 
-const selectDepartment = async () => {
-  try {
-    const department = document.getElementById("departmentPicker");
-    const departmentName = department.options[department.selectedIndex].value;
-    const departmentID = await convertDepartmentNameToId(departmentName);
-    sessionStorage.setItem("selectedDepartmentId", departmentID);
-  } catch (error) {
-    console.error("Error selecting department:", error.message);
-    // Handle the error accordingly (e.g., display an error message to the user)
-  }
-};
-
 const createSelectDepartment = async (employeeDepartmentId) => {
   // Create a select element
   const selectDepartment = document.createElement("select");
@@ -117,30 +103,6 @@ const createSelectDepartment = async (employeeDepartmentId) => {
   return selectDepartment;
 };
 
-const deleteSelectedEmployee = async () => {
-  const id = sessionStorage.getItem("employeeID");
-  try {
-    const resp = await fetch(`http://localhost:3000/employees/delete`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: id,
-      }),
-    });
-    const status = await resp.json();
-    if (!resp.ok) {
-      throw new Error(`Failed to delete employee: ${status.message}`);
-    } else {
-      return true;
-    }
-  } catch (error) {
-    console.error("Error deleting employee:", error.message);
-    // Handle the error accordingly (e.g., display an error message to the user)
-  }
-};
-
 const registerShift = async (employee) => {
   const shiftId = document.getElementById("shiftPicker").value;
 
@@ -149,15 +111,5 @@ const registerShift = async (employee) => {
 
   location.reload();
 };
-
-
-  
-
-
-
-
-
-
-
 
 window.onload = editEmployee;

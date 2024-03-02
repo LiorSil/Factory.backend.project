@@ -21,8 +21,8 @@ const assignShift = async (shiftId) => {
     console.log("Shift is already assigned");
     return true;
   } else {
-      console.log("Shift is already assigned2");
-    shift.assigned = true; // Assigning boolean true instead of string "true"
+    console.log("Shift is not assigned");
+    shift.assigned = true;
     await shift.save();
     return false;
   }

@@ -68,23 +68,24 @@ const deleteEmployee = async (employeeId) => {
 
 const assignShift = async (shiftId, employeeId) => {
   try {
-    //test if the shift is available
+    // Check if the shift is available
     const assignedShift = await shiftRepo.assignShift(shiftId);
+
+    // Determine the appropriate message and status
+    let message, status;
     if (!assignedShift) {
       await employeeRepo.addShiftToEmployee(shiftId, employeeId);
-      return {
-        message: `Shift ${shiftId} assigned to employee ${employeeId}`,
-        status: "success",
-      };
+      message = `Shift ${shiftId} assigned to employee ${employeeId}`;
+      status = "success";
     } else {
-      return {
-        message: `Shift ${shiftId} is already assigned`,
-        status: "failed",
-      };
+      message = `Shift ${shiftId} is already assigned`;
+      status = "failed";
     }
+    return { message, status };
   } catch (error) {
+    // Handle errors
     return {
-      message: `Failed to assign shift: ${error} unknown error`,
+      message: `Failed to assign shift: ${error.message || error}`,
       status: false,
     };
   }
