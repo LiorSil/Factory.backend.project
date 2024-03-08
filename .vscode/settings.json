@@ -1,0 +1,15 @@
+{
+  "github.copilot.advanced": {
+    "indentationMode": {
+      "python": false,
+      "javascript": false,
+      "javascriptreact": false,
+      "jsx": false,
+      "typescript": false,
+      "typescriptreact": false,
+      "go": false,
+      "ruby": false,
+      "*": true
+    }
+  }
+}
