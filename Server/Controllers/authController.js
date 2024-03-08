@@ -12,7 +12,7 @@ router.post("/login", async (req, res) => {
       .status(401)
       .json({ message: "user not found", success: resp.success });
 
-  const token = jwt.sign({ username }, "secret");
+  const token = jwt.sign({ username }, "secret", { expiresIn: "1h" });
   return res.json({
     message: resp.message,
     token: token,

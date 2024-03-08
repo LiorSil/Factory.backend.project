@@ -67,10 +67,8 @@ const createEmployeesSelect = async (selectId, employees) => {
 };
 
 //
-async function redirectToEditEmployee(employeeID) {
-  //i want to pass the employeeID to the edit_employee.html page
-  sessionStorage.setItem("employeeID", employeeID);
-  const editEmployeeURL = `./edit_employee.html`;
+async function redirectToEditEmployee(employee) {
+  const editEmployeeURL = `./edit_employee.html/?id=${employee._id}`;
   window.location.href = editEmployeeURL;
 }
 
