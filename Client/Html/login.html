@@ -26,13 +26,13 @@
             email,
           }),
         });
-
-        const status = await resp.json();
+        const data = await resp.json();
         
-        sessionStorage.setItem("token", status.token);
+        sessionStorage.setItem("token", data.token);
         sessionStorage.setItem("username", username);
-        sessionStorage.setItem("name", status.name);
-        if (status.token) {
+        sessionStorage.setItem("name", data.name);
+
+        if (data.token) {
           window.location.href = "./home.html";
         } else {
           alert("Invalid username or email");

@@ -6,17 +6,17 @@ const jwt = require("jsonwebtoken");
 // http://localhost:3000/auth/login
 router.post("/login", async (req, res) => {
   const { username, email } = req.body;
-  const result = await authService.authUser(username, email);
-  if (!result.success)
+  const resp = await authService.authUser(username, email);
+  if (!resp.success)
     return res
       .status(401)
-      .json({ message: "user not found", success: result.success });
+      .json({ message: "user not found", success: resp.success });
 
   const token = jwt.sign({ username }, "secret");
   return res.json({
-    message: result.message,
+    message: resp.message,
     token: token,
-    name: result.name,
+    name: resp.name,
     success: true,
   });
 });

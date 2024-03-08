@@ -1,6 +1,8 @@
 const loadShift = async () => {
-  const shiftId = sessionStorage.getItem("shiftId");
-  initializeEditShift(shiftId);
+  const urlParams = new URLSearchParams(window.location.search);
+  const shiftId = urlParams.get("shiftId");
+  const shift = await getShiftByID(shiftId);
+  initializeEditShift(shift);
 
   //log which option chosen
   const select = document.getElementById("editAssigned");
@@ -17,8 +19,7 @@ const loadShift = async () => {
   });
 };
 
-const initializeEditShift = async (shiftId) => {
-  const shift = await getShiftByID(shiftId);
+const initializeEditShift = async (shift) => {
   const date = document.getElementById("editDate");
   const startingHour = document.getElementById("editStartHour");
   const endingHour = document.getElementById("editEndHour");

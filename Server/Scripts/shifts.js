@@ -12,9 +12,12 @@ const loadShifts = async () => {
   const editButtons = document.getElementsByClassName("editButton");
   for (let i = 0; i < editButtons.length; i++) {
     const button = editButtons[i];
-    button.addEventListener("click", () => {
+    button.addEventListener("click", async () => {
       if (button.innerHTML === "Unassign") unassignBtnHandler(button.id);
-      else editBtnHandler(button.id);
+      else {
+        const shift = await getShiftByID(button.id);
+        editBtnHandler(shift);
+      }
     });
   }
 };
@@ -63,9 +66,8 @@ const unassignBtnHandler = async (shiftId) => {
   location.reload();
 };
 
-const editBtnHandler = async (shiftId) => {
-  sessionStorage.setItem("shiftId", shiftId);
-  window.location.href = "./edit_shift.html";
+const editBtnHandler = async (shift) => {
+  window.location.href = `./edit_shift.html?shiftId=${shift._id}`;
 };
 
 window.onload = loadShifts;
