@@ -55,11 +55,11 @@ const getEmployeeByID = async (employeeId) => {
   }
 };
 
-const createEmployeesSelect = async (selectId) => {
-  const employees = await getEmployees();
+const createEmployeesSelect = async (selectId, employees) => {
   const select = document.getElementById(selectId);
   employees.forEach((employee) => {
     const option = document.createElement("option");
+    option.id = employee._id;
     option.value = employee._id;
     option.text = `${employee.firstName} ${employee.lastName}`;
     select.appendChild(option);
@@ -103,3 +103,14 @@ const deleteEmployeeById = async (employeeId) => {
     // Handle the error accordingly (e.g., display an error message to the user)
   }
 };
+
+const getAllEmployeesExceptManagers = async () => {
+  const resp = await fetch(
+    "http://localhost:3000/employees/e/employees_except_managers"
+  );
+  const employees = await resp.json();
+  return employees;
+};
+
+
+

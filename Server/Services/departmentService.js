@@ -42,20 +42,21 @@ const isManager = async (employeeId) => {
   return managerStrings.includes(employeeId);
 };
 
-const createDepartment = async (departmentName) => {
-  if (!departmentName) return null;
-  if (departmentName.length < 3) return null;
+const createDepartment = async (newDepartmentName, managerId) => {
+  if (!newDepartmentName) return null;
+  if (newDepartmentName.length < 3) return null;
   //test if department exists
   const departmentAlreadyExist = await departmentRepo.getDepartmentByName(
-    departmentName
+    newDepartmentName
   );
   if (departmentAlreadyExist) return false;
-  else {
-    const newDepartment = await departmentRepo.createDepartment(departmentName);
-    return {
-      department: newDepartment,
-    };
-  }
+  // create department
+  const newDepartment = await departmentRepo.createDepartment(
+    newDepartmentName,
+    managerId
+  );
+  await employeeRepo.updateEmployeeDepartment(managerId, newDepartment._id);
+  return newDepartment;
 };
 
 module.exports = {

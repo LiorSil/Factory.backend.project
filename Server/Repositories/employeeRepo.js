@@ -8,7 +8,8 @@ const removeShiftFromEmployee = async (shiftId, employeeId) => {
 };
 
 const getEmployee = async (employeeId) => {
-  return await employeeModel.findById(employeeId);
+  const employee = await employeeModel.findById(employeeId);
+  return employee;
 };
 
 const getEmployees = async () => {
@@ -31,7 +32,6 @@ const createEmployee = async (
   startWorkYear,
   departmentId
 ) => {
-
   const newEmployee = new employeeModel({
     firstName,
     lastName,
@@ -46,11 +46,10 @@ const getShifts = async (id) => {
 };
 
 const updateEmployeeDepartment = async (employeeId, departmentId) => {
-  console.log(`Updating employee department to: ${departmentId}`);
   const employee = await getEmployee(employeeId);
   employee.departmentId = departmentId;
   await employee.save();
-  return employee;
+  return
 };
 
 const updateEmployeeFirstName = async (id, firstName) => {

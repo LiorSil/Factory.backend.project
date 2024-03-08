@@ -38,6 +38,7 @@ const deleteDepartment = async (id) => {
 const createDepartment = async (name, manager) => {
   const newDepartment = new departmentModel({ name, manager });
   await newDepartment.save();
+  return newDepartment;
 };
 
 const getManager = async (id) => {
@@ -62,7 +63,7 @@ const updateManager = async (departmentId, employeeId) => {
 
 const getDepartmentByName = async (name) => {
   const isExist = await departmentModel.findOne({ name: name });
-  if (isExist) return true;
+  if (isExist) return isExist;
   return false;
 };
 

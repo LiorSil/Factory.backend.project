@@ -107,7 +107,22 @@ const unassignShift = async (shiftId) => {
   }
 };
 
+const getEmployeesExceptManagers = async () => {
+  const employees = await employeeRepo.getEmployees();
+  const managersStr = await departmentRepo.getAllManagers();
+  const managers = await Promise.all(
+    managersStr.map(async (manager) => await getEmployeeByID(manager))
+  );
+
+  // Filter out the managers
+  const employeesExceptManagers = employees.filter((employee) =>
+    managers.every((manager) => !manager._id.equals(employee._id))
+  );
+  return employeesExceptManagers;
+};
+
 module.exports = {
+  getEmployeesExceptManagers,
   getEmployeeShiftsByID,
   getEmployeeByID,
   getEmployees,

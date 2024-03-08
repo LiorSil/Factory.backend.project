@@ -9,9 +9,7 @@ router.get("/", async (req, res) => {
   const employees = await employeeService.getEmployees();
   return res.json(employees);
 });
-router.get("/test", async (req, res) => {
-  return res.json({ message: "Employee test route" });
-});
+
 
 //get by department
 router.get("/department/:departmentName", async (req, res) => {
@@ -79,11 +77,6 @@ router.put("/update_employee", async (req, res) => {
       return res.json(statusOK);
     }
   } catch (error) {
-    // const statusNotOK = {
-    //   success: "false",
-    //   message: error.message,
-    //   employee: null,
-    // };
     return res.json({ message: "Error updating employee: " });
   }
 });
@@ -119,5 +112,20 @@ router.put("/unassign_shift_from_employee", async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 });
+
+router.get("/e/employees_except_managers", async (req, res) => {
+  try {
+    const employees = await employeeService.getEmployeesExceptManagers();
+    return res.json(employees);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+});
+
+
+
+
+
+
 
 module.exports = router;

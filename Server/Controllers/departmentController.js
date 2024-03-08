@@ -68,19 +68,21 @@ router.delete("/deleteDepartmentAndEmployees", async (req, res) => {
 
 router.post("/create_department", async (req, res) => {
   try {
+    const { departmentName, managerId } = req.body;
+
     const department = await departmentService.createDepartment(
-      req.body.departmentName
+      departmentName,
+      managerId
     );
-    return res.json(
-      department
-        ? { message: "Department created successfully", department: department }
-        : {
-            message:
-              "Department already exists, Or department name is too short",
-          }
-    );
+
+    if (department) {
+      return res.status(201).json({ department });
+    } else {
+      return res.status(400).json({ message: "Failed to create department" });
+    }
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    console.error("Error creating department:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 });
 

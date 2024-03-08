@@ -1,5 +1,7 @@
 const getEditDepartment = async () => {
-  const departmentId = sessionStorage.getItem("departmentId");
+  //get the id from the url
+  const urlParams = new URLSearchParams(window.location.search);
+  const departmentId = urlParams.get("id");
   const departmentName = await convertDepartmentIDtoName(departmentId);
   await departmentNamePlaceholder(departmentName);
 
