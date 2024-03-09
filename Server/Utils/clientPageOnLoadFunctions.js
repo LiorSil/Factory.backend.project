@@ -1,13 +1,12 @@
-function displayUserAndLogout() {
-   console.log("displayUserAndLogout function is called!");
-  // Get the user's name from sessionStorage
-  const userName = sessionStorage.getItem("name");
+const displayUserAndLogout = async () => {
+  const fullname = sessionStorage.getItem("name");
+  await fetch(`http://localhost:3000/users/username/${fullname}`);
 
   // Check if the user is logged in
-  if (userName) {
+  if (fullname) {
     // Create an element to display the user's name
-  const userElement = document.createElement("div");
-    userElement.textContent = `Welcome, ${userName}!`;
+    const userElement = document.createElement("div");
+    userElement.textContent = `Welcome, ${fullname}!`;
     userElement.style.fontWeight = "bold";
     userElement.style.padding = "10px";
     userElement.style.backgroundColor = "#f0f0f0";
@@ -30,13 +29,14 @@ function displayUserAndLogout() {
     // Append the logout button to the body
     document.body.insertBefore(logoutButton, document.body.firstChild);
   }
-}
+};
 
 function logout() {
   // Remove token and name from sessionStorage
+
   sessionStorage.removeItem("token");
   sessionStorage.removeItem("name");
-  sessionStorage.removeItem("username");
+  // sessionStorage.removeItem("fullname");
 
   // Redirect to the login page
   window.location.href = "./login.html";

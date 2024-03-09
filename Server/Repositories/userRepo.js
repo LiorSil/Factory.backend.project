@@ -1,32 +1,27 @@
 const userModel = require("../Models/userModel");
+const actions = require("../Utils/actions");
 
-
-
-const getFullname = async (id) => { 
-    const user = await userModel.findById(id);
-    return user.fullname;
-}
-
-const getNumOfActions = async (id) => {
-    const user  = await userModel.findById(id);
-    return user.num_of_actions; 
-}
-
-const updateNumOfActions = async (id, newNum) => {
-    const user  = await userModel.findById(id);
-    user.num_of_actions = newNum;
-    await user.save();
-}
+const getUserById = async (id) => {
+  return await userModel.findById;
+};
 
 const getUsers = async () => {
   return await userModel.find();
 };
 
+const getUserByName = (fullname) => {
+  return userModel.findOne({ fullname: fullname });
+};
+
+const reduceAction = async (userId) => {
+  return await actions.reduceAction(userId);
+};
+
 module.exports = {
-  getFullname,
-  getNumOfActions,
-  updateNumOfActions,
+  getUserById,
   getUsers,
+  getUserByName,
+  reduceAction,
 };   
 
 

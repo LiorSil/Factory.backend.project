@@ -16,11 +16,13 @@ const app = express();
  const employeeController = require("./Controllers/employeeController");
  const shiftController = require("./Controllers/shiftController");
  const departmentController = require("./Controllers/departmentController");
+ const userController = require("./Controllers/userController");
 
  app.use("/auth", authController);
  app.use("/employees", employeeController);
  app.use("/shifts", shiftController);
  app.use("/departments", departmentController);
+ app.use("/users", userController);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

@@ -41,3 +41,32 @@ const initializeUsers = async () => {
     console.log("Users actions initialized");
   }
 };
+
+const reduceAction = async (userId) => {
+  let users = await getUsers();
+
+  // user id is ObjectId type and we need to convert it to string
+  const userIdStr = await userId.toString();
+  const user = await getUserById(userIdStr);
+
+  if (user.actionAllowed === 0) {
+    return {
+      message: "No actions left for today",
+      status: false,
+    };
+  } else {
+    console.log("reducing action");
+    user.actionAllowed = user.actionAllowed - 1;
+    users = users.map((u) => (u.id === userIdStr ? user : u));
+    await jsonfile.writeFile(file, { users });
+
+    console.log("Action reduced");
+  }
+};
+
+module.exports = {
+  getUsers,
+  getUserById,
+  initializeUsers,
+  reduceAction,
+};
