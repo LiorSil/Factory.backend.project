@@ -11,14 +11,10 @@ router.post("/login", async (req, res) => {
     return res
       .status(401)
       .json({ message: "user not found", success: resp.success });
+  const { name } = resp;
 
   const token = jwt.sign({ username }, "secret", { expiresIn: "1h" });
-  return res.json({
-    message: resp.message,
-    token: token,
-    name: resp.name,
-    success: true,
-  });
+  res.send({ token, username, name });
 });
 
 module.exports = router;
