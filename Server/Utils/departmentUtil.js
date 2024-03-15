@@ -64,8 +64,7 @@ const getEmployeesInDepartment = async (departmentId) => {
   return await employeesInDepartment;
 };
 
-const getEmployeesNotInDepartment = async () => {
-  const departmentId = sessionStorage.getItem("departmentId");
+const getEmployeesNotInDepartment = async (departmentId) => {
   const employees = await getEmployees();
 
   //return employees that are not in the department

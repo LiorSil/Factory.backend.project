@@ -27,7 +27,7 @@ const getEditDepartment = async () => {
     departmentManagerID = await department.manager;
   }
 
-  await addEmployeesToSelect();
+  await addEmployeesToSelect(departmentId);
   await addManagerToSelect(departmentManagerID, departmentId);
 
   const selectedEmployee = await getChosenEmployee("employeeDropdown");
@@ -64,14 +64,14 @@ const addManagerToSelect = async (departmentManagerID, departmentId) => {
   managerDropdown.value = await convertEmployeeIDtoName(departmentManagerID);
 };
 
-const addEmployeesToSelect = async () => {
-  const notBelongingEmployees = await getEmployeesNotInDepartment();
+const addEmployeesToSelect = async (departmentId) => {
+  const notBelongingEmployees = await getEmployeesNotInDepartment(departmentId);
   const employeeDropdown = document.getElementById("employeeDropdown");
   await fillOptionsWithEmployees(notBelongingEmployees, employeeDropdown);
 };
 
 const getChosenEmployee = async (dropdownID) => {
-  const employeeDropdown = await document.getElementById(dropdownID);
+  const employeeDropdown = document.getElementById(dropdownID);
   const employeeChosen = await employeeDropdown.value;
   const employeeID = await employeeDropdown.options[
     employeeDropdown.selectedIndex
@@ -83,18 +83,11 @@ const getChosenEmployee = async (dropdownID) => {
     name: employeeChosen,
     isManager: eIsManager || false,
   };
-  sessionStorage.setItem("selectedEmployeeId", employee.id);
-  sessionStorage.setItem("selectedEmployeeName", employee.name);
-  sessionStorage.setItem("isManager", employee.isManager);
 
   return employee;
 };
 
-const updateDepartmentManger = async () => {
-  const department = sessionStorage.getItem("departmentId");
-  const dropdownID = "departmentManagerDropdown";
-  const chosenEmployee = await getChosenEmployee(dropdownID);
-
+const updateDepartmentManager = async (newManagerId, departmentId) => {
   try {
     const resp = await fetch(
       "http://localhost:3000/departments/updateManager",
@@ -104,8 +97,8 @@ const updateDepartmentManger = async () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          departmentId: department,
-          employeeId: chosenEmployee.id,
+          departmentId: departmentId,
+          employeeId: newManagerId,
         }),
       }
     );
@@ -114,11 +107,11 @@ const updateDepartmentManger = async () => {
   } catch (error) {}
 };
 
-const updateEmployeeDepartment = async () => {
-  const departmentId = sessionStorage.getItem("departmentId");
-  const selectedEmployeeId = sessionStorage.getItem("selectedEmployeeId");
-  const selectedEmployeeIsManager = await isManager(selectedEmployeeId);
-  sessionStorage.setItem("isManager", selectedEmployeeIsManager);
+const updateEmployeeDepartment = async (newEmployeeId) => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const departmentId = urlParams.get("id");
+  const selectedEmployeeIsManager = await isManager(newEmployeeId);
+
   try {
     if (!selectedEmployeeIsManager) {
       const resp = await fetch(
@@ -130,7 +123,7 @@ const updateEmployeeDepartment = async () => {
           },
           body: JSON.stringify({
             departmentId: departmentId,
-            employeeId: selectedEmployeeId,
+            employeeId: newEmployeeId,
           }),
         }
       );

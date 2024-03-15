@@ -30,10 +30,13 @@ const getEmployeesByDepartment = async (departmentName) => {
 };
 
 const updateEmployeeDepartment = async (departmentId, employeeId) => {
+
+  const departmentIdStr = departmentId.toString();
+
   try {
     const department = await employeeRepo.updateEmployeeDepartment(
-      departmentId,
-      employeeId
+      employeeId,
+      departmentIdStr
     );
 
     console.log(`Service success: ${department}`);

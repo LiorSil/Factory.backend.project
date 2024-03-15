@@ -1,24 +1,24 @@
+// authController.js
+
 const authService = require("../Services/authService");
 const express = require("express");
+const session = require("express-session");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 
-// http://localhost:3000/auth/login
+// Login route
 router.post("/login", async (req, res) => {
   const { username, email } = req.body;
   const resp = await authService.authUser(username, email);
   if (!resp.success)
     return res
       .status(401)
-      .json({ message: "user not found", success: resp.success });
+      .json({ message: "User not found", success: resp.success });
 
+  // Generate JWT token upon successful authentication
   const token = jwt.sign({ username }, "secret", { expiresIn: "1h" });
-  return res.json({
-    message: resp.message,
-    token: token,
-    name: resp.name,
-    success: true,
-  });
+  session.token = token;
+  res.send({ token: true, name: resp.name });
 });
 
 module.exports = router;

@@ -61,6 +61,8 @@
     <script>
       let chosenEmployee = null;
       let chosenManager = null;
+      const urlParams = new URLSearchParams(window.location.search);
+      const departmentId = urlParams.get("id");
 
       document
         .getElementById("departmentManagerDropdown")
@@ -68,39 +70,36 @@
           const selectedEmployee = await getChosenEmployee(
             "departmentManagerDropdown"
           );
+          
           chosenManager = selectedEmployee.id;
+          console.log(chosenManager);
+          
         });
 
       document
         .getElementById("updateDepartmentButton")
         .addEventListener("click", async (e) => {
           e.preventDefault();
-          updateDepartmentManger();
-
+          await updateDepartmentManager(chosenManager, departmentId);
           window.location.reload();
-          if (chosenManager != null) {
-            window.location.reload();
-          }
         });
+        
 
       document
         .getElementById("employeeDropdown")
         .addEventListener("change", async () => {
-          const selectedEmployee = await getChosenEmployee("employeeDropdown");
-          chosenEmployee = selectedEmployee.id;
+         
         });
 
       document
         .getElementById("addEmployeeButton")
         .addEventListener("click", async (e) => {
           e.preventDefault();
-          /*
-          updateEmployeeDepartment function is called and test if the chosen
-          employee is not a manager in the session storage
-           */
-          updateEmployeeDepartment();
-
+           const selectedEmployee = await getChosenEmployee("employeeDropdown");
+          await updateEmployeeDepartment(selectedEmployee.id);
           window.location.reload();
+
+        
         });
 
       document
