@@ -13,12 +13,12 @@ router.post("/login", async (req, res) => {
   if (!resp.success)
     return res
       .status(401)
-      .json({ message: "User not found", success: resp.success });
+      .json({ message: "user not found", success: resp.success });
+  const { name } = resp;
 
   // Generate JWT token upon successful authentication
   const token = jwt.sign({ username }, "secret", { expiresIn: "1h" });
-  session.token = token;
-  res.send({ token: true, name: resp.name });
+  res.send({ token, username, name });
 });
 
 module.exports = router;

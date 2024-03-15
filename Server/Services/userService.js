@@ -1,24 +1,33 @@
-import User from "../Models/userModel.js";
+const userRepo = require("../Repositories/userRepo");
 
 const getUserById = async (id) => {
-  const user = await User.findById(id);
-  return user;
-};
-
-const getUserByEmployeeId = async (employeeId) => {
-  const user = await User.findOne({ employeeId: employeeId });
+  const user = await userRepo.findById(id);
   return user;
 };
 
 const getUsername = async (id) => {
-  const username = await User.findById(id).select("username");
+  const username = await getUserById(id).username;
   return username;
 };
 
+const getUserByName = async (fullname) => {
+  const user = await userRepo.getUserByName(fullname);
+  return user;
+};
 
+const getUsers = async () => {
+  const users = await userRepo.getUsers();
+  return users;
+};
 
-export default {
+const reduceAction = async (userId) => {
+  return await userRepo.reduceAction(userId);
+};
+
+module.exports = {
   getUserById,
-  getUserByEmployeeId,
   getUsername,
+  getUserByName,
+  getUsers,
+  reduceAction,
 };

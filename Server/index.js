@@ -4,38 +4,26 @@ const port = 3000;
 const app = express();  
 const session = require("express-session");
 
-require("./Configs/database");
+ require('./Configs/database');
+ const jwt = require("jsonwebtoken");
+ const authenticateToken = require("./Middlewares/authenticateToken");
 
-app.use(express.json());
-app.use(cors());
-app.options("*", cors());
+ app.use(cors());
+ app.use(express.json());
+ app.options("*", cors());
 
-app.use(
-  session({
-    secret: "your-secret-key",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+ //controllers or routes
+ const authController = require("./Controllers/authController");
+ const employeeController = require("./Controllers/employeeController");
+ const shiftController = require("./Controllers/shiftController");
+ const departmentController = require("./Controllers/departmentController");
+ const userController = require("./Controllers/userController");
 
-const authMiddleware = require("./Middlewares/authMiddleware");
-const disableCacheMiddleware = require("./Middlewares/disableCaching");
-
-//controllers or routes
-const authController = require("./Controllers/authController");
-const employeeController = require("./Controllers/employeeController");
-const shiftController = require("./Controllers/shiftController");
-const departmentController = require("./Controllers/departmentController");
-
-app.use("/auth", authController);
-app.use("/employees", authMiddleware, employeeController);
-app.use("/shifts", authMiddleware, shiftController);
-app.use(
-  "/departments",
-  authMiddleware,
-  disableCacheMiddleware,
-  departmentController
-);
+ app.use("/auth", authController);
+ app.use("/employees", employeeController);
+ app.use("/shifts", shiftController);
+ app.use("/departments", departmentController);
+ app.use("/users", userController);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
