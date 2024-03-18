@@ -111,7 +111,9 @@
             "Are you sure you want to delete this department?"
           );
           if (userConfirmed) {
-            const departmentId = sessionStorage.getItem("departmentId");
+            //get id from url 
+            const urlParams = new URLSearchParams(window.location.search);
+            const departmentId = urlParams.get("id");
             deleteDepartment(departmentId);
             window.location.href = "employees.html";
           }

@@ -2,6 +2,7 @@
 
 const startUpEmployees = async () => {
   const employees = await getEmployees();
+  await fillDepartmentFilter();
   fillTable(employees);
 };
 
@@ -88,7 +89,16 @@ const employeeShifts = async (shiftsIds) => {
   return shifts;
 };
 
-
+const fillDepartmentFilter = async () => {
+  const departments = await getDepartments();
+  const departmentSelect = document.getElementById("departmentFilter");
+  departments.forEach((department) => {
+    const option = document.createElement("option");
+    option.value = department.name;
+    option.textContent = department.name;
+    departmentSelect.appendChild(option);
+  });
+};
 
 
 // Call the getEmployees function when the page loads
