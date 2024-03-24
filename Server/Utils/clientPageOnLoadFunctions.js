@@ -1,6 +1,6 @@
 const displayUserAndLogout = async () => {
   const fullname = sessionStorage.getItem("name");
-  await fetch(`http://localhost:3000/users/username/${fullname}`);
+
 
   // Check if the user is logged in
   if (fullname) {

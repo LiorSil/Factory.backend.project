@@ -7,10 +7,19 @@ const session = require("express-session");
  require('./Configs/database');
  const jwt = require("jsonwebtoken");
  const authenticateToken = require("./Middlewares/authenticateToken");
-
+ const day = 1000 * 60 * 60 * 24;
  app.use(cors());
  app.use(express.json());
  app.options("*", cors());
+ app.use(
+   session({
+     secret: "secret",
+     resave: false,
+     saveUninitialized: true,
+     firstLogin: true,
+     cookie: { maxAge: day },
+   })
+ );
 
  //controllers or routes
  const authController = require("./Controllers/authController");
@@ -20,10 +29,10 @@ const session = require("express-session");
  const userController = require("./Controllers/userController");
 
  app.use("/auth", authController);
- app.use("/employees", employeeController);
- app.use("/shifts", shiftController);
- app.use("/departments", departmentController);
- app.use("/users", userController);
+ app.use("/employees", authenticateToken, employeeController);
+ app.use("/shifts", authenticateToken, shiftController);
+ app.use("/departments", authenticateToken, departmentController);
+ app.use("/users", authenticateToken, userController);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

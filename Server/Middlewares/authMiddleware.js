@@ -3,6 +3,8 @@
 const jwt = require("jsonwebtoken");
 const session = require("express-session");
 
+const userService = require("../Services/userService");
+
 const authMiddleware = (req, res, next) => {
   // Get token from request header or query parameter or cookie
   const token = session.token;
@@ -15,10 +17,13 @@ const authMiddleware = (req, res, next) => {
     // Verify token
     const decoded = jwt.verify(token, "secret"); // Verify token with your secret key
     req.user = decoded; // Attach decoded user information to request object
+
     next(); // User is authenticated, proceed to the next middleware/route handler
   } catch (error) {
     return res.status(401).json({ message: "Invalid token" });
   }
 };
+
+
 
 module.exports = authMiddleware;
