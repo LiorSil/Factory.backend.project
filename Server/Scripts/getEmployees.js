@@ -1,5 +1,10 @@
-// Function to fetch employees from the server and fill the table
+try {
+  const token = sessionStorage.getItem("token");
+} catch (error) {
+  console.error("Error getting token from session storage:", error);
+}
 
+// Function to get employees from the server and fill the table
 const startUpEmployees = async () => {
   const employees = await getEmployees();
   await fillDepartmentFilter();
@@ -71,6 +76,7 @@ async function filterByDepartment(filterId) {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": token,
         },
       }
     );
@@ -99,7 +105,6 @@ const fillDepartmentFilter = async () => {
     departmentSelect.appendChild(option);
   });
 };
-
 
 // Call the getEmployees function when the page loads
 window.onload = startUpEmployees;

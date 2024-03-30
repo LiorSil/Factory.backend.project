@@ -1,13 +1,18 @@
+const token = sessionStorage.getItem("token");
 const onLoadUsersPage = async () => {
   const users = await getUsers();
   await fillTbodyWithUsers(users);
 };
 
 const getUsers = async () => {
-  const resp = await fetch("http://localhost:3000/users/get_users");
+  const resp = await fetch("http://localhost:3000/users/get_users", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+  });
   const users = await resp.json();
-  //console.log(session);
-  console.log(users);
   return users;
 };
 

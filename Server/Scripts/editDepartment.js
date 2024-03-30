@@ -1,3 +1,4 @@
+const editDepartmentToken = sessionStorage.getItem("token");
 const getEditDepartment = async () => {
   //get the id from the url
   const urlParams = new URLSearchParams(window.location.search);
@@ -13,6 +14,7 @@ const getEditDepartment = async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "x-access-token": editDepartmentToken,
       },
     }
   );
@@ -120,6 +122,7 @@ const updateEmployeeDepartment = async (newEmployeeId) => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            "x-access-token": editDepartmentToken,
           },
           body: JSON.stringify({
             departmentId: departmentId,
@@ -145,6 +148,7 @@ const deleteDepartment = async (departmentId) => {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": editDepartmentToken,
         },
         body: JSON.stringify({
           departmentId: departmentId,
@@ -158,8 +162,6 @@ const deleteDepartment = async (departmentId) => {
     console.log(`Error2: ${error}`);
   }
 };
-
-
 
 // Call the getEmployees function when the page loads
 window.onload = getEditDepartment;

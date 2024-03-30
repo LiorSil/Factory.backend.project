@@ -1,3 +1,4 @@
+const editEmployeeToken = sessionStorage.getItem("token");
 const editEmployee = async () => {
   const currentUrl = window.location.href;
   const url = new URL(currentUrl);
@@ -32,6 +33,7 @@ const updateEmployee = async (employee) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": editEmployeeToken,
         },
         body: JSON.stringify({
           id: employee._id, // Make sure employeeId is in scope

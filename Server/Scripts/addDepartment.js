@@ -1,3 +1,4 @@
+const token = sessionStorage.getItem("token");
 const createDepartment = async (newDepartmentName, managerId) => {
   try {
     const resp = await fetch(
@@ -6,6 +7,7 @@ const createDepartment = async (newDepartmentName, managerId) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": token,
         },
         body: JSON.stringify({
           departmentName: newDepartmentName,

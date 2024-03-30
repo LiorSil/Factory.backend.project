@@ -1,9 +1,11 @@
 async function getEmployees() {
+  const token = sessionStorage.getItem("token");
   try {
     const resp = await fetch("http://localhost:3000/employees", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "x-access-token": token,
       },
     });
 
@@ -23,6 +25,7 @@ const convertEmployeeIDtoName = async (employeeId) => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      "x-access-token": token,
     },
   });
   if (!resp.ok) {
@@ -40,6 +43,7 @@ const getEmployeeByID = async (employeeId) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "x-access-token": token,
       },
     });
 
@@ -85,6 +89,7 @@ const deleteEmployeeById = async (employeeId) => {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        "x-access-token": token,
       },
       body: JSON.stringify({
         id: employeeId,
@@ -104,7 +109,13 @@ const deleteEmployeeById = async (employeeId) => {
 
 const getAllEmployeesExceptManagers = async () => {
   const resp = await fetch(
-    "http://localhost:3000/employees/e/employees_except_managers"
+    "http://localhost:3000/employees/e/employees_except_managers",{
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
+      },
+    }
   );
   const employees = await resp.json();
   return employees;

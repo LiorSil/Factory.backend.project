@@ -1,3 +1,5 @@
+const shiftToken = sessionStorage.getItem("token");
+
 const selectUnassignedShifts = async () => {
   try {
     const unassignedShifts = await getUnassignedShifts();
@@ -19,7 +21,14 @@ const selectUnassignedShifts = async () => {
 const getUnassignedShifts = async () => {
   try {
     const response = await fetch(
-      "http://localhost:3000/shifts/unassigned_shifts"
+      "http://localhost:3000/shifts/unassigned_shifts",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": shiftToken,
+        },
+      }
     );
     const shifts = await response.json();
 
@@ -46,6 +55,7 @@ const assignShift = async (shiftId, employeeId) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "x-access-token": shiftToken,
       },
       body: JSON.stringify({
         shiftId: shiftId,
@@ -67,7 +77,6 @@ const assignShift = async (shiftId, employeeId) => {
   }
 };
 
-
 async function getShiftsList(shifts) {
   const shiftDetails = await Promise.all(
     shifts.map(async (shiftId) => {
@@ -75,6 +84,7 @@ async function getShiftsList(shifts) {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": shiftToken,
         },
       });
 
@@ -98,6 +108,7 @@ const getShiftByID = async (shiftId) => {
 
       headers: {
         "Content-Type": "application/json",
+        "x-access-token": shiftToken,
       },
     });
 
@@ -139,7 +150,18 @@ const fillShiftsTable = async (employee, tBodyId) => {
 
 const getShifts = async () => {
   try {
-    const response = await fetch("http://localhost:3000/shifts/get_shifts");
+    const token = sessionStorage.getItem("token");
+  } catch (error) {
+    token = sessionStorage.getItem("token");
+  }
+  try {
+    const response = await fetch("http://localhost:3000/shifts/get_shifts", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": shiftToken,
+      },
+    });
     const shifts = await response.json();
     return shifts;
   } catch (error) {
@@ -154,6 +176,7 @@ const createShift = async (newShift) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-access-token": shiftToken,
       },
       body: JSON.stringify(newShift),
     });
@@ -177,6 +200,7 @@ const unassignShift = async (shiftId) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "x-access-token": token,
       },
       body: JSON.stringify({ shiftId: shiftId }),
     }
@@ -199,6 +223,7 @@ const updateShift = async (shiftId, updatedShift) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": token,
         },
         body: JSON.stringify(updatedShift),
       }
@@ -215,6 +240,3 @@ const updateShift = async (shiftId, updatedShift) => {
     // Handle the error accordingly (e.g., display an error message to the user)
   }
 };
-
-
-

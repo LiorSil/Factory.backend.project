@@ -1,5 +1,6 @@
 
 
+const token = sessionStorage.getItem("token");
 async function convertDepartmentIDtoName(departmentId) {
   try {
     const resp = await fetch(
@@ -8,6 +9,7 @@ async function convertDepartmentIDtoName(departmentId) {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": token,
         },
       }
     );
@@ -34,6 +36,7 @@ const convertDepartmentNameToId = async (departmentName) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "x-access-token": token,
       },
     });
 
@@ -83,6 +86,7 @@ const isManager = async (employeeID) => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": token,
         },
       }
     );
@@ -107,6 +111,7 @@ const getDepartments = async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "x-access-token": token,
       },
     });
 
