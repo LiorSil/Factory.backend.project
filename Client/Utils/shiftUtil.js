@@ -1,4 +1,4 @@
-const shiftToken = sessionStorage.getItem("token");
+const shiftUtilToken = sessionStorage.getItem("token");
 
 const selectUnassignedShifts = async () => {
   try {
@@ -26,7 +26,7 @@ const getUnassignedShifts = async () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "x-access-token": shiftToken,
+          "x-access-token": shiftUtilToken,
         },
       }
     );
@@ -55,7 +55,7 @@ const assignShift = async (shiftId, employeeId) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": shiftToken,
+        "x-access-token": shiftUtilToken,
       },
       body: JSON.stringify({
         shiftId: shiftId,
@@ -84,7 +84,7 @@ async function getShiftsList(shifts) {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "x-access-token": shiftToken,
+          "x-access-token": shiftUtilToken,
         },
       });
 
@@ -108,7 +108,7 @@ const getShiftByID = async (shiftId) => {
 
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": shiftToken,
+        "x-access-token": shiftUtilToken,
       },
     });
 
@@ -159,7 +159,7 @@ const getShifts = async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": shiftToken,
+        "x-access-token": shiftUtilToken,
       },
     });
     const shifts = await response.json();
@@ -176,7 +176,7 @@ const createShift = async (newShift) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": shiftToken,
+        "x-access-token": shiftUtilToken,
       },
       body: JSON.stringify(newShift),
     });
@@ -200,7 +200,7 @@ const unassignShift = async (shiftId) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": token,
+        "x-access-token": shiftUtilToken,
       },
       body: JSON.stringify({ shiftId: shiftId }),
     }
@@ -223,7 +223,7 @@ const updateShift = async (shiftId, updatedShift) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "x-access-token": token,
+          "x-access-token": shiftUtilToken,
         },
         body: JSON.stringify(updatedShift),
       }

@@ -1,8 +1,3 @@
-try {
-  const token = sessionStorage.getItem("token");
-} catch (error) {
-  token = sessionStorage.getItem("token");
-}
 const loadShifts = async () => {
   const shifts = await getShifts();
   await fillTbodyShiftsTable(shifts);
