@@ -5,7 +5,6 @@ const router = express.Router();
 
 
 router.get("/get_users", async (req, res) => {
-  const session = require("express-session");
   const users = await userService.getUsers();
 
   res.send(users);

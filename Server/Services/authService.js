@@ -8,8 +8,12 @@ const authUser = async (username, email) => {
 
   if (wsUser.email !== email) return { success: false, message: "Wrong email " };
 
-  return { 
-    success: true, message: "Login successful", name: wsUser.name };
+  return {
+    success: true,
+    message: "Login successful",
+    name: wsUser.name,
+    wsId: wsUser.id,
+  };
 }
     
 
