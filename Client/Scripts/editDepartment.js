@@ -90,6 +90,7 @@ const getChosenEmployee = async (dropdownID) => {
 };
 
 const updateDepartmentManager = async (newManagerId, departmentId) => {
+  const wsId = sessionStorage.getItem("wsId");
   try {
     const resp = await fetch(
       "http://localhost:3000/departments/updateManager",
@@ -97,6 +98,8 @@ const updateDepartmentManager = async (newManagerId, departmentId) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": editDepartmentToken,
+          wsId: wsId,
         },
         body: JSON.stringify({
           departmentId: departmentId,
@@ -141,6 +144,7 @@ const updateEmployeeDepartment = async (newEmployeeId) => {
 };
 
 const deleteDepartment = async (departmentId) => {
+  const wsId = sessionStorage.getItem("wsId");
   try {
     const resp = await fetch(
       "http://localhost:3000/departments/deleteDepartmentAndEmployees",
@@ -149,6 +153,7 @@ const deleteDepartment = async (departmentId) => {
         headers: {
           "Content-Type": "application/json",
           "x-access-token": editDepartmentToken,
+          wsId: wsId,
         },
         body: JSON.stringify({
           departmentId: departmentId,

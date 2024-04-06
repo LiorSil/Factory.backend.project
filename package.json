@@ -3,6 +3,7 @@
     "axios": "^1.6.7",
     "express-session": "^1.18.0",
     "jsonfile": "^6.1.0",
+    "node-cache": "^5.1.2",
     "path": "^0.12.7"
   },
   "devDependencies": {

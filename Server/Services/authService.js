@@ -15,9 +15,11 @@ const authUser = async (username, email) => {
     wsId: wsUser.id,
   };
 }
+
+
     
 
 module.exports = {
-    authUser
-}
+  authUser,
+};
  

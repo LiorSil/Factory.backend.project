@@ -8,7 +8,12 @@ const getUsers = async () => {
   return await userModel.find();
 };
 
+const getUserByFullName = async (fullname) => {
+  return await userModel.findOne({ fullname });
+};
+
 module.exports = {
   getUserById,
   getUsers,
+  getUserByFullName,
 };

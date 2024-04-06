@@ -65,6 +65,7 @@ async function fillTable(employees) {
 
 // Function to filter the table based on the selected department
 async function filterByDepartment(filterId) {
+  const id = sessionStorage.getItem("id");
   const selectedDepartment = document.getElementById(filterId).value;
   let employees = await getEmployees();
   if (selectedDepartment === "all") {
@@ -77,6 +78,7 @@ async function filterByDepartment(filterId) {
         headers: {
           "Content-Type": "application/json",
           "x-access-token": token,
+          id: id,
         },
       }
     );

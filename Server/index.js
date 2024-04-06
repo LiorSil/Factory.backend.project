@@ -13,82 +13,54 @@ app.use(cors());
 app.use(express.json());
 app.options("*", cors());
 
-app.use("/auth", authController);
-
 app.use(async (req, res, next) => {
-  let ans = true;
-  const headers = req.headers;
-  const userId = headers["id"];
+  try {
+    const headers = req.headers;
+    const userId = headers["id"];
 
-  const path = req.url;
-  const method = req.method;
-  switch (true) {
-    case path === "/employees": //display employees table || addEmployee
-      ans = await takeAction(userId);
-      break;
-    case path.startsWith("/employees/department/"): //display employees by department
-      ans = await takeAction(userId, path);
-      break;
-    case path.startsWith("/employees/updateDepartment"): //update department of employee
-      ans = await takeAction(userId, path);
-      break;
-    case path.startsWith("/employees/update_employee"): //edit employee details
-      ans = await takeAction(userId, path);
-      break;
-    case path.startsWith("/employees/delete"): //delete employee
-      ans = await takeAction(userId, path);
-      break;
-    case path.startsWith("/employees/unassign_shift_from_employee"): //unassign shift from employee
-      ans = await takeAction(userId, path);
-      break;
-    case path === "/departments": //display departments table || addDepartment
-      ans = await takeAction(userId, path);
-      break;
-    case path.startsWith("/departments/deleteDepartmentAndEmployees"): //delete department and employees
-      ans = await takeAction(userId, path);
-      break;
-    case path.startsWith("/departments/create_department"): //add department
-      ans = await takeAction(userId, path);
-      break;
-    case path.startsWith("/departments/updateManager"): //update manager of department
-      ans = await takeAction(userId, path);
-      break;
-    case path.startsWith("/shifts/get_shifts"): //display shifts table
-      ans = await takeAction(userId, path);
-      break;
-    case path.startsWith("/shifts/assign"): //assign shift to employee
-      ans = await takeAction(userId, path);
-      break;
-    case path.startsWith("/shifts"): //create shift
-      if (method === "POST") ans = await takeAction(userId, path);
-      break;
-    case path.startsWith("/update_shift"): //update shift
-      ans = await takeAction(userId, path);
-      break;
+    const path = req.url;
+    const method = req.method;
 
-    case path === "/users/get_users": //display users table
-      ans = await takeAction(userId, path);
-      break;
-  }
+    switch (true) {
+      case path === "/employees":
+        await takeAction(userId);
+        break;
+      case path.startsWith("/employees/department/"):
+      case path.startsWith("/employees/updateDepartment"):
+      case path.startsWith("/employees/update_employee"):
+      case path.startsWith("/employees/delete"):
+      case path.startsWith("/employees/unassign_shift_from_employee"):
+        await takeAction(userId, path);
+        break;
+      case path === "/departments":
+      case path.startsWith("/departments/deleteDepartmentAndEmployees"):
+      case path.startsWith("/departments/create_department"):
+      case path.startsWith("/departments/updateManager"):
+        await takeAction(userId, path);
+        break;
+      case path.startsWith("/shifts/get_shifts"):
+      case path.startsWith("/shifts/assign"):
+      case path.startsWith("/shifts"):
+        if (method === "POST") {
+          await takeAction(userId, path);
+        }
+        break;
+      default:
+        // Do nothing
 
-  // Check if ans is false - Actions are over for the day
-  if (!ans) {
-    return res.send(false);
-  } else {
-    // if this is the users page
-    if (path === "/users") {
-      // Pass numAction as a parameter to next()
-      req.numAction = ans.numAction;
-      req.name = ans.name;
-      next();
-    } else {
-      next();
+        break;
     }
+
+    next(); // Move to the next middleware
+  } catch (error) {
+    console.error("Error processing request:", error);
+    res.status(500).send("Internal server error");
   }
 });
 
 async function takeAction(userId, path) {
   // Check if user has remaining actions
+  console.log("Checking remaining actions for user with ID: " + userId);
   try {
     const resp = await isRemainingActions(userId);
     //add line to json
@@ -103,7 +75,7 @@ async function takeAction(userId, path) {
     }
     console.log(message);
   } catch (e) {
-    console.log(e.message);
+    console.log(`Error: ${e.message}`);
   }
 }
 

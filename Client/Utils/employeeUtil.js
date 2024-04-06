@@ -1,11 +1,16 @@
+
+
 async function getEmployees() {
+  const id = sessionStorage.getItem("id");
   const token = sessionStorage.getItem("token");
   try {
+    console.log(`id: ${id} `);
     const resp = await fetch("http://localhost:3000/employees", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": token,
+        id: id,
       },
     });
 
@@ -21,11 +26,13 @@ async function getEmployees() {
 }
 
 const convertEmployeeIDtoName = async (employeeId) => {
+  const id = sessionStorage.getItem("id");
   const resp = await fetch(`http://localhost:3000/employees/${employeeId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       "x-access-token": token,
+      id: id,
     },
   });
   if (!resp.ok) {
@@ -38,12 +45,14 @@ const convertEmployeeIDtoName = async (employeeId) => {
 };
 
 const getEmployeeByID = async (employeeId) => {
+  const id = sessionStorage.getItem("id");
   try {
     const resp = await fetch(`http://localhost:3000/employees/${employeeId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": token,
+        id: id,
       },
     });
 
@@ -84,12 +93,14 @@ async function redirectToEditDepartment(departmentId) {
 }
 
 const deleteEmployeeById = async (employeeId) => {
+  const id = sessionStorage.getItem("id");
   try {
     const resp = await fetch(`http://localhost:3000/employees/delete`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": token,
+        id: id,
       },
       body: JSON.stringify({
         id: employeeId,
@@ -108,18 +119,18 @@ const deleteEmployeeById = async (employeeId) => {
 };
 
 const getAllEmployeesExceptManagers = async () => {
+  const id = sessionStorage.getItem("id");
   const resp = await fetch(
-    "http://localhost:3000/employees/e/employees_except_managers",{
+    "http://localhost:3000/employees/e/employees_except_managers",
+    {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": token,
+        id: id,
       },
     }
   );
   const employees = await resp.json();
   return employees;
 };
-
-
-

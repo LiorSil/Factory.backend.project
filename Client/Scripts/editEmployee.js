@@ -20,6 +20,7 @@ const editEmployee = async () => {
 };
 
 const updateEmployee = async (employee) => {
+  const id = sessionStorage.getItem("id");
   // Retrieve the updated employee data from the form and handle cases where the user didn't update a field
   let firstName =
     document.getElementById("firstName").value || employee.firstName;
@@ -34,6 +35,7 @@ const updateEmployee = async (employee) => {
         headers: {
           "Content-Type": "application/json",
           "x-access-token": editEmployeeToken,
+          id: id,
         },
         body: JSON.stringify({
           id: employee._id, // Make sure employeeId is in scope

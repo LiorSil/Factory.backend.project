@@ -19,6 +19,7 @@ const selectUnassignedShifts = async () => {
 };
 
 const getUnassignedShifts = async () => {
+  const id = sessionStorage.getItem("id");
   try {
     const response = await fetch(
       "http://localhost:3000/shifts/unassigned_shifts",
@@ -27,6 +28,7 @@ const getUnassignedShifts = async () => {
         headers: {
           "Content-Type": "application/json",
           "x-access-token": shiftUtilToken,
+          id: id,
         },
       }
     );
@@ -50,12 +52,14 @@ const formatDate = (date) => {
 };
 
 const assignShift = async (shiftId, employeeId) => {
+  const id = sessionStorage.getItem("id");
   try {
     const resp = await fetch("http://localhost:3000/shifts/assign", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": shiftUtilToken,
+        id: id,
       },
       body: JSON.stringify({
         shiftId: shiftId,
@@ -78,6 +82,7 @@ const assignShift = async (shiftId, employeeId) => {
 };
 
 async function getShiftsList(shifts) {
+  const id = sessionStorage.getItem("id");
   const shiftDetails = await Promise.all(
     shifts.map(async (shiftId) => {
       const resp = await fetch(`http://localhost:3000/shifts/${shiftId}`, {
@@ -85,6 +90,7 @@ async function getShiftsList(shifts) {
         headers: {
           "Content-Type": "application/json",
           "x-access-token": shiftUtilToken,
+          id: id,
         },
       });
 
@@ -103,12 +109,14 @@ async function getShiftsList(shifts) {
 
 const getShiftByID = async (shiftId) => {
   try {
+    const id = sessionStorage.getItem("id");
     const resp = await fetch(`http://localhost:3000/shifts/${shiftId}`, {
       method: "GET",
 
       headers: {
         "Content-Type": "application/json",
         "x-access-token": shiftUtilToken,
+        id: id,
       },
     });
 
@@ -149,6 +157,7 @@ const fillShiftsTable = async (employee, tBodyId) => {
 };
 
 const getShifts = async () => {
+  const id = sessionStorage.getItem("id");
   try {
     const token = sessionStorage.getItem("token");
   } catch (error) {
@@ -160,6 +169,7 @@ const getShifts = async () => {
       headers: {
         "Content-Type": "application/json",
         "x-access-token": shiftUtilToken,
+        id: id,
       },
     });
     const shifts = await response.json();
@@ -171,12 +181,14 @@ const getShifts = async () => {
 };
 
 const createShift = async (newShift) => {
+  const id = sessionStorage.getItem("id");
   try {
     const resp = await fetch("http://localhost:3000/shifts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": shiftUtilToken,
+        id: id,
       },
       body: JSON.stringify(newShift),
     });
@@ -194,6 +206,7 @@ const createShift = async (newShift) => {
 };
 
 const unassignShift = async (shiftId) => {
+  const id = sessionStorage.getItem("id");
   const resp = await fetch(
     "http://localhost:3000/employees/unassign_shift_from_employee",
     {
@@ -201,6 +214,7 @@ const unassignShift = async (shiftId) => {
       headers: {
         "Content-Type": "application/json",
         "x-access-token": shiftUtilToken,
+        id: id,
       },
       body: JSON.stringify({ shiftId: shiftId }),
     }
@@ -216,6 +230,7 @@ const unassignShift = async (shiftId) => {
 };
 
 const updateShift = async (shiftId, updatedShift) => {
+  const id = sessionStorage.getItem("id");
   try {
     const resp = await fetch(
       `http://localhost:3000/shifts/update_shift/${shiftId}`,
@@ -224,6 +239,7 @@ const updateShift = async (shiftId, updatedShift) => {
         headers: {
           "Content-Type": "application/json",
           "x-access-token": shiftUtilToken,
+          id: id,
         },
         body: JSON.stringify(updatedShift),
       }

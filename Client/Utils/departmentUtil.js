@@ -2,6 +2,8 @@
 
 const token = sessionStorage.getItem("token");
 async function convertDepartmentIDtoName(departmentId) {
+  const id = sessionStorage.getItem("id");
+
   try {
     const resp = await fetch(
       `http://localhost:3000/departments/${departmentId}`,
@@ -10,6 +12,7 @@ async function convertDepartmentIDtoName(departmentId) {
         headers: {
           "Content-Type": "application/json",
           "x-access-token": token,
+          id: id,
         },
       }
     );
@@ -32,30 +35,15 @@ async function convertDepartmentIDtoName(departmentId) {
 
 const convertDepartmentNameToId = async (departmentName) => {
   try {
-    const resp = await fetch(`http://localhost:3000/departments`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": token,
-      },
-    });
-
-    if (!resp.ok) {
-      throw new Error(`Failed to fetch departments: ${resp.statusText}`);
-    } else {
-      const departments = await resp.json();
-      const department = departments.find(
-        (department) => department.name === departmentName
-      );
-      return department._id;
-    }
+    const departments = await getDepartments();
+    const department = departments.find(
+      (department) => department.name === departmentName
+    );
+    return department._id;
   } catch (error) {
     console.log(`Error fetching department: ${error}`);
   }
 };
-
-
-
 
 const getEmployeesInDepartment = async (departmentId) => {
   const employees = await getEmployees();
@@ -79,6 +67,8 @@ const getEmployeesNotInDepartment = async (departmentId) => {
 };
 
 const isManager = async (employeeID) => {
+  const id = sessionStorage.getItem("id");
+
   try {
     const resp = await fetch(
       `http://localhost:3000/departments/isManager/${employeeID}`,
@@ -87,6 +77,7 @@ const isManager = async (employeeID) => {
         headers: {
           "Content-Type": "application/json",
           "x-access-token": token,
+          id: id,
         },
       }
     );
@@ -106,12 +97,15 @@ const isManager = async (employeeID) => {
 };
 
 const getDepartments = async () => {
+  const id = sessionStorage.getItem("id");
+
   try {
     const resp = await fetch("http://localhost:3000/departments", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": token,
+        id: id,
       },
     });
 
@@ -123,7 +117,6 @@ const getDepartments = async () => {
     return departments;
   } catch (error) {
     console.error(error);
-    // Handle errors as needed
   }
 
   // const getEmployeesInDepartment
