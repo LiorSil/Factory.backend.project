@@ -45,26 +45,28 @@ app.use(async (req, res, next) => {
 });
 
 async function takeAction(userId, path) {
-  if (path === undefined) return;
+  //do nothing:
+  return true;
+  // if (path === undefined) return;
 
-  console.log(`path: ${path}`);
-  // Check if user has remaining actions
-  try {
-    const resp = await isRemainingActions(userId);
-    //add line to json
-    let { isNewActionAllowed, remainingActions, fullname } = resp;
-    //console.log(`User: ${fullname} has ${remainingActions - 1} remaining actions`);
-    if (isNewActionAllowed) {
-      // Decrement remaining actions
-      await updateRemainingActions(userId, remainingActions);
-      return true;
-    } else {
-      //console.log(`User has no remaining actions`);
-      return false;
-    }
-  } catch (e) {
-    console.log(`Error: ${e.message}`);
-  }
+  // console.log(`path: ${path}`);
+  // // Check if user has remaining actions
+  // try {
+  //   const resp = await isRemainingActions(userId);
+  //   //add line to json
+  //   let { isNewActionAllowed, remainingActions, fullname } = resp;
+  //   //console.log(`User: ${fullname} has ${remainingActions - 1} remaining actions`);
+  //   if (isNewActionAllowed) {
+  //     // Decrement remaining actions
+  //     await updateRemainingActions(userId, remainingActions);
+  //     return true;
+  //   } else {
+  //     //console.log(`User has no remaining actions`);
+  //     return false;
+  //   }
+  // } catch (e) {
+  //   console.log(`Error: ${e.message}`);
+  // }
 }
 
 //controllers or routes

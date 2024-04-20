@@ -25,6 +25,8 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+
+
 router.put("/updateManager", async (req, res) => {
   try {
     const { departmentId, employeeId } = req.body;
@@ -54,11 +56,10 @@ router.get("/isManager/:id", async (req, res) => {
   }
 });
 
-router.delete("/deleteDepartmentAndEmployees", async (req, res) => {
+router.delete("/delete", async (req, res) => {
   try {
     const departmentId = req.body.departmentId;
     await departmentService.deleteDepartmentAndEmployees(departmentId);
-    return res.json({ message: "Department and employees deleted" });
   } catch (error) {
     return res.status(500).json({
       message: `Error in deleteDepartmentAndEmployees: ${error}`,

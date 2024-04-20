@@ -1,15 +1,14 @@
-const getEditDepartments = async () => {
-  fillDepartments();
-};
+const departmentsToken = sessionStorage.getItem("token");
 
-const fillDepartments = async () => {
+const getDepartmentsPage = async () => {
   const departments = await getDepartments();
+  const employees = await getEmployees();
   const departmentsTableBody = document.getElementById("departmentsTableBody");
   departments.forEach(async (department) => {
     const row = departmentsTableBody.insertRow();
     const name = row.insertCell(0);
     const manager = row.insertCell(1);
-    const employees = row.insertCell(2);
+    const employeesColumn = row.insertCell(2);
 
     // Create a clickable link for the department name
     const departmentLink = document.createElement("a");
@@ -19,6 +18,7 @@ const fillDepartments = async () => {
 
     // Append the link to the name cell
     name.appendChild(departmentLink);
+
     //Add an event listener to handle click events
     departmentLink.addEventListener("click", (event) => {
       event.preventDefault(); // Prevent the default behavior of the link
@@ -26,17 +26,19 @@ const fillDepartments = async () => {
     });
 
     // Retrieve manager information asynchronously
-    const managerEmployee = await getEmployeeByID(department.manager);
+    const managerEmployee = await getManager(department, employees);
+
     const managerName = document.createElement("p");
-    managerName.id = managerEmployee._id;
+    managerName.id = managerEmployee;
     managerName.textContent = `${managerEmployee.firstName} ${managerEmployee.lastName}`;
     manager.appendChild(managerName);
 
     // Retrieve employees in department asynchronously
-    const employeesInDepartment = await getEmployeesInDepartment(
-      department._id
+    const departmentEmployees = employees.filter(
+      (employee) => employee.departmentId === department._id
     );
-    employeesInDepartment.forEach((employee) => {
+
+    departmentEmployees.forEach((employee) => {
       // Create a clickable link for each employee's name
       const employeeLink = document.createElement("a");
       employeeLink.textContent = `${employee.firstName} ${employee.lastName}`;
@@ -46,15 +48,45 @@ const fillDepartments = async () => {
       // Add an event listener to handle click events
       employeeLink.addEventListener("click", (event) => {
         event.preventDefault(); // Prevent the default behavior of the link
-        sessionStorage.setItem("employeeID", employee._id);
         window.location.href = event.target.href; // Redirect to the specified URL
       });
 
       // Append the link to the employees cell
-      employees.appendChild(employeeLink);
-      employees.appendChild(document.createElement("br")); // Add line break
+      employeesColumn.appendChild(employeeLink);
+      employeesColumn.appendChild(document.createElement("br")); // Add line break
     });
   });
 };
 
-window.onload = getEditDepartments;
+const getDepartments = async () => {
+  const response = await fetch("http://localhost:3000/departments", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": departmentsToken,
+    },
+  });
+  const departments = await response.json();
+  return departments;
+};
+
+const getEmployees = async () => {
+  const response = await fetch("http://localhost:3000/employees", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": departmentsToken,
+    },
+  });
+  const employees = await response.json();
+  return employees;
+};
+
+const getManager = async (department, employees) => {
+  const manager = await employees.find(
+    (employee) => employee._id === department.manager
+  );
+  return manager;
+};
+
+window.onload = getDepartmentsPage;

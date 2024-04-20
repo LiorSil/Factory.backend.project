@@ -45,19 +45,10 @@ router.put("/updateDepartment", async (req, res) => {
       departmentId,
       employeeId
     );
-    const status = {
-      success: " true",
-      message: "Employee department updated successfully",
-      employee: employee,
-    };
-    return res.json(status);
+
+    return res.json({ status: "success", employee: employee });
   } catch (error) {
-    const status = {
-      success: "false",
-      message: error.message,
-      employee: null,
-    };
-    return res.json(status);
+    return res.json({status: "error", message: error.message});
   }
 });
 

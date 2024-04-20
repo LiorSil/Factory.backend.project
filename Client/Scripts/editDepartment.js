@@ -3,47 +3,52 @@ const getEditDepartment = async () => {
   //get the id from the url
   const urlParams = new URLSearchParams(window.location.search);
   const departmentId = urlParams.get("id");
-  const departmentName = await convertDepartmentIDtoName(departmentId);
-  await departmentNamePlaceholder(departmentName);
 
-  //get the department manager
-  let departmentManagerID = null;
-  const resp = await fetch(
-    `http://localhost:3000/departments/${departmentId}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": editDepartmentToken,
-      },
-    }
+  const employees = await getEmployees();
+  const departments = await getDepartments();
+
+  //get the department as an object (_id, name, managerId)
+  const department = await getDepartment(departmentId);
+  await departmentNamePlaceholder(department.name);
+
+  //get the department manager (id)
+  const departmentManager = department.manager;
+  const departmentManagerEmployee = await employees.find(
+    (employee) => employee._id === departmentManager
   );
 
-  if (!resp.ok) {
-    throw new Error(
-      `Failed to fetch data and get managerID : ${resp.statusText}`
-    );
-  } else {
-    const department = await resp.json();
-    // Call the function to fill the form with the department date
-    departmentManagerID = await department.manager;
-  }
+  const departmentManagerLabel = document.getElementById(
+    "departmentManagerLabel"
+  );
+  departmentManagerLabel.innerHTML = `Current Manager: ${departmentManagerEmployee.firstName} ${departmentManagerEmployee.lastName}`;
 
-  await addEmployeesToSelect(departmentId);
-  await addManagerToSelect(departmentManagerID, departmentId);
+  //Handling available employees to be department managers
+  const availableManagers = await availableManagersToSelect(
+    departmentId,
+    employees,
+    departmentManager
+  );
+  const availableManagersDropdown = document.getElementById(
+    "departmentManagerDropdown"
+  );
+  await fillOptionsWithEmployees(availableManagers, availableManagersDropdown);
 
-  const selectedEmployee = await getChosenEmployee("employeeDropdown");
-
-  sessionStorage.setItem("departmentName", departmentName);
-  sessionStorage.setItem("selectedEmployeeId", selectedEmployee.id);
-  sessionStorage.setItem("selectedEmployeeName", selectedEmployee.name);
+  //handle the employees that are not in the department
+  const availableEmployees = await availableEmployeesToSelect(
+    departmentId,
+    departments,
+    employees
+  );
+  const availableEmployeesDropdown =
+    document.getElementById("employeeDropdown");
+  await fillOptionsWithEmployees(
+    availableEmployees,
+    availableEmployeesDropdown
+  );
 };
-
-//End of getEditDepartment function
 
 const departmentNamePlaceholder = async (departmentName) => {
   const departmentNameElement = document.getElementById("department");
-
   departmentNameElement.placeholder = departmentName;
 };
 
@@ -58,39 +63,36 @@ const fillOptionsWithEmployees = async (employees, dropdown) => {
   });
 };
 
-const addManagerToSelect = async (departmentManagerID, departmentId) => {
-  const departmentEmployees = await getEmployeesInDepartment(departmentId);
-  const managerDropdown = document.getElementById("departmentManagerDropdown");
-  await fillOptionsWithEmployees(departmentEmployees, managerDropdown);
-  //set current manager as selected option
-  managerDropdown.value = await convertEmployeeIDtoName(departmentManagerID);
+const availableEmployeesToSelect = async (
+  departmentId,
+  departments,
+  employees
+) => {
+  const managers = await getManagers(departments);
+  const otherDepartmentsEmployees = await employees.filter((employee) => {
+    return !departmentId.includes(employee.departmentId);
+  });
+  //ignore active managers
+  return otherDepartmentsEmployees.filter(
+    (employee) => !managers.includes(employee._id)
+  );
 };
 
-const addEmployeesToSelect = async (departmentId) => {
-  const notBelongingEmployees = await getEmployeesNotInDepartment(departmentId);
-  const employeeDropdown = document.getElementById("employeeDropdown");
-  await fillOptionsWithEmployees(notBelongingEmployees, employeeDropdown);
-};
-
-const getChosenEmployee = async (dropdownID) => {
-  const employeeDropdown = document.getElementById(dropdownID);
-  const employeeChosen = await employeeDropdown.value;
-  const employeeID = await employeeDropdown.options[
-    employeeDropdown.selectedIndex
-  ].id;
-  const eIsManager = await isManager(employeeID);
-
-  const employee = {
-    id: employeeID,
-    name: employeeChosen,
-    isManager: eIsManager || false,
-  };
-
-  return employee;
+const availableManagersToSelect = async (
+  departmentId,
+  employees,
+  departmentManager
+) => {
+  const employeesInDepartment = await employees.filter((employee) => {
+    return employee.departmentId.includes(departmentId);
+  });
+  //reduce manager from the list of employees
+  return employeesInDepartment.filter((employee) => {
+    return !employee._id.includes(departmentManager);
+  });
 };
 
 const updateDepartmentManager = async (newManagerId, departmentId) => {
-  const wsId = sessionStorage.getItem("wsId");
   try {
     const resp = await fetch(
       "http://localhost:3000/departments/updateManager",
@@ -99,7 +101,6 @@ const updateDepartmentManager = async (newManagerId, departmentId) => {
         headers: {
           "Content-Type": "application/json",
           "x-access-token": editDepartmentToken,
-          wsId: wsId,
         },
         body: JSON.stringify({
           departmentId: departmentId,
@@ -107,66 +108,119 @@ const updateDepartmentManager = async (newManagerId, departmentId) => {
         }),
       }
     );
-
-    const status = await resp.json();
-  } catch (error) {}
-};
-
-const updateEmployeeDepartment = async (newEmployeeId) => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const departmentId = urlParams.get("id");
-  const selectedEmployeeIsManager = await isManager(newEmployeeId);
-
-  try {
-    if (!selectedEmployeeIsManager) {
-      const resp = await fetch(
-        "http://localhost:3000/employees/updateDepartment",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token": editDepartmentToken,
-          },
-          body: JSON.stringify({
-            departmentId: departmentId,
-            employeeId: newEmployeeId,
-          }),
-        }
-      );
-
-      const status = await resp.json();
-    } else {
-      const status = await resp.json();
-    }
   } catch (error) {
     console.log(`Error1: ${error}`);
   }
 };
 
-const deleteDepartment = async (departmentId) => {
-  const wsId = sessionStorage.getItem("wsId");
+const updateDepartmentEmployees = async (newEmployeeId, departmentId) => {
   try {
     const resp = await fetch(
-      "http://localhost:3000/departments/deleteDepartmentAndEmployees",
+      "http://localhost:3000/employees/updateDepartment",
       {
-        method: "DELETE",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           "x-access-token": editDepartmentToken,
-          wsId: wsId,
         },
         body: JSON.stringify({
           departmentId: departmentId,
+          employeeId: newEmployeeId,
         }),
       }
     );
-
-    const status = await resp.json();
-    console.log(`status: ${status.message}`);
   } catch (error) {
-    console.log(`Error2: ${error}`);
+    console.log(`Error: ${error}`);
+  }
+};
+
+const deleteDepartment = async (departmentId) => {
+  try {
+    const resp = await fetch(`http://localhost:3000/departments/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": editDepartmentToken,
+      },
+      body: JSON.stringify({
+        departmentId: departmentId,
+      }),
+    });
+  } catch (error) {
+    console.log(`Error: ${error}`);
   }
 };
 
 // Call the getEmployees function when the page loads
+
+const getEmployees = async () => {
+  const resp = await fetch("http://localhost:3000/employees", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": editDepartmentToken,
+    },
+  });
+
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch data: ${resp.statusText}`);
+  } else {
+    const employees = await resp.json();
+    return employees;
+  }
+};
+
+const getDepartment = async (departmentId) => {
+  const resp = await fetch(
+    `http://localhost:3000/departments/${departmentId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": editDepartmentToken,
+      },
+    }
+  );
+
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch data: ${resp.statusText}`);
+  } else {
+    const department = await resp.json();
+    return department;
+  }
+};
+
+const getDepartments = async () => {
+  const resp = await fetch("http://localhost:3000/departments", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": editDepartmentToken,
+    },
+  });
+
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch data: ${resp.statusText}`);
+  } else {
+    const departments = await resp.json();
+    return departments;
+  }
+};
+
+const getManagers = async (departments) => {
+  const managers = departments.map((department) => department.manager);
+  return managers;
+};
+
+const getChosenEmployee = async (dropdownId) => {
+  const dropdown = document.getElementById(dropdownId);
+  try {
+    const chosenEmployee = dropdown.options[dropdown.selectedIndex].id;
+    return chosenEmployee;
+  } catch (error) {
+    const chosenEmployee = null;
+  }
+};
+
+
 window.onload = getEditDepartment;
