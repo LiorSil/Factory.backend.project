@@ -12,10 +12,6 @@ router.get("/", async (req, res) => {
   return res.json(employees);
 });
 
-router.get("/employees_departments", async (req, res) => {
-  const departments = await employeeService.getDepartmentsForEmployees();
-  return res.json(departments);
-});
 
 
 //get by department

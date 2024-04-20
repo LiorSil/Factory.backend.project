@@ -53,15 +53,13 @@ async function takeAction(userId, path) {
     const resp = await isRemainingActions(userId);
     //add line to json
     let { isNewActionAllowed, remainingActions, fullname } = resp;
-    console.log(
-      `User: ${fullname} has ${remainingActions - 1} remaining actions`
-    );
+    //console.log(`User: ${fullname} has ${remainingActions - 1} remaining actions`);
     if (isNewActionAllowed) {
       // Decrement remaining actions
       await updateRemainingActions(userId, remainingActions);
       return true;
     } else {
-      console.log(`User has no remaining actions`);
+      //console.log(`User has no remaining actions`);
       return false;
     }
   } catch (e) {

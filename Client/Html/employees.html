@@ -17,10 +17,7 @@
   <!-- Dropdown to filter by department -->
   <label for="departmentFilter">Filter by Department:</label>
   <select id="departmentFilter" onchange="filterDepartment()">
-    <option value="all">All Departments</option>
-    <!-- <option value="Sales">Sales</option> -->
-    <!-- <option value="Engineering">Engineering</option> -->
-    <!-- <option value="Marketing">Marketing</option> =-->
+    <option id="all" value="all">All Departments</option>
   </select>
 
   <!-- Table to display employees data -->
@@ -38,17 +35,14 @@
   <!-- JavaScript functions for redirection and filtering -->
  
   <script src ='../Utils/clientPageOnLoadFunctions.js'></script>
-  <script src= '../Utils/departmentUtil.js'></script>
-  <script src ='../Utils/employeeUtil.js'></script>
-  <script src ="../Utils//shiftUtil.js"></script>
-  <script src ='../scripts/getEmployees.js'></script>
+  <script src ='../scripts/employees.js'></script>
   
   <script> 
-  const filterDepartment =async ()=>{
-    const employees = await filterByDepartment("departmentFilter")
-    await fillTable(employees)
+  const filterDepartment =async ()=> await filterByDepartment("departmentFilter")
 
-  }
+    
+
+  
   </script>
   
  

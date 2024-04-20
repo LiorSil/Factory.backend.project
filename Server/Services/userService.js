@@ -5,7 +5,7 @@ const path = require("path");
 const actionsPath = path.join(__dirname, "../Logs/users.json");
 const jsonfile = require("jsonfile");
 const NodeCache = require("node-cache");
-const { log } = require("console");
+
 
 // Create a cache with a 5-minute expiration
 const cache = new NodeCache({ stdTTL: 300 });
@@ -74,7 +74,7 @@ const updateRemainingActions = async (userId, remainingActions) => {
   const dbUser = await userRepo.getUserByFullName(user.name);
 
   //decrement the remaining actions
-  remainingActions--;
+  //remainingActions--;
 
   //update the cache
   cache.set(user.name, remainingActions);

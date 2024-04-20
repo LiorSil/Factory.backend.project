@@ -4,14 +4,17 @@ const express = require("express");
 const router = express.Router();
 
 // http://localhost:3000/shifts
-router.get("/get_shifts", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
+
     const shifts = await shiftService.getShifts();
     return res.json(shifts);
   } catch (error) {
+
     return res.status(500).json({ message: error.message });
   }
 });
+
 
 router.get("/unassigned_shifts", async (req, res) => {
   try {
