@@ -45,6 +45,7 @@ app.use(async (req, res, next) => {
           await takeAction(userId, path);
         }
         break;
+      case path.startsWith("/users/get_users"):
       default:
         // Do nothing
 
@@ -59,21 +60,26 @@ app.use(async (req, res, next) => {
 });
 
 async function takeAction(userId, path) {
+  if (path === undefined) return;
+
+  console.log(`path: ${path}`);
   // Check if user has remaining actions
   console.log("Checking remaining actions for user with ID: " + userId);
   try {
     const resp = await isRemainingActions(userId);
     //add line to json
-    let { remainingActions, message } = resp;
-    if (remainingActions) {
+    let { isNewActionAllowed, remainingActions, fullname } = resp;
+
+    if (isNewActionAllowed) {
+      //console.log(`${fullname} has ${remainingActions} remaining actions`);
       await updateRemainingActions(userId, remainingActions);
-      return {
-        ans: true,
-        numAction: remainingActions,
-        name: resp.fullname,
-      };
+      //console.log(`User now has ${remainingActions - 1} remaining actions`);
+      return;
+    } else {
+      console.log(`User has no remaining actions`);
+      window.location.href = `../Client/Html/login.html`;
+      return;
     }
-    console.log(message);
   } catch (e) {
     console.log(`Error: ${e.message}`);
   }

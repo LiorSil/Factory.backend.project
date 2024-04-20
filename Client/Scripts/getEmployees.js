@@ -6,6 +6,8 @@ try {
 
 // Function to get employees from the server and fill the table
 const startUpEmployees = async () => {
+  // Get the employees from the server
+  // Use the getEmployees function from the employeeUtil.js file
   const employees = await getEmployees();
   await fillDepartmentFilter();
   fillTable(employees);
