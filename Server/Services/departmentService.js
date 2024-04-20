@@ -42,7 +42,7 @@ const isManager = async (employeeId) => {
 
 const createDepartment = async (newDepartmentName, managerId) => {
   if (!newDepartmentName) return null;
-  if (newDepartmentName.length < 3) return null;
+  if (newDepartmentName.length < 2) return null;
   //test if department exists
   const departmentAlreadyExist = await departmentRepo.getDepartmentByName(
     newDepartmentName

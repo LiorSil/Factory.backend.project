@@ -67,23 +67,16 @@ router.delete("/delete", async (req, res) => {
   }
 });
 
-router.post("/create_department", async (req, res) => {
+router.post("/createDepartment", async (req, res) => {
   try {
     const { departmentName, managerId } = req.body;
-
-    const department = await departmentService.createDepartment(
+    const newDepartment = await departmentService.createDepartment(
       departmentName,
       managerId
     );
-
-    if (department) {
-      return res.status(201).json({ department });
-    } else {
-      return res.status(400).json({ message: "Failed to create department" });
-    }
+    console.log(`New Department: ${newDepartment}`);
   } catch (error) {
-    console.error("Error creating department:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: error.message });
   }
 });
 

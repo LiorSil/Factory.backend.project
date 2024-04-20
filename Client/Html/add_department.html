@@ -9,10 +9,7 @@
   <body>
     <div class="container">
       <h1>Add Department</h1>
-      <form
-        id="departmentForm"
-        onsubmit="event.preventDefault(); submitButtonHandler();"
-      >
+      <form id="departmentForm">
         <div class="form-group">
           <label for="departmentName">Department Name:</label>
           <input
@@ -33,27 +30,15 @@
     </div>
 
     <!-- Scripts -->
-    <script src="../Utils/employeeUtil.js"></script>
     <script src="../Utils/clientPageOnLoadFunctions.js"></script>
     <script src="../Scripts/addDepartment.js"></script>
-    
-    
-
     <script>
-      const departmentInput = document.getElementById("departmentName");
-      const addDepartmentButton = document.getElementById(
-        "addDepartmentButton"
-      );
-      createOptionsToSelectManager("selectManager");
-
-      const submitButtonHandler = async () => {
-        const newDepartmentName = departmentInput.value;
-        const managerId = document.getElementById("selectManager").value;
-        await createDepartment(newDepartmentName, managerId);
-
-        alert("Department created successfully"); // Notify user with an alert
-        window.location.href = "./departments.html"; // Redirect user to departments page
-      };
+      const button = document.getElementById("addDepartmentButton");
+      button.addEventListener("click", function (event) {
+        event.preventDefault();
+        window.location.assign("./departments.html");
+        window.location.href = "./departments.html";
+      });
     </script>
   </body>
 </html>
