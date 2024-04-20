@@ -1,7 +1,9 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const NodeCache = require("node-cache");
+
+const cors = require("cors");
 const port = 3000;
-const app = express();  
+const app = express();
 const {
   isRemainingActions,
   updateRemainingActions,
@@ -13,49 +15,32 @@ app.use(cors());
 app.use(express.json());
 app.options("*", cors());
 
+let previousURL = "";
 app.use(async (req, res, next) => {
-  try {
-    const headers = req.headers;
-    const userId = headers["id"];
+  const path = req.url;
 
-    const path = req.url;
-    const method = req.method;
+  const headers = req.headers;
+  const userId = headers["id"];
+  const method = req.method;
+  let ans = null;
 
-    switch (true) {
-      case path === "/employees":
-        await takeAction(userId);
-        break;
-      case path.startsWith("/employees/department/"):
-      case path.startsWith("/employees/updateDepartment"):
-      case path.startsWith("/employees/update_employee"):
-      case path.startsWith("/employees/delete"):
-      case path.startsWith("/employees/unassign_shift_from_employee"):
-        await takeAction(userId, path);
-        break;
-      case path === "/departments":
-      case path.startsWith("/departments/deleteDepartmentAndEmployees"):
-      case path.startsWith("/departments/create_department"):
-      case path.startsWith("/departments/updateManager"):
-        await takeAction(userId, path);
-        break;
-      case path.startsWith("/shifts/get_shifts"):
-      case path.startsWith("/shifts/assign"):
-      case path.startsWith("/shifts"):
-        if (method === "POST") {
-          await takeAction(userId, path);
-        }
-        break;
-      case path.startsWith("/users/get_users"):
-      default:
-        // Do nothing
+  switch (true) {
+    case path === "/employees":
+      ans = await takeAction(userId, path);
+      break;
+    case path === "/departments":
+      ans = await takeAction(userId, path);
+      break;
 
-        break;
-    }
+    default:
+      // Do nothing
+      break;
+  }
 
-    next(); // Move to the next middleware
-  } catch (error) {
-    console.error("Error processing request:", error);
-    res.status(500).send("Internal server error");
+  if (ans == false) {
+    return res.send(false);
+  } else {
+    next();
   }
 });
 
@@ -64,21 +49,20 @@ async function takeAction(userId, path) {
 
   console.log(`path: ${path}`);
   // Check if user has remaining actions
-  console.log("Checking remaining actions for user with ID: " + userId);
   try {
     const resp = await isRemainingActions(userId);
     //add line to json
     let { isNewActionAllowed, remainingActions, fullname } = resp;
-
+    console.log(
+      `User: ${fullname} has ${remainingActions - 1} remaining actions`
+    );
     if (isNewActionAllowed) {
-      //console.log(`${fullname} has ${remainingActions} remaining actions`);
+      // Decrement remaining actions
       await updateRemainingActions(userId, remainingActions);
-      //console.log(`User now has ${remainingActions - 1} remaining actions`);
-      return;
+      return true;
     } else {
       console.log(`User has no remaining actions`);
-      window.location.href = `../Client/Html/login.html`;
-      return;
+      return false;
     }
   } catch (e) {
     console.log(`Error: ${e.message}`);
@@ -101,8 +85,3 @@ app.use("/users", authenticateToken, userController);
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-
-
-
-

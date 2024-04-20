@@ -1,4 +1,6 @@
 const employeeService = require("../Services/EmployeeService");
+
+
 const shiftService = require("../Services/shiftService");
 const express = require("express");
 const router = express.Router();
@@ -8,6 +10,11 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   const employees = await employeeService.getEmployees();
   return res.json(employees);
+});
+
+router.get("/employees_departments", async (req, res) => {
+  const departments = await employeeService.getDepartmentsForEmployees();
+  return res.json(departments);
 });
 
 

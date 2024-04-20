@@ -29,7 +29,6 @@ const assignShift = async (shiftId) => {
 };
 
 const getUnassignedShifts = async () => {
-  console.log("Getting unassigned shifts...");
   return shiftModel.find({ assigned: false });
 };
 

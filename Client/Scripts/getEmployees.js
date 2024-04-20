@@ -100,7 +100,7 @@ const employeeShifts = async (shiftsIds) => {
 };
 
 const fillDepartmentFilter = async () => {
-  const departments = await getDepartments();
+  const departments = await getDepartmentsForEmployees();
   const departmentSelect = document.getElementById("departmentFilter");
   departments.forEach((department) => {
     const option = document.createElement("option");
@@ -109,6 +109,37 @@ const fillDepartmentFilter = async () => {
     departmentSelect.appendChild(option);
   });
 };
+
+const getDepartmentsForEmployees = async () => {
+  const id = sessionStorage.getItem("id");
+
+  try {
+    const resp = await fetch(
+      "http://localhost:3000/employees/employees_departments",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": token,
+          id: id,
+        },
+      }
+    );
+
+    if (!resp.ok) {
+      throw new Error(`Failed to fetch data: ${resp.statusText}`);
+    }
+
+    const departments = await resp.json();
+    return departments;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+
+
 
 // Call the getEmployees function when the page loads
 window.onload = startUpEmployees;

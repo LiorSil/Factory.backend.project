@@ -124,6 +124,11 @@ const getEmployeesExceptManagers = async () => {
   return employeesExceptManagers;
 };
 
+const getDepartmentsForEmployees = async () => {
+  const departments = await departmentRepo.getDepartments();
+  return departments;
+};
+
 module.exports = {
   getEmployeesExceptManagers,
   getEmployeeShiftsByID,
@@ -135,4 +140,5 @@ module.exports = {
   deleteEmployee,
   assignShift,
   unassignShift,
+  getDepartmentsForEmployees,
 };

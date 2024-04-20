@@ -46,7 +46,7 @@ const convertDepartmentNameToId = async (departmentName) => {
 };
 
 const getEmployeesInDepartment = async (departmentId) => {
-  const employees = await getEmployees();
+  const employees = await getEmployeesAllDepartments();
 
   //return employees that are in the department
   const employeesInDepartment = employees.filter(
@@ -56,7 +56,7 @@ const getEmployeesInDepartment = async (departmentId) => {
 };
 
 const getEmployeesNotInDepartment = async (departmentId) => {
-  const employees = await getEmployees();
+  const employees = await getEmployeesAllDepartments();
 
   //return employees that are not in the department
   const employeesNotInDepartment = employees.filter(
@@ -118,6 +118,32 @@ const getDepartments = async () => {
   } catch (error) {
     console.error(error);
   }
-
-  // const getEmployeesInDepartment
 };
+
+async function getEmployeesAllDepartments() {
+  const id = sessionStorage.getItem("id");
+  const token = sessionStorage.getItem("token");
+  try {
+    console.log(`id: ${id} `);
+    const resp = await fetch(
+      "http://localhost:3000/employees/employees_departments",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": token,
+          id: id,
+        },
+      }
+    );
+
+    if (!resp.ok) {
+      throw new Error(`Failed to fetch data: ${resp.statusText}`);
+    }
+
+    const employees = await resp.json();
+    return employees;
+  } catch (error) {
+    console.error(error);
+  }
+}

@@ -7,7 +7,6 @@ const jsonfile = require("jsonfile");
 const NodeCache = require("node-cache");
 const { log } = require("console");
 
-
 // Create a cache with a 5-minute expiration
 const cache = new NodeCache({ stdTTL: 300 });
 
@@ -27,10 +26,8 @@ const getUsers = async () => {
 
 // Checks if the user has remaining actions.
 const isRemainingActions = async (userId) => {
-
   //get user from the web service (auth repo)
   const user = await authRepo.getUserById(userId);
-  console.log(`User: ${user.name}`);
 
   //get user from the local database (user repo)
   const dbUser = await userRepo.getUserByFullName(user.name);
@@ -40,16 +37,16 @@ const isRemainingActions = async (userId) => {
 
   // If user is not in cache, get remaining actions from DB (initialization)
   if (remainingActions === undefined) {
-    console.log("User not in cache");
+    
     remainingActions = dbUser.num_of_actions;
     cache.set(user.name, remainingActions);
 
     return {
       isNewActionAllowed: true,
       remainingActions: remainingActions,
-      fullname: user.name,  
-     };
-  } 
+      fullname: user.name,
+    };
+  }
 
   // If user is in cache and has NO remaining actions return false
   if (remainingActions <= 0) {
@@ -58,7 +55,7 @@ const isRemainingActions = async (userId) => {
       remainingActions: remainingActions,
       fullname: user.name,
     };
-  } 
+  }
 
   // If user is in cache and has remaining actions return true
   return {
@@ -69,7 +66,6 @@ const isRemainingActions = async (userId) => {
 };
 
 // Updates the remaining actions for a user.
-
 const updateRemainingActions = async (userId, remainingActions) => {
   //get user from the web service (auth repo)
   const user = await authRepo.getUserById(userId);
@@ -86,7 +82,7 @@ const updateRemainingActions = async (userId, remainingActions) => {
   try {
     //new data to be added to the json file
     const maxActions = dbUser.num_of_actions;
-    
+
     // Get the current date in the format MM/DD/YYYY hh:mm:ss
     const date = new Date().toLocaleString();
 
@@ -99,15 +95,9 @@ const updateRemainingActions = async (userId, remainingActions) => {
     };
 
     let actionsData = await jsonfile.readFile(actionsPath);
-    // Check if the actions key exists in the JSON file and create { actions: [] } if it doesn't
-    if (!actionsData["actions"]) {
-      actionsData["actions"] = [];
-      // Write the updated data back to the file
-      await jsonfile.writeFile(actionsPath, actionsData);
-    }
 
-        
     await actionsData["actions"].push(newLog);
+
     // Write the updated data back to the file
     await jsonfile.writeFile(actionsPath, actionsData);
 
