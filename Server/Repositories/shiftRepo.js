@@ -45,10 +45,12 @@ const unassignShift = async (shiftId) => {
 };
 
 const updateShift = async (shiftId, updatedShift) => {
+  console.log(`Updating shift ${updatedShift}`);
   const shift = await getShift(shiftId);
   shift.date = updatedShift.date;
   shift.startingHour = updatedShift.startingHour;
   shift.endingHour = updatedShift.endingHour;
+  shift.assigned = updatedShift.assigned;
   await shift.save();
   return shift;
 };

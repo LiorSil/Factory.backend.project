@@ -22,21 +22,18 @@
         <label for="lastName">Last Name:</label>
         <input type="text" id="lastName" name="lastName" required>
       </div>
-
       
-      <!-- select a department -->
+      <div class="form-group">
+        <label for="department">Department:</label>
+       
+        <input type="text" id="department" name="department" readonly style="background-color: rgb(188, 185, 185);">
+
+      </div>
       
-          <label id = departmentPickerLabel for="department">Department:   </label> 
-          
-          
-          
-     
-
-
-      <!-- Add other fields as needed -->
 
       <div class="form-buttons">
-        <button id="updateEmployee" type="button" class="btn btn-primary" >Update</button>
+        
+        <button  id="updateEmployee" type="button" class="btn btn-primary" >Update</button>
         <button id ="deleteEmployee" type="button" class="btn btn-danger" onclick="deleteEmployeeFunc()">Delete</button>
       </div>
     </form>
@@ -78,10 +75,7 @@
     
   </script>
   <script src="../Utils/clientPageOnLoadFunctions.js"></script>
-  <script src="../Utils/departmentUtil.js"></script>
-  <script src="../Utils/employeeUtil.js"></script>
-  <script src="../Scripts/editEmployee.js"></script> <!-- Make sure this is included after deleteEmployee function definition -->
-  <script src="../Utils/shiftUtil.js"></script>
+  <script src="../Scripts/editEmployee.js"></script>
   
  
 </body>

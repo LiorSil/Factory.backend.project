@@ -24,12 +24,6 @@ router.get("/department/:departmentName", async (req, res) => {
   return res.json(employees);
 });
 
-router.get("/edit_employee/:id", async (req, res) => {
-  const id = req.params.id;
-  const employee = await employeeService.getEmployeeByID(id);
-
-  return res.json(employee);
-});
 
 router.get("/:id", async (req, res) => {
   const id = req.params.id;
@@ -48,45 +42,52 @@ router.put("/updateDepartment", async (req, res) => {
 
     return res.json({ status: "success", employee: employee });
   } catch (error) {
-    return res.json({status: "error", message: error.message});
+    return res.json({ status: "error", message: error.message });
   }
 });
 
-router.put("/update_employee", async (req, res) => {
+router.put("/:id", async (req, res) => {
+  //update employee without know what parms are being passed
   try {
-    const { id, firstName, lastName, departmentId } = req.body;
-    console.log(`departmentId: ${departmentId}`);
-    const employee = await employeeService.updateEmployee(id, {
+    const id = req.params.id;
+    const { firstName, lastName } = req.body;
+    const employee = await employeeService.updateEmployee(
+      id,
       firstName,
-      lastName,
-      departmentId,
-    });
-
+      lastName
+    );
     if (employee) {
-      const statusOK = {
-        success: "true",
-        message: "Employee updated successfully",
-        employee: employee,
-      };
-      return res.json(statusOK);
+      return res.json({ message: "Employee updated successfully" });
+    } else {
+      return res.json({ message: "Error updating employee" });
     }
   } catch (error) {
-    return res.json({ message: "Error updating employee: " });
+    return res.json({ message: `Error updating employee: ${error.message}` });
   }
 });
 
-router.delete("/delete", async (req, res) => {
+router.put("/assignShift/:shiftId/:employeeId", async (req, res) => {
   try {
-    if (employee) {
-      const statusOK = {
-        success: "true",
-        message: "Employee deleted successfully",
-        employee: employee,
-      };
-      return res.json(statusOK);
-    }
+    const shiftId = req.params.shiftId;
+    const employeeId = req.params.employeeId;
+    const employee = await employeeService.assignShift(shiftId, employeeId);
+    return res.json(employee);
   } catch (error) {
-    return res.json({ message: "Error deleting employee: " });
+    return res.json({ message: error.message });
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    await employeeService.deleteEmployee(id);
+
+    return res.status;
+  } catch (error) {
+    return res.json({
+      status: "error",
+      message: `Failed to delete employee: ${error.message}`,
+    });
   }
 });
 

@@ -3,117 +3,251 @@ const editEmployee = async () => {
   const currentUrl = window.location.href;
   const url = new URL(currentUrl);
   const employeeId = url.searchParams.get("id");
+  const employee = await getEmployee(employeeId);
+  const departments = await getDepartments();
+  const shifts = await getShifts();
 
-  const employee = await getEmployeeByID(employeeId);
+  // initialize the form with the employee's current department and name
 
-  // Load the employee data into the form
-  await loadEmployeeEditPage(employee);
-  await fillShiftsTable(employee, "shiftsTableBody");
-  selectUnassignedShifts();
+  const firstNameInput = document.getElementById("firstName");
+  const lastNameInput = document.getElementById("lastName");
+  const departmentReadonlyInput = document.getElementById("department");
+  const shiftsTbody = document.getElementById("shiftsTableBody");
 
-  // Handle the update button
+  const employeeDepartment = departments.find((department) =>
+    department._id.includes(employee.departmentId)
+  );
+
+  // the employee's shifts stores as array of shifts ids
+
+  const employeeShifts = shifts
+    .filter((shift) => {
+      return employee.shifts.includes(shift._id);
+    })
+    .map((employeeShift) => {
+      // format the date to be more readable like `DD/MM/YYYY`
+      const fDate = new Date(employeeShift.date).toLocaleDateString("en-GB");
+      return {
+        _id: employeeShift._id,
+        date: fDate,
+        start: employeeShift.startingHour,
+        end: employeeShift.endingHour,
+      };
+    });
+
+  // display the employee's current department and name
+  departmentReadonlyInput.value = employeeDepartment.name;
+  firstNameInput.value = employee.firstName;
+  lastNameInput.value = employee.lastName;
+
+  // display the employee's shifts in a table format of date and time
+  employeeShifts.forEach((shift) => {
+    const row = document.createElement("tr");
+    row.id = shift._id;
+    const date = document.createElement("td");
+    date.textContent = shift.date;
+    const time = document.createElement("td");
+    time.textContent = `${shift.start} - ${shift.end}`;
+    row.appendChild(date);
+    row.appendChild(time);
+    shiftsTbody.appendChild(row);
+  });
+
+  // handling the available unassigned shifts
+  const availableShifts = shifts
+    .filter((shift) => shift.assigned === false)
+    .map((shift) => {
+      const fDate = new Date(shift.date).toLocaleDateString("en-GB");
+      return {
+        _id: shift._id,
+        date: fDate,
+        startingHour: shift.startingHour,
+        endingHour: shift.endingHour,
+      };
+    });
+
+  const shiftsSelect = document.getElementById("shiftPicker");
+  availableShifts.forEach((shift) => {
+    const option = document.createElement("option");
+    option.value = shift._id;
+    option.textContent = `${shift.date} ${shift.startingHour} - ${shift.endingHour}`;
+    shiftsSelect.appendChild(option);
+  });
+
+  // handling the update form submission
   const updateButton = document.getElementById("updateEmployee");
-  updateButton.addEventListener("click", () => updateEmployee(employee));
+  updateButton.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const firstName = firstNameInput.value;
+    const lastName = lastNameInput.value;
+    const updatedEmployee = await updateEmployee(employee, firstName, lastName);
+    if (updatedEmployee) {
+      alert("Employee updated successfully");
+      window.location.href = "employees.html";
+    } else {
+      alert("Error updating employee");
+    }
+  });
 
+  // handling the delete button
+  const deleteButton = document.getElementById("deleteEmployee");
+  deleteButton.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const confirmDelete = confirm("Are you sure you want to delete?");
+    if (confirmDelete) {
+      await deleteEmployee(employeeId);
+      alert("Employee deleted successfully");
+      window.location.href = "employees.html";
+    }
+  });
+
+  // handling the the register shift button
   const registerShiftButton = document.getElementById("registerShift");
-  registerShiftButton.addEventListener("click", () => registerShift(employee));
+  registerShiftButton.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const shiftId = shiftsSelect.value;
+    const shift = shifts.find((shift) => shift._id.includes(shiftId));
+    const assignedShift = await assignShift(shift);
+    const assignedShiftToEmployee = await assignShiftToEmployee(
+      shift._id,
+      employee._id
+    );
+    if (assignedShift && assignedShiftToEmployee) {
+      alert("Shift assigned successfully");
+      window.location.reload();
+    } else {
+      alert("Error assigning shift");
+    }
+  });
 };
 
-const updateEmployee = async (employee) => {
-  const id = sessionStorage.getItem("id");
-  // Retrieve the updated employee data from the form and handle cases where the user didn't update a field
-  let firstName =
-    document.getElementById("firstName").value || employee.firstName;
-  let lastName = document.getElementById("lastName").value || employee.lastName;
+//*******************  Helper functions *******************//
 
-  const departmentId = document.getElementById("departmentPicker").value;
-  try {
-    const resp = await fetch(
-      "http://localhost:3000/employees/update_employee",
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "x-access-token": editEmployeeToken,
-          id: id,
-        },
-        body: JSON.stringify({
-          id: employee._id, // Make sure employeeId is in scope
-          firstName: firstName,
-          lastName: lastName,
-          departmentId: departmentId,
-        }),
-      }
-    );
-
-    if (!resp.ok) {
-      throw new Error(`Failed to update employee: ${resp.statusText}`);
-    } else {
-      alert("Employee updated successfully");
-      // Redirect the user to another page after successful update
-      // window.location.href = "http://localhost:3000/employees";
-    }
-  } catch (error) {
-    console.error("Error updating employee:", error.message);
-    // Handle the error accordingly (e.g., display an error message to the user)
+const getEmployee = async (employeeId) => {
+  const resp = await fetch(`http://localhost:3000/employees/${employeeId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": editEmployeeToken,
+    },
+  });
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch data: ${resp.statusText}`);
+  } else {
+    const employee = await resp.json();
+    return employee;
   }
 };
 
-const loadEmployeeEditPage = async (employee) => {
-  // Load the employee data into the form placeholders
-  const firstName = document.getElementById("firstName");
-  const lastName = document.getElementById("lastName");
-  firstName.placeholder = employee.firstName || "";
-  lastName.placeholder = employee.lastName || "";
-
-  // Load the department picker in the right order
-  const selectDepartment = await createSelectDepartment(employee.departmentId);
-  const departmentPickerLabel = document.getElementById(
-    "departmentPickerLabel"
-  );
-  departmentPickerLabel.insertAdjacentElement("afterend", selectDepartment);
-};
-
-const createSelectDepartment = async (employeeDepartmentId) => {
-  // Create a select element
-  const selectDepartment = document.createElement("select");
-  selectDepartment.id = "departmentPicker";
-
-  const departments = await getDepartments();
-
-  // Find the department of the employee
-  const employeeDepartment = departments.find(
-    (department) => department._id.toString() === employeeDepartmentId
-  );
-
-  // Filter out the department of the employee
-  const noEmployeeDepartment = departments.filter(
-    (department) => department._id.toString() !== employeeDepartmentId
-  );
-
-  // Reorder departments to place the employee's department first
-  const reorderedDepartments = [employeeDepartment, ...noEmployeeDepartment];
-
-  // Create options for each department
-  reorderedDepartments.forEach((department) => {
-    const option = document.createElement("option");
-    option.id = department._id;
-    option.value = department._id;
-    option.text = department.name;
-    selectDepartment.appendChild(option);
+const getDepartments = async () => {
+  const resp = await fetch("http://localhost:3000/departments", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": editEmployeeToken,
+    },
   });
 
-  // Return the select element
-  return selectDepartment;
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch data: ${resp.statusText}`);
+  } else {
+    const departments = await resp.json();
+    return departments;
+  }
 };
 
-const registerShift = async (employee) => {
-  const shiftId = document.getElementById("shiftPicker").value;
+const getShifts = async () => {
+  const resp = await fetch("http://localhost:3000/shifts", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": editEmployeeToken,
+    },
+  });
 
-  const employeeId = employee._id;
-  await assignShift(shiftId, employeeId);
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch data: ${resp.statusText}`);
+  } else {
+    const shifts = await resp.json();
+    return shifts;
+  }
+};
 
-  location.reload();
+const updateEmployee = async (employee, firstName, lastName) => {
+  // test if changes are made
+  if (employee.firstName === firstName && employee.lastName === lastName) {
+    return employee;
+  }
+  const resp = await fetch(`http://localhost:3000/employees/${employee._id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": editEmployeeToken,
+    },
+    body: JSON.stringify({ firstName, lastName }),
+  });
+
+  if (!resp.ok) {
+    throw new Error(`Failed to update employee: ${resp.statusText}`);
+  } else {
+    const updatedEmployee = await resp.json();
+    return updatedEmployee;
+  }
+};
+
+const deleteEmployee = async (employeeId) => {
+  const resp = await fetch(`http://localhost:3000/employees/${employeeId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": editEmployeeToken,
+    },
+  });
+
+  if (!resp.ok) {
+    throw new Error(`Failed to delete employee: ${resp.statusText}`);
+  } else {
+    return;
+  }
+};
+
+const assignShift = async (shift) => {
+  shift.assigned = true;
+  const shiftId = shift._id;
+  const resp = await fetch(`http://localhost:3000/shifts/${shiftId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": editEmployeeToken,
+    },
+    body: JSON.stringify(shift),
+  });
+  // if the shift is not assigned, return null
+  if (!resp.ok) {
+    throw new Error(`Failed to assign shift: ${resp.statusText}`);
+  } else {
+    const assignedShift = await resp.json();
+    return assignedShift;
+  }
+};
+
+const assignShiftToEmployee = async (shiftId, employeeId) => {
+  const resp = await fetch(
+    `http://localhost:3000/employees/assignShift/${shiftId}/${employeeId}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": editEmployeeToken,
+      },
+    }
+  );
+  if (!resp.ok) {
+    throw new Error(`Failed to assign shift to employee: ${resp.statusText}`);
+  } else {
+    const assignedShift = await resp.json();
+    return assignedShift;
+  }
 };
 
 window.onload = editEmployee;

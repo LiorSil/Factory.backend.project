@@ -53,7 +53,8 @@ async function fillTable(employees, departments, shifts) {
     const shiftCell = document.createElement("td");
 
     // Populate department name and shifts
-    departmentLink.textContent = department.name;
+    
+    departmentLink.textContent = department ? department.name : "No Department";
     shiftCell.textContent = shiftsArray;
 
     // Append cells to the row

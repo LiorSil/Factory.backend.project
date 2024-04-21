@@ -46,11 +46,10 @@ const updateEmployeeDepartment = async (departmentId, employeeId) => {
   }
 };
 
-const updateEmployee = async (id, details) => {
+const updateEmployee = async (id, firstName, lastName) => {
   try {
-    await employeeRepo.updateEmployeeFirstName(id, details.firstName);
-    await employeeRepo.updateEmployeeLastName(id, details.lastName);
-    await employeeRepo.updateEmployeeDepartment(id, details.departmentId);
+    await employeeRepo.updateEmployeeFirstName(id, firstName);
+    await employeeRepo.updateEmployeeLastName(id, lastName);
     const employee = await getEmployeeByID(id);
     return employee;
   } catch (error) {
@@ -62,35 +61,23 @@ const updateEmployee = async (id, details) => {
 const deleteEmployee = async (employeeId) => {
   try {
     await employeeRepo.deleteEmployee(employeeId);
-    return true;
+    return { status: "success", message: `Employee deleted` };
   } catch (error) {
     console.log(`Service error: ${error}`);
-    return false;
+    return {
+      status: "error",
+      message: `Failed to delete employee: ${error.message}`,
+    };
   }
 };
 
 const assignShift = async (shiftId, employeeId) => {
   try {
-    // Check if the shift is available
-    const assignedShift = await shiftRepo.assignShift(shiftId);
-
-    // Determine the appropriate message and status
-    let message, status;
-    if (!assignedShift) {
-      await employeeRepo.addShiftToEmployee(shiftId, employeeId);
-      message = `Shift ${shiftId} assigned to employee ${employeeId}`;
-      status = "success";
-    } else {
-      message = `Shift ${shiftId} is already assigned`;
-      status = "failed";
-    }
-    return { message, status };
+    await employeeRepo.addShiftToEmployee(shiftId, employeeId);
+    return shiftId;
   } catch (error) {
-    // Handle errors
-    return {
-      message: `Failed to assign shift: ${error.message || error}`,
-      status: false,
-    };
+    console.error("Error assigning shift to employee:", error.message);
+    return null;
   }
 };
 
