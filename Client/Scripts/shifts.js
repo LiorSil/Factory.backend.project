@@ -85,7 +85,7 @@ const unassignShiftHandler = async (shift) => {
     body: shift,
   });
   if (!resp.ok) {
-    throw new Error(`Failed to unassign shift: ${resp.statusText}`);
+    throw new Error(`Failed To unassign shift: ${resp.statusText}`);
   } else{ 
     location.reload();
   }
@@ -97,6 +97,6 @@ const unassignShiftForEmployee = async (shiftId) => {
   if (!employee) {
     throw new Error("Employee not found");
   } else {
-    
+
 
 window.onload = loadShifts;
