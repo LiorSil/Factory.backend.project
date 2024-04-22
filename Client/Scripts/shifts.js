@@ -1,73 +1,102 @@
+const shiftsToken = sessionStorage.getItem("token");
+
 const loadShifts = async () => {
   const shifts = await getShifts();
-  await fillTbodyShiftsTable(shifts);
 
-  const createShiftButton = document.getElementById("createShiftButton");
-  createShiftButton.addEventListener("click", () => {
-    const newShift = getFormDetails();
-    createShift(newShift);
-  });
-
-  //add event listener to all edit buttons in the table
-  const editButtons = document.getElementsByClassName("editButton");
-  for (let i = 0; i < editButtons.length; i++) {
-    const button = editButtons[i];
-    button.addEventListener("click", async () => {
-      if (button.innerHTML === "Unassign") unassignBtnHandler(button.id);
-      else {
-        const shift = await getShiftByID(button.id);
-        editBtnHandler(shift);
-      }
-    });
-  }
-};
-
-const fillTbodyShiftsTable = async (shifts) => {
-  const tableBody = document.getElementById("shiftsTableBody");
+  const shiftsTableTbody = document.getElementById("shiftsTableBody");
   shifts.forEach((shift) => {
-    const row = document.createElement("tr");
-    const date = document.createElement("td");
-    const startingHour = document.createElement("td");
-    const endingHour = document.createElement("td");
-    const assigned = document.createElement("td");
-    //create edit button and add it to new cell
-    const editButton = document.createElement("button");
+    const tr = document.createElement("tr");
+    tr.id = shift._id;
 
-    const fDate = formatDate(shift.date);
-    date.innerHTML = fDate;
-    startingHour.innerHTML = shift.startingHour;
-    endingHour.innerHTML = shift.endingHour;
-    assigned.innerHTML = shift.assigned ? "Yes" : "No";
-    editButton.innerHTML = shift.assigned ? "Unassign" : "Edit";
-    editButton.className = "editButton";
-    editButton.id = shift._id;
-    row.appendChild(date);
-    row.appendChild(startingHour);
-    row.appendChild(endingHour);
-    row.appendChild(assigned);
-    row.appendChild(editButton);
+    const tdDate = document.createElement("td");
+    let fDate = new Date(shift.date);
+    tdDate.innerText = fDate.toLocaleDateString();
+    tr.appendChild(tdDate);
 
-    tableBody.appendChild(row);
+    const tdStartTime = document.createElement("td");
+    tdStartTime.innerText = shift.startingHour;
+    tr.appendChild(tdStartTime);
+
+    const tdEndTime = document.createElement("td");
+    tdEndTime.innerText = shift.endingHour;
+    tr.appendChild(tdEndTime);
+
+    const tdAssigned = document.createElement("td");
+    tdAssigned.innerText = shift.assigned ? "Yes" : "No";
+    //style the assigned column based on the value
+    if (shift.assigned) {
+      tdAssigned.style.backgroundColor = "MediumAquaMarine";
+      tdAssigned.style.color = "white";
+    } else {
+      tdAssigned.style.backgroundColor = "IndianRed";
+      tdAssigned.style.color = "white";
+    }
+    tr.appendChild(tdAssigned);
+
+    const tdActions = document.createElement("td");
+    const assignButton = document.createElement("button");
+    assignButton.innerText = shift.assigned ? "Unassign" : "Edit";
+    tdActions.appendChild(assignButton);
+    tr.appendChild(tdActions);
+
+    shiftsTableTbody.appendChild(tr);
   });
 };
 
-const getFormDetails = () => {
-  const date = document.getElementById("newDate").value;
-  const startingHour = document.getElementById("newStartHour").value;
-  const endingHour = document.getElementById("newEndHour").value;
-  return { date, startingHour, endingHour };
-};
-
-const unassignBtnHandler = async (shiftId) => {
-  const result = await unassignShift(shiftId);
-  if (result) {
-    alert("Shift unassigned");
+const getShifts = async () => {
+  const resp = await fetch("http://localhost:3000/shifts", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": shiftsToken,
+    },
+  });
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch data: ${resp.statusText}`);
   }
-  location.reload();
+  const shifts = await resp.json();
+  return shifts;
 };
 
-const editBtnHandler = async (shift) => {
-  window.location.href = `./edit_shift.html?shiftId=${shift._id}`;
+const getEmployees = async () => {
+  const resp = await fetch("http://localhost:3000/employees", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": shiftsToken,
+    },
+  });
+  if (!resp.ok) {
+    throw new Error(`Failed to fetch data: ${resp.statusText}`);
+  }
+  const employees = await resp.json();
+  return employees;
 };
+
+const unassignShiftHandler = async (shift) => {
+  //update the shift object
+  shift.assigned = false;
+  const resp = await fetch(`http://localhost:3000/shifts/${shift._id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": shiftsToken,
+    },
+    body: shift,
+  });
+  if (!resp.ok) {
+    throw new Error(`Failed to unassign shift: ${resp.statusText}`);
+  } else{ 
+    location.reload();
+  }
+};
+
+const unassignShiftForEmployee = async (shiftId) => {
+  const employees = await getEmployees();
+  const employee = employees.find((e) => e.shifts.includes(shiftId));
+  if (!employee) {
+    throw new Error("Employee not found");
+  } else {
+    
 
 window.onload = loadShifts;

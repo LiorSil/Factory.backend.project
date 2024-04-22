@@ -91,7 +91,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.put("/unassign_shift_from_employee", async (req, res) => {
+router.put("/unassignShift", async (req, res) => {
   try {
     const shiftId = req.body.shiftId;
     const unassignShiftFromEmployee = await employeeService.unassignShift(
