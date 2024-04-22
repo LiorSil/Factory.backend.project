@@ -46,6 +46,23 @@ router.put("/updateDepartment", async (req, res) => {
   }
 });
 
+router.put("/unassignShift/:id", async (req, res) => {
+  const shiftId = req.params.id;
+
+  const unassignShiftFromEmployee = await employeeService.unassignShift(
+    shiftId
+  );
+
+  const unassignShiftFromShifts = await shiftService.unassignShift(shiftId);
+
+  const result = {
+    employee: unassignShiftFromEmployee,
+    shift: unassignShiftFromShifts,
+  };
+  return res.json(result);
+});
+
+
 router.put("/:id", async (req, res) => {
   //update employee without know what parms are being passed
   try {
@@ -91,22 +108,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.put("/unassignShift", async (req, res) => {
-  try {
-    const shiftId = req.body.shiftId;
-    const unassignShiftFromEmployee = await employeeService.unassignShift(
-      shiftId
-    );
-    const unassignShiftFromShifts = await shiftService.unassignShift(shiftId);
-    const result = {
-      employee: unassignShiftFromEmployee,
-      shift: unassignShiftFromShifts,
-    };
-    return res.json(result);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
+
 
 router.get("/e/employees_except_managers", async (req, res) => {
   try {

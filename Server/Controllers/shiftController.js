@@ -16,15 +16,6 @@ router.get("/", async (req, res) => {
 });
 
 
-router.get("/unassigned_shifts", async (req, res) => {
-  try {
-    const shifts = await shiftService.getUnassignedShifts();
-    return res.json(shifts);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
-
 router.put("/assign", async (req, res) => {
   try {
     const { shiftId, employeeId } = req.body;
@@ -70,16 +61,7 @@ router.post("/", async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 });
-router.put("/update_shift/:id", async (req, res) => {
-  try {
-    const shiftId = req.params.id;
-    const updatedShift = req.body;
-    const result = await shiftService.updateShift(shiftId, updatedShift);
-    return res.json(result);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-}); 
+
 
 
 

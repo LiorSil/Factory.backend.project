@@ -36,6 +36,14 @@ const loadShifts = async () => {
     const tdActions = document.createElement("td");
     const assignButton = document.createElement("button");
     assignButton.innerText = shift.assigned ? "Unassign" : "Edit";
+    assignButton.onclick = () => {
+      if (shift.assigned) {
+        unassignShiftHandler(shift._id);
+      } else {
+        sessionStorage.setItem("shiftId", shift._id);
+        window.location.href = "editShift.html";
+      }
+    };
     tdActions.appendChild(assignButton);
     tr.appendChild(tdActions);
 
@@ -58,45 +66,25 @@ const getShifts = async () => {
   return shifts;
 };
 
-const getEmployees = async () => {
-  const resp = await fetch("http://localhost:3000/employees", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": shiftsToken,
-    },
-  });
+const unassignShiftHandler = async (shiftId) => {
+  const resp = await fetch(
+    `http://localhost:3000/employees/unassignShift/${shiftId}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": shiftsToken,
+      },
+    }
+  );
   if (!resp.ok) {
-    throw new Error(`Failed to fetch data: ${resp.statusText}`);
-  }
-  const employees = await resp.json();
-  return employees;
-};
-
-const unassignShiftHandler = async (shift) => {
-  //update the shift object
-  shift.assigned = false;
-  const resp = await fetch(`http://localhost:3000/shifts/${shift._id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": shiftsToken,
-    },
-    body: shift,
-  });
-  if (!resp.ok) {
-    throw new Error(`Failed To unassign shift: ${resp.statusText}`);
-  } else{ 
+    throw new Error(
+      `Failed To unassign shift for employee: ${resp.statusText}`
+    );
+  } else {
     location.reload();
   }
 };
-
-const unassignShiftForEmployee = async (shiftId) => {
-  const employees = await getEmployees();
-  const employee = employees.find((e) => e.shifts.includes(shiftId));
-  if (!employee) {
-    throw new Error("Employee not found");
-  } else {
-
+  
 
 window.onload = loadShifts;

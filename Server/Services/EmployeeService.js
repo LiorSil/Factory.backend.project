@@ -83,10 +83,10 @@ const assignShift = async (shiftId, employeeId) => {
 
 const unassignShift = async (shiftId) => {
   const employees = await getEmployees();
+
   try {
     employees.forEach(async (employee) => {
       if (employee.shifts.includes(shiftId)) {
-        console.log(`Employee ${employee._id} has shift ${shiftId}`);
         await employeeRepo.removeShiftFromEmployee(shiftId, employee._id);
         return shiftId;
       }
