@@ -45,38 +45,23 @@ const getShifts = async (id) => {
   return employee.shifts;
 };
 
+const updateEmployee = async (updatedEmployee) => {
+  const employee = await getEmployee(updatedEmployee._id);
+  employee.firstName = updatedEmployee.firstName;
+  employee.lastName = updatedEmployee.lastName;
+  employee.startWorkYear = updatedEmployee.startWorkYear;
+  employee.departmentId = updatedEmployee.departmentId;
+  employee.shifts = updatedEmployee.shifts;
+  await employee.save();
+
+  return employee;
+};
+
 const updateEmployeeDepartment = async (employeeId, departmentId) => {
   const employee = await getEmployee(employeeId);
   employee.departmentId = departmentId;
   await employee.save();
-  return
-};
-
-const updateEmployeeFirstName = async (id, firstName) => {
-  try {
-    console.log(`Updating employee first name to: ${firstName}`);
-    console.log(`id: ${id}`);
-    const employee = await getEmployee(id);
-    employee.firstName = firstName;
-    await employee.save();
-    return;
-  } catch (error) {
-    console.log(`Error updating employee first name: ${error}`);
-  }
-};
-
-const updateEmployeeLastName = async (id, lastName) => {
-  const employee = await getEmployee(id);
-  employee.lastName = lastName;
-  await employee.save();
   return;
-};
-
-const addShiftToEmployee = async (shiftId, employeeId) => {
-  const employee = await getEmployee(employeeId);
-  employee.shifts.push(shiftId);
-  await employee.save();
-  return employee;
 };
 
 module.exports = {
@@ -87,8 +72,6 @@ module.exports = {
   getShifts,
   getEmployees,
   updateEmployeeDepartment,
-  updateEmployeeFirstName,
-  updateEmployeeLastName,
-  addShiftToEmployee,
+  updateEmployee,
   removeShiftFromEmployee,
 };

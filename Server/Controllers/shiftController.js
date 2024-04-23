@@ -18,8 +18,9 @@ router.get("/", async (req, res) => {
 
 router.put("/assign", async (req, res) => {
   try {
-    const { shiftId, employeeId } = req.body;
-    const result = await employeesService.assignShift(shiftId, employeeId);
+    const { shift, employee } = req.body;
+    console.log(`Shift: ${shift}, Employee: ${employee}`);
+    const result = await shiftService.assignShift(shift, employee);
     res.json(result);
   } catch (error) {
     res.status(500).json({ message: error.message, status: "failed" });

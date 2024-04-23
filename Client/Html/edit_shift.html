@@ -32,22 +32,14 @@
         />
         <label for="editAssigned">Assigned:</label>
         <select id="editAssigned" name="editAssigned" required>
-          <option id="assigned" value="0">Unassigned</option>
+          <option id="unassignedOption" value="unassigned">Unassigned</option>
         </select>
         <button id="submitEditShift" type="submit">Save Changes</button>
       </form>
     </div>
     <script src="../Utils/clientPageOnLoadFunctions.js"></script>
     <script src="../Scripts/editShift.js"></script>
-    <script src="../Utils/employeeUtil.js"></script>
-    <script src="../Utils/shiftUtil.js"></script>
-    <script>
-      const shiftId = sessionStorage.getItem("shiftId");
-      const asyncCreateEmployeesSelect = async () => {
-        const employees = await getEmployees();
-        await createEmployeesSelect("editAssigned", employees);
-      };
-      asyncCreateEmployeesSelect();
-    </script>
+    <!-- <script src="../Utils/employeeUtil.js"></script>
+    <script src="../Utils/shiftUtil.js"></script> -->
   </body>
 </html>

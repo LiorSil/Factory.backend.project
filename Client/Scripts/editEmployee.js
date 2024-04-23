@@ -1,3 +1,5 @@
+const e = require("express");
+
 const editEmployeeToken = sessionStorage.getItem("token");
 const editEmployee = async () => {
   const currentUrl = window.location.href;
@@ -177,14 +179,21 @@ const updateEmployee = async (employee, firstName, lastName) => {
   // test if changes are made
   if (employee.firstName === firstName && employee.lastName === lastName) {
     return employee;
+  } else if (firstName === "" || lastName === "") {
+    alert("Please fill in all fields");
+    return;
+  } else {
+    employee.firstName = firstName;
+    employee.lastName = lastName;
   }
+
   const resp = await fetch(`http://localhost:3000/employees/${employee._id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       "x-access-token": editEmployeeToken,
     },
-    body: JSON.stringify({ firstName, lastName }),
+    body: JSON.stringify({ employee }),
   });
 
   if (!resp.ok) {

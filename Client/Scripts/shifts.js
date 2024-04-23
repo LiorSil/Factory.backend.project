@@ -40,8 +40,8 @@ const loadShifts = async () => {
       if (shift.assigned) {
         unassignShiftHandler(shift._id);
       } else {
-        sessionStorage.setItem("shiftId", shift._id);
-        window.location.href = "editShift.html";
+
+        window.location.href = `edit_shift.html?id=${shift._id}`;
       }
     };
     tdActions.appendChild(assignButton);

@@ -38,19 +38,15 @@ const updateEmployeeDepartment = async (departmentId, employeeId) => {
       employeeId,
       departmentIdStr
     );
-
-    console.log(`Service success: ${department}`);
     return department;
   } catch (error) {
     console.log(`Service error: ${error}`);
   }
 };
 
-const updateEmployee = async (id, firstName, lastName) => {
+const updateEmployee = async (updatedEmployee) => {
   try {
-    await employeeRepo.updateEmployeeFirstName(id, firstName);
-    await employeeRepo.updateEmployeeLastName(id, lastName);
-    const employee = await getEmployeeByID(id);
+    const employee = await employeeRepo.updateEmployee(updatedEmployee);
     return employee;
   } catch (error) {
     console.log(`Service error: ${error}`);
@@ -71,10 +67,10 @@ const deleteEmployee = async (employeeId) => {
   }
 };
 
-const assignShift = async (shiftId, employeeId) => {
+const assignShift = async (shift, employee) => {
   try {
-    await employeeRepo.addShiftToEmployee(shiftId, employeeId);
-    return shiftId;
+    await employeeRepo.addShiftToEmployee(shift._id, employee._id);
+    return shift;
   } catch (error) {
     console.error("Error assigning shift to employee:", error.message);
     return null;
@@ -115,6 +111,8 @@ const getDepartmentsForEmployees = async () => {
   const departments = await departmentRepo.getDepartments();
   return departments;
 };
+
+// const updateEmployee = async 
 
 module.exports = {
   getEmployeesExceptManagers,

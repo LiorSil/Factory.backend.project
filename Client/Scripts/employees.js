@@ -11,7 +11,7 @@ const startUpEmployees = async () => {
   const departments = await fillDepartmentFilter();
   const shifts = await getShifts();
 
-  //store the variabales in a global variable
+  //store the variables in a global variable
   window.departments = departments;
   window.employees = employees;
   window.shifts = shifts;
