@@ -1,13 +1,6 @@
 const employeeRepo = require("../Repositories/employeeRepo");
 const departmentRepo = require("../Repositories/departmentRepo");
 const shiftService = require("./shiftService");
-const shiftRepo = require("../Repositories/shiftRepo");
-const Shift = require("../Models/shiftModel");
-
-const getEmployeeShiftsByID = async (id) => {
-  const shifts = await employeeRepo.getShifts(id);
-  return shifts;
-};
 
 const getEmployeeByID = async (id) => {
   const employee = await employeeRepo.getEmployee(id);
@@ -46,7 +39,7 @@ const updateEmployeeDepartment = async (departmentId, employeeId) => {
 
 const updateEmployee = async (newEmployee) => {
   try {
-    const employee = await employeeRepo.updateEmployeeData(newEmployee);
+    const employee = await employeeRepo.updateEmployee(newEmployee);
     return employee;
   } catch (error) {
     console.log(`Service error: ${error}`);
@@ -117,10 +110,31 @@ const getDepartmentsForEmployees = async () => {
   return departments;
 };
 
+const createEmployee = async (
+  firstName,
+  lastName,
+  startWorkYear,
+  departmentId
+) => {
+  try {
+    await employeeRepo.createEmployee(
+      firstName,
+      lastName,
+      startWorkYear,
+      departmentId
+    );
+    return { status: "success", message: "Employee created" };
+  } catch (error) {
+    console.log(`Service error: ${error}`);
+    return {
+      status: "error",
+      message: `Failed to create employee: ${error.message}`,
+    };
+  }
+};
 
 module.exports = {
   getEmployeesExceptManagers,
-  getEmployeeShiftsByID,
   getEmployeeByID,
   getEmployees,
   getEmployeesByDepartment,
@@ -130,4 +144,5 @@ module.exports = {
   assignShift,
   unassignShift,
   getDepartmentsForEmployees,
+  createEmployee,
 };
