@@ -44,7 +44,7 @@ const getShifts = async (id) => {
   return employee.shifts;
 };
 
-const updateEmployeeData = async (updatedEmployee) => {
+const updateEmployee = async (updatedEmployee) => {
   const employee = await getEmployee(updatedEmployee._id);
   employee.firstName = updatedEmployee.firstName;
   employee.lastName = updatedEmployee.lastName;
@@ -71,6 +71,6 @@ module.exports = {
   getShifts,
   getEmployees,
   updateEmployeeDepartment,
-  updateEmployeeData,
+  updateEmployee,
   removeShiftFromEmployee,
 };

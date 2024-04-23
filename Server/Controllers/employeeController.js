@@ -11,6 +11,21 @@ router.get("/", async (req, res) => {
   return res.json(employees);
 });
 
+router.post("/", async (req, res) => {
+  try {
+    const { firstName, lastName, startWorkYear, departmentId } = req.body;
+    const result = await employeeService.createEmployee(
+      firstName,
+      lastName,
+      startWorkYear,
+      departmentId
+    );
+    return res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
 //get by department
 router.get("/department/:departmentName", async (req, res) => {
   const departmentName = req.params.departmentName;
@@ -107,5 +122,7 @@ router.put("/assignShift", async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 });
+
+
 
 module.exports = router;

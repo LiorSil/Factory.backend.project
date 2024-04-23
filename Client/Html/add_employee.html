@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../CSS/add_employee.css">
+<title>Create New Employee</title>
+
+</head>
+<body>
+
+<h2>Create New Employee</h2>
+
+<form id="addEmployeeForm">
+    <label for="firstName">First Name:</label><br>
+    <input type="text" id="firstName" name="firstName" placeholder="Hakeem"><br>
+    <label for="lastName">Last Name:</label><br>
+    <input type="text" id="lastName" name="lastName" placeholder="Olajuwon"><br>
+    <label for="startWorkYear">Start Work Year:</label> <br>
+    <input type="number" id="startWorkYear" name="year" value="2021" min="2010" max="2024"> <br><br>
+
+
+    <label for="department">Department:</label><br>
+    <select id="department" name="department">
+    </select><br><br>
+    
+    <button id = addEmployeeButton type="submit" >Save</button>
+    <button id ="cancelButton" type="button" >Cancel</button>
+</form>
+<script src ='../Utils/clientPageOnLoadFunctions.js'></script>
+<script src ='../scripts/addEmployee.js'></script>
+
+
+
+
+</body>
+</html>

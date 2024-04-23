@@ -16,6 +16,12 @@ const startUpEmployees = async () => {
   window.employees = employees;
   window.shifts = shifts;
 
+  ////handle add employee button click
+  const addEmployeeButton = document.getElementById("addEmployeeButton");
+  addEmployeeButton.addEventListener("click", () => {
+    window.location.href = "./add_employee.html";
+  });
+
   await fillTable(employees, departments, shifts);
 };
 
@@ -53,7 +59,7 @@ async function fillTable(employees, departments, shifts) {
     const shiftCell = document.createElement("td");
 
     // Populate department name and shifts
-    
+
     departmentLink.textContent = department ? department.name : "No Department";
     shiftCell.textContent = shiftsArray;
 
@@ -79,7 +85,6 @@ async function filterByDepartment(filterId) {
         )
       : allEmployees;
 
-  const gShifts = window.shifts;
   const gDepartments = window.departments;
   fillTable(filteredEmployees, gDepartments, allEmployees);
 }
@@ -195,6 +200,9 @@ const getEmployeeShiftsNames = async (shiftsIds, allShifts) => {
   );
   return shiftsArray;
 };
+
+
+
 
 // Call the getEmployees function when the page loads
 window.onload = startUpEmployees;
