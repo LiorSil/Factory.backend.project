@@ -14,7 +14,8 @@ const editShiftLoad = async () => {
   const endingHourInput = document.getElementById("editEndHour");
 
   //initialize the form with the shift's current date and time
-  const fDate = new Date(shift.date).toISOString().split("T")[0];
+  //TODO: fix the date format
+  const fDate = shift.date
   dateInput.value = fDate;
   startingHourInput.value = shift.startingHour;
   endingHourInput.value = shift.endingHour;
@@ -106,3 +107,11 @@ const updateShift = async (shift, employee) => {
 };
 
 window.onload = editShiftLoad;
+
+/* requests to the server */
+// /shifts/:id - GET
+// /employees - GET
+// /shifts/assign - PUT
+// /shifts - PUT
+// /employees - PUT
+// /shifts - GET

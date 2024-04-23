@@ -21,8 +21,8 @@ const createShift = async (shift) => {
   return result;
 };
 
-const unassignShift = async (shiftId) => {
-  const result = await shiftRepo.unassignShift(shiftId);
+const unassignShift = async (shift) => {
+  const result = await shiftRepo.unassignShift(shift);
   return result;
 };
 

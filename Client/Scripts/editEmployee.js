@@ -99,7 +99,7 @@ const editEmployee = async () => {
     e.preventDefault();
     const confirmDelete = confirm("Are you sure you want to delete?");
     if (confirmDelete) {
-      await deleteEmployee(employeeId);
+      await deleteEmployee(employee);
       window.location.href = "employees.html";
     }
   });
@@ -189,7 +189,7 @@ const updateEmployeeFullname = async (employee, firstName, lastName) => {
     employee.lastName = lastName;
   }
 
-  const resp = await fetch(`http://localhost:3000/employees/${employee._id}`, {
+  const resp = await fetch(`http://localhost:3000/employees`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -206,13 +206,14 @@ const updateEmployeeFullname = async (employee, firstName, lastName) => {
   }
 };
 
-const deleteEmployee = async (employeeId) => {
-  const resp = await fetch(`http://localhost:3000/employees/${employeeId}`, {
+const deleteEmployee = async (employee) => {
+  const resp = await fetch(`http://localhost:3000/employees`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
       "x-access-token": editEmployeeToken,
     },
+    body: JSON.stringify({ employee }),
   });
 
   if (!resp.ok) {
@@ -236,3 +237,10 @@ const assignShiftToEmployee = async (shift, employee) => {
 };
 
 window.onload = editEmployee;
+
+/* requests to the server */
+// /employees/:id - GET
+// /departments - GET
+// /shifts - GET
+// /employees - PUT
+// /employees - DELETE

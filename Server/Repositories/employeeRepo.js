@@ -16,8 +16,8 @@ const getEmployees = async () => {
   return await employeeModel.find();
 };
 
-const deleteEmployee = async (employeeId) => {
-  await employeeModel.findByIdAndDelete(employeeId);
+const deleteEmployee = async (employee) => {
+  await employeeModel.findByIdAndDelete(employee._id);
 };
 
 const getEmployeeName = async (employeeId) => {

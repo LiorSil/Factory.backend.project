@@ -38,10 +38,9 @@ const loadShifts = async () => {
     assignButton.innerText = shift.assigned ? "Unassign" : "Edit";
     assignButton.onclick = () => {
       if (shift.assigned) {
-        unassignShiftHandler(shift._id);
+        unassignShiftHandler(shift);
       } else {
-
-        window.location.href = `edit_shift.html?id=${shift._id}`;
+        window.location.href = `edit_shift.html`;
       }
     };
     tdActions.appendChild(assignButton);
@@ -66,17 +65,15 @@ const getShifts = async () => {
   return shifts;
 };
 
-const unassignShiftHandler = async (shiftId) => {
-  const resp = await fetch(
-    `http://localhost:3000/employees/unassignShift/${shiftId}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": shiftsToken,
-      },
-    }
-  );
+const unassignShiftHandler = async (shift) => {
+  const resp = await fetch(`http://localhost:3000/employees/unassignShift`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": shiftsToken,
+    },
+    body: JSON.stringify({ shift }),
+  });
   if (!resp.ok) {
     throw new Error(
       `Failed To unassign shift for employee: ${resp.statusText}`

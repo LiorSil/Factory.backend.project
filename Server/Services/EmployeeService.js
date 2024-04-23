@@ -47,14 +47,14 @@ const updateEmployee = async (newEmployee) => {
   }
 };
 
-const deleteEmployee = async (employeeId) => {
+const deleteEmployee = async (employee) => {
   try {
     const employee = await getEmployeeByID(employeeId);
     employee.shifts.forEach(async (shiftId) => {
       await shiftService.unassignShift(shiftId);
     });
 
-    await employeeRepo.deleteEmployee(employeeId);
+    await employeeRepo.deleteEmployee(employee);
     return { status: "success", message: `Employee deleted` };
   } catch (error) {
     console.log(`Service error: ${error}`);
@@ -75,14 +75,14 @@ const assignShift = async (shift, employee) => {
   }
 };
 
-const unassignShift = async (shiftId) => {
+const unassignShift = async (shift) => {
   const employees = await getEmployees();
 
   try {
     employees.forEach(async (employee) => {
-      if (employee.shifts.includes(shiftId)) {
-        await employeeRepo.removeShiftFromEmployee(shiftId, employee._id);
-        return shiftId;
+      if (employee.shifts.includes(shift._id)) {
+        await employeeRepo.removeShiftFromEmployee(shift._id, employee._id);
+        return shift;
       }
     });
   } catch (error) {

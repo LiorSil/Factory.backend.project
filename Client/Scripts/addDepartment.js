@@ -31,20 +31,17 @@ const addDepartmentPage = async () => {
 
 const createDepartment = async (newDepartmentName, managerId) => {
   try {
-    const resp = await fetch(
-      "http://localhost:3000/departments/createDepartment",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-access-token": addDepartmentToken,
-        },
-        body: JSON.stringify({
-          departmentName: newDepartmentName,
-          managerId: managerId,
-        }),
-      }
-    );
+    const resp = await fetch("http://localhost:3000/departments", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": addDepartmentToken,
+      },
+      body: JSON.stringify({
+        departmentName: newDepartmentName,
+        managerId: managerId,
+      }),
+    });
     console.log(`Response: ${resp.status}`);
   } catch (error) {
     // Handle errors
@@ -90,3 +87,7 @@ const getEmployeesThatAreNotManagers = async () => {
   return employeesThatAreNotManagers;
 };
 window.onload = addDepartmentPage;
+/* requests to the server */
+// /departments - GET
+// /employees - GET
+// /departments - POST

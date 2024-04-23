@@ -108,15 +108,12 @@ const fillDepartmentFilter = async () => {
 };
 
 const getDepartments = async () => {
-  const id = sessionStorage.getItem("id");
-
   try {
     const resp = await fetch("http://localhost:3000/departments", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": token,
-        id: id,
       },
     });
 
@@ -132,15 +129,12 @@ const getDepartments = async () => {
 };
 
 const getEmployees = async () => {
-  const id = sessionStorage.getItem("id");
-
   try {
     const resp = await fetch("http://localhost:3000/employees", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": token,
-        id: id,
       },
     });
 

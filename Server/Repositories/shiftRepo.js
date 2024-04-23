@@ -29,14 +29,14 @@ const getUnassignedShifts = async () => {
   return shiftModel.find({ assigned: false });
 };
 
-const unassignShift = async (shiftId) => {
+const unassignShift = async (shift) => {
   try {
-    const shift = await getShift(shiftId);
-    shift.assigned = false;
-    await shift.save();
-    return shift;
+    const updatedShift = await getShift(shift._id);
+    updatedShift.assigned = false;
+    await updatedShift.save();
+    return updatedShift;
   } catch (error) {
-    console.error("Error unassigning shift:", error.message);
+    console.error("Error unassigning updatedShift:", error.message);
     return null;
   }
 };

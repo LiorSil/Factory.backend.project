@@ -136,7 +136,7 @@ const updateDepartmentEmployees = async (newEmployeeId, departmentId) => {
 
 const deleteDepartment = async (departmentId) => {
   try {
-    const resp = await fetch(`http://localhost:3000/departments/delete`, {
+    const resp = await fetch(`http://localhost:3000/departments`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -224,3 +224,8 @@ const getChosenEmployee = async (dropdownId) => {
 
 
 window.onload = getEditDepartment;
+
+/* requests to the server */
+// /employees - GET
+// /departments - GET
+// /departments/:id - GET

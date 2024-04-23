@@ -26,14 +26,34 @@ router.post("/", async (req, res) => {
   }
 });
 
-//get by department
-router.get("/department/:departmentName", async (req, res) => {
-  const departmentName = req.params.departmentName;
 
-  const employees = await employeeService.getEmployeesByDepartment(
-    departmentName
-  );
-  return res.json(employees);
+router.delete("/", async (req, res) => {
+  try {
+    const { employee } = req.body;
+
+    await employeeService.deleteEmployee(employee);
+    return res.status;
+  } catch (error) {
+    return res.json({
+      status: "error",
+      message: `Failed to delete employee: ${error.message}`,
+    });
+  }
+});
+
+router.put("/", async (req, res) => {
+  //update employee without know what parms are being passed
+  try {
+    const { employee } = req.body;
+    const isUpdated = await employeeService.updateEmployee(employee);
+    if (isUpdated) {
+      return res.json({ message: "Employee updated successfully" });
+    } else {
+      return res.json({ message: "Error updating employee" });
+    }
+  } catch (error) {
+    return res.json({ message: `Error updating employee: ${error.message}` });
+  }
 });
 
 router.get("/:id", async (req, res) => {
@@ -57,14 +77,12 @@ router.put("/updateDepartment", async (req, res) => {
   }
 });
 
-router.put("/unassignShift/:id", async (req, res) => {
-  const shiftId = req.params.id;
+router.put("/unassignShift", async (req, res) => {
+  const { shift } = req.body;
 
-  const unassignShiftFromEmployee = await employeeService.unassignShift(
-    shiftId
-  );
+  const unassignShiftFromEmployee = await employeeService.unassignShift(shift);
 
-  const unassignShiftFromShifts = await shiftService.unassignShift(shiftId);
+  const unassignShiftFromShifts = await shiftService.unassignShift(shift);
 
   const result = {
     employee: unassignShiftFromEmployee,
@@ -73,45 +91,9 @@ router.put("/unassignShift/:id", async (req, res) => {
   return res.json(result);
 });
 
-router.put("/:id", async (req, res) => {
-  //update employee without know what parms are being passed
-  try {
-    const id = req.params.id;
-    const { employee } = req.body;
-    const isUpdated = await employeeService.updateEmployee(employee);
-    if (isUpdated) {
-      return res.json({ message: "Employee updated successfully" });
-    } else {
-      return res.json({ message: "Error updating employee" });
-    }
-  } catch (error) {
-    return res.json({ message: `Error updating employee: ${error.message}` });
-  }
-});
 
-router.delete("/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
 
-    await employeeService.deleteEmployee(id);
 
-    return res.status;
-  } catch (error) {
-    return res.json({
-      status: "error",
-      message: `Failed to delete employee: ${error.message}`,
-    });
-  }
-});
-
-router.get("/e/employees_except_managers", async (req, res) => {
-  try {
-    const employees = await employeeService.getEmployeesExceptManagers();
-    return res.json(employees);
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
-  }
-});
 
 router.put("/assignShift", async (req, res) => {
   try {

@@ -14,6 +14,32 @@ router.get("/", async (req, res) => {
   }
 });
 
+//create
+router.post("/", async (req, res) => {
+  try {
+    const { departmentName, managerId } = req.body;
+    const newDepartment = await departmentService.createDepartment(
+      departmentName,
+      managerId
+    );
+    console.log(`New Department: ${newDepartment}`);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+
+//delete
+router.delete("/", async (req, res) => {
+  try {
+    const departmentId = req.body.departmentId;
+    await departmentService.deleteDepartmentAndEmployees(departmentId);
+  } catch (error) {
+    return res.status(500).json({
+      message: `Error in deleteDepartmentAndEmployees: ${error}`,
+    });
+  }
+});
 
 //get by id
 router.get("/:id", async (req, res) => {
@@ -24,8 +50,6 @@ router.get("/:id", async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 });
-
-
 
 router.put("/updateManager", async (req, res) => {
   try {
@@ -45,39 +69,8 @@ router.put("/updateManager", async (req, res) => {
   }
 });
 
-router.get("/isManager/:id", async (req, res) => {
-  try {
-    const isManager = await departmentService.isManager(req.params.id);
-    return res.json({ isManager: isManager });
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ message: `cant get answer: ${error.message}` });
-  }
-});
 
-router.delete("/delete", async (req, res) => {
-  try {
-    const departmentId = req.body.departmentId;
-    await departmentService.deleteDepartmentAndEmployees(departmentId);
-  } catch (error) {
-    return res.status(500).json({
-      message: `Error in deleteDepartmentAndEmployees: ${error}`,
-    });
-  }
-});
 
-router.post("/createDepartment", async (req, res) => {
-  try {
-    const { departmentName, managerId } = req.body;
-    const newDepartment = await departmentService.createDepartment(
-      departmentName,
-      managerId
-    );
-    console.log(`New Department: ${newDepartment}`);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
+
 
 module.exports = router;
