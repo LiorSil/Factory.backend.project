@@ -1,4 +1,3 @@
-const { assignShift } = require("../Repositories/shiftRepo");
 const employeeService = require("../Services/EmployeeService");
 
 const shiftService = require("../Services/shiftService");
@@ -78,6 +77,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const id = req.params.id;
+
     await employeeService.deleteEmployee(id);
 
     return res.status;
@@ -95,6 +95,16 @@ router.get("/e/employees_except_managers", async (req, res) => {
     return res.json(employees);
   } catch (err) {
     return res.status(500).json({ message: err.message });
+  }
+});
+
+router.put("/assignShift", async (req, res) => {
+  try {
+    const { shift, employee } = req.body;
+    const result = await employeeService.assignShift(shift, employee);
+    return res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 });
 

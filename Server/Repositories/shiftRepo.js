@@ -1,12 +1,12 @@
-const shiftModel = require('../Models/shiftModel');
+const shiftModel = require("../Models/shiftModel");
 
 const getShifts = async () => {
-    return await shiftModel.find();
-}
+  return await shiftModel.find();
+};
 
 const getShift = async (id) => {
-    return await shiftModel.findById(id);
-}
+  return await shiftModel.findById(id);
+};
 
 const createShift = async (newShift) => {
   const { date, startingHour, endingHour } = newShift;
@@ -14,14 +14,11 @@ const createShift = async (newShift) => {
   await shift.save();
 };
 
-
 const assignShift = async (shiftId) => {
   const shift = await getShift(shiftId);
   if (shift.assigned) {
-    console.log("Shift is already assigned");
     return true;
   } else {
-    console.log("Shift is not assigned");
     shift.assigned = true;
     await shift.save();
     return false;
@@ -51,7 +48,6 @@ const updateShift = async (shiftId, updatedShift) => {
   shift.endingHour = updatedShift.endingHour;
   shift.assigned = updatedShift.assigned;
   await shift.save();
-  console.log(`Shift updated successfully: ${shift}`);
   return shift;
 };
 
@@ -63,9 +59,4 @@ module.exports = {
   unassignShift,
   getUnassignedShifts,
   updateShift,
-};   
-
-
-
-
-
+};

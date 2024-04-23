@@ -1,27 +1,28 @@
 const shiftService = require("../Services/shiftService");
-const employeesService = require("../Services/EmployeeService");
+const employeeService = require("../Services/EmployeeService");
 const express = require("express");
 const router = express.Router();
 
 // http://localhost:3000/shifts
 router.get("/", async (req, res) => {
   try {
-
     const shifts = await shiftService.getShifts();
     return res.json(shifts);
   } catch (error) {
-
     return res.status(500).json({ message: error.message });
   }
 });
 
-
 router.put("/assign", async (req, res) => {
   try {
     const { shift, employee } = req.body;
-    console.log(`Shift: ${shift}, Employee: ${employee}`);
-    const result = await shiftService.assignShift(shift, employee);
-    res.json(result);
+    const isShiftUpdated = await shiftService.assignShift(shift);
+    const isEmployeeUpdated = await employeeService.updateEmployee(employee);
+    if (isShiftUpdated && isEmployeeUpdated) {
+      return res.json({ status: "success" });
+    } else {
+      return res.json({ status: "error" });
+    }
   } catch (error) {
     res.status(500).json({ message: error.message, status: "failed" });
   }

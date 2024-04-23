@@ -1,5 +1,6 @@
 const employeeRepo = require("../Repositories/employeeRepo");
 const departmentRepo = require("../Repositories/departmentRepo");
+const shiftService = require("./shiftService");
 const shiftRepo = require("../Repositories/shiftRepo");
 const Shift = require("../Models/shiftModel");
 
@@ -19,7 +20,7 @@ const getEmployees = async () => {
 };
 const getEmployeesByDepartment = async (departmentName) => {
   const departmentId = await departmentRepo.getDepartmentID(departmentName);
-  console.log(`Department ID: ${departmentId}`);
+
   const employees = await getEmployees();
 
   const employeesInDepartment = employees.filter((employee) =>
@@ -30,7 +31,6 @@ const getEmployeesByDepartment = async (departmentName) => {
 };
 
 const updateEmployeeDepartment = async (departmentId, employeeId) => {
-
   const departmentIdStr = departmentId.toString();
 
   try {
@@ -44,9 +44,9 @@ const updateEmployeeDepartment = async (departmentId, employeeId) => {
   }
 };
 
-const updateEmployee = async (updatedEmployee) => {
+const updateEmployee = async (newEmployee) => {
   try {
-    const employee = await employeeRepo.updateEmployee(updatedEmployee);
+    const employee = await employeeRepo.updateEmployeeData(newEmployee);
     return employee;
   } catch (error) {
     console.log(`Service error: ${error}`);
@@ -56,6 +56,11 @@ const updateEmployee = async (updatedEmployee) => {
 
 const deleteEmployee = async (employeeId) => {
   try {
+    const employee = await getEmployeeByID(employeeId);
+    employee.shifts.forEach(async (shiftId) => {
+      await shiftService.unassignShift(shiftId);
+    });
+
     await employeeRepo.deleteEmployee(employeeId);
     return { status: "success", message: `Employee deleted` };
   } catch (error) {
@@ -112,7 +117,6 @@ const getDepartmentsForEmployees = async () => {
   return departments;
 };
 
-// const updateEmployee = async 
 
 module.exports = {
   getEmployeesExceptManagers,

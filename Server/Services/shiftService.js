@@ -31,16 +31,10 @@ const updateShift = async (shiftId, updatedShift) => {
   return shift;
 };
 
-const assignShift = async (shift, employee) => {
-  console.log(`Assigning shift: ${shift} to employee: ${employee} SS`);
+const assignShift = async (shift) => {
   try {
     const isShiftUpdated = await updateShift(shift._id, shift);
-    const isEmployeeUpdated = await employeeService.updateEmployee(employee);
-    if (isShiftUpdated && isEmployeeUpdated) {
-      return { status: "success", message: "Shift assigned" };
-    } else {
-      return { status: "error", message: "Failed to assign shift" };
-    }
+    return isShiftUpdated;
   } catch (error) {
     return { status: "error", message: error.message };
   }

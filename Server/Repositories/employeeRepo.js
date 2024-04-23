@@ -22,7 +22,6 @@ const deleteEmployee = async (employeeId) => {
 
 const getEmployeeName = async (employeeId) => {
   const employee = await employeeModel.findById(employeeId);
-  console.log("Getting employee name by id...");
   return employee.firstName + " " + employee.lastName;
 };
 
@@ -45,7 +44,7 @@ const getShifts = async (id) => {
   return employee.shifts;
 };
 
-const updateEmployee = async (updatedEmployee) => {
+const updateEmployeeData = async (updatedEmployee) => {
   const employee = await getEmployee(updatedEmployee._id);
   employee.firstName = updatedEmployee.firstName;
   employee.lastName = updatedEmployee.lastName;
@@ -72,6 +71,6 @@ module.exports = {
   getShifts,
   getEmployees,
   updateEmployeeDepartment,
-  updateEmployee,
+  updateEmployeeData,
   removeShiftFromEmployee,
 };

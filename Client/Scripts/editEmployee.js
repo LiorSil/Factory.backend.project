@@ -1,6 +1,5 @@
-const e = require("express");
-
 const editEmployeeToken = sessionStorage.getItem("token");
+
 const editEmployee = async () => {
   const currentUrl = window.location.href;
   const url = new URL(currentUrl);
@@ -10,7 +9,6 @@ const editEmployee = async () => {
   const shifts = await getShifts();
 
   // initialize the form with the employee's current department and name
-
   const firstNameInput = document.getElementById("firstName");
   const lastNameInput = document.getElementById("lastName");
   const departmentReadonlyInput = document.getElementById("department");
@@ -77,12 +75,16 @@ const editEmployee = async () => {
   });
 
   // handling the update form submission
-  const updateButton = document.getElementById("updateEmployee");
+  const updateButton = document.getElementById("updateEmployeeButton");
   updateButton.addEventListener("click", async (e) => {
     e.preventDefault();
     const firstName = firstNameInput.value;
     const lastName = lastNameInput.value;
-    const updatedEmployee = await updateEmployee(employee, firstName, lastName);
+    const updatedEmployee = await updateEmployeeFullname(
+      employee,
+      firstName,
+      lastName
+    );
     if (updatedEmployee) {
       alert("Employee updated successfully");
       window.location.href = "employees.html";
@@ -98,7 +100,6 @@ const editEmployee = async () => {
     const confirmDelete = confirm("Are you sure you want to delete?");
     if (confirmDelete) {
       await deleteEmployee(employeeId);
-      alert("Employee deleted successfully");
       window.location.href = "employees.html";
     }
   });
@@ -109,16 +110,17 @@ const editEmployee = async () => {
     e.preventDefault();
     const shiftId = shiftsSelect.value;
     const shift = shifts.find((shift) => shift._id.includes(shiftId));
-    const assignedShift = await assignShift(shift);
+    employee.shifts.push(shiftId);
+    shift.assigned = true;
     const assignedShiftToEmployee = await assignShiftToEmployee(
-      shift._id,
-      employee._id
+      shift,
+      employee
     );
-    if (assignedShift && assignedShiftToEmployee) {
+    if (assignedShiftToEmployee) {
       alert("Shift assigned successfully");
-      window.location.reload();
+      window.location.href = `employees.html`;
     } else {
-      alert("Error assigning shift");
+      alert("Error assigning shift to employee");
     }
   });
 };
@@ -175,7 +177,7 @@ const getShifts = async () => {
   }
 };
 
-const updateEmployee = async (employee, firstName, lastName) => {
+const updateEmployeeFullname = async (employee, firstName, lastName) => {
   // test if changes are made
   if (employee.firstName === firstName && employee.lastName === lastName) {
     return employee;
@@ -220,43 +222,17 @@ const deleteEmployee = async (employeeId) => {
   }
 };
 
-const assignShift = async (shift) => {
-  shift.assigned = true;
-  const shiftId = shift._id;
-  const resp = await fetch(`http://localhost:3000/shifts/${shiftId}`, {
+const assignShiftToEmployee = async (shift, employee) => {
+  const resp = await fetch(`http://localhost:3000/shifts/assign`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       "x-access-token": editEmployeeToken,
     },
-    body: JSON.stringify(shift),
+    body: JSON.stringify({ shift, employee }),
   });
-  // if the shift is not assigned, return null
-  if (!resp.ok) {
-    throw new Error(`Failed to assign shift: ${resp.statusText}`);
-  } else {
-    const assignedShift = await resp.json();
-    return assignedShift;
-  }
-};
-
-const assignShiftToEmployee = async (shiftId, employeeId) => {
-  const resp = await fetch(
-    `http://localhost:3000/employees/assignShift/${shiftId}/${employeeId}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": editEmployeeToken,
-      },
-    }
-  );
-  if (!resp.ok) {
-    throw new Error(`Failed to assign shift to employee: ${resp.statusText}`);
-  } else {
-    const assignedShift = await resp.json();
-    return assignedShift;
-  }
+  const result = await resp.json();
+  return result;
 };
 
 window.onload = editEmployee;
