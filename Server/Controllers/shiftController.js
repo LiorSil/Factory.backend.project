@@ -39,17 +39,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
-  try {
-    const shiftId = req.params.id;
-    const updatedShift = req.body;
-    const result = await shiftService.updateShift(shiftId, updatedShift);
-    return res.json(result);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
-
 
 
 //create
@@ -64,9 +53,11 @@ router.post("/", async (req, res) => {
   }
 });
 
-
-
-
-
-
 module.exports = router;
+
+// Routes: http://localhost:3000/shifts 
+// /shifts/assign - PUT - assign shift to employee
+// /shifts - GET - get all shifts
+// /shifts/:id - GET - get shift by id
+// /shifts - POST - create a new shift
+

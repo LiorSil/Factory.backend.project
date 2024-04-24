@@ -239,8 +239,8 @@ const assignShiftToEmployee = async (shift, employee) => {
 window.onload = editEmployee;
 
 /* requests to the server */
-// /employees/:id - GET
-// /departments - GET
-// /shifts - GET
-// /employees - PUT
-// /employees - DELETE
+// /employees/:id - GET - get employee by id
+// /departments - GET - get all departments
+// /shifts - GET - get all shifts
+// /employees - PUT - update an employee
+// /employees - DELETE - delete an employee

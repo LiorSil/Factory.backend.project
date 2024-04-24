@@ -87,7 +87,7 @@ const getEmployeesThatAreNotManagers = async () => {
   return employeesThatAreNotManagers;
 };
 window.onload = addDepartmentPage;
-/* requests to the server */
+// Requests to the server:
 // /departments - GET
 // /employees - GET
 // /departments - POST

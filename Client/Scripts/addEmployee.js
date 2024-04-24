@@ -107,3 +107,7 @@ const paramsValidation = async (
 };
 
 window.onload = addEmployeePage;
+
+// Requests the server:
+// /departments - GET - get all departments
+// /employees - POST - create an employee

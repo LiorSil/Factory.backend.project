@@ -55,7 +55,7 @@
     <script src="../Scripts/editDepartment.js"></script>
 
     <script>
-      let chosenEmployee = null;
+      let employee = null;
       let chosenManager = null;
       const urlParams = new URLSearchParams(window.location.search);
       const departmentId = urlParams.get("id");
@@ -66,7 +66,7 @@
         .getElementById("departmentManagerDropdown")
         .addEventListener("change", async () => {
           chosenManager = await getChosenEmployee("departmentManagerDropdown");
-          console.log(chosenManager);
+          
         });
           
       document
@@ -86,20 +86,22 @@
       document
         .getElementById("employeeDropdown")
         .addEventListener("change", async () => {
-          chosenEmployee = await getChosenEmployee("employeeDropdown");
-          console.log(chosenEmployee);
+          employee = await getChosenEmployee("employeeDropdown");
         });
+
           
       document
         .getElementById("addEmployeeButton")
         .addEventListener("click", async (e) => {
           e.preventDefault();
-          if(chosenEmployee === null) {
+          if(employee === null) {
             alert("Please select an employee");
             return;
-          }
-          await updateDepartmentEmployees(chosenEmployee, departmentId);
+          } else {
+
+          await updateDepartmentEmployees(employee, departmentId);
           window.location.reload();
+          }
         });
 
       //Handling Delete Department Button

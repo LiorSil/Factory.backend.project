@@ -5,6 +5,8 @@ const getEditDepartment = async () => {
   const departmentId = urlParams.get("id");
 
   const employees = await getEmployees();
+  // create global employees variable
+  window.employees = employees;
   const departments = await getDepartments();
 
   //get the department as an object (_id, name, managerId)
@@ -113,22 +115,22 @@ const updateDepartmentManager = async (newManagerId, departmentId) => {
   }
 };
 
-const updateDepartmentEmployees = async (newEmployeeId, departmentId) => {
+const updateDepartmentEmployees = async (employee, departmentId) => {
+  const globalEmployees = await window.employees;
+  employee = globalEmployees.find((e) => e._id === employee);
+  employee.departmentId = departmentId;
   try {
-    const resp = await fetch(
-      "http://localhost:3000/employees/updateDepartment",
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "x-access-token": editDepartmentToken,
-        },
-        body: JSON.stringify({
-          departmentId: departmentId,
-          employeeId: newEmployeeId,
-        }),
-      }
-    );
+    const resp = await fetch("http://localhost:3000/employees/", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": editDepartmentToken,
+      },
+      body: JSON.stringify({
+        employee,
+      }),
+    });
+    return resp;
   } catch (error) {
     console.log(`Error: ${error}`);
   }
@@ -222,10 +224,36 @@ const getChosenEmployee = async (dropdownId) => {
   }
 };
 
-
 window.onload = getEditDepartment;
 
-/* requests to the server */
-// /employees - GET
-// /departments - GET
-// /departments/:id - GET
+
+/**
+ * Requests to the server:
+ * 
+ * // /employees - GET - get all employees
+ * // /departments - GET - get all departments
+ * // /departments/:id - GET - get department by id
+ * // /departments/updateManager - PUT - update department manager
+ * // /employees - PUT  - update employee
+ * // /departments - DELETE - delete department
+ */
+
+/**
+ * List of functions:
+ * 
+ * // async getEditDepartment()
+ * // async departmentNamePlaceholder()
+ * // async fillOptionsWithEmployees()
+ * // async availableEmployeesToSelect()
+ * // async availableManagersToSelect()
+ * // async updateDepartmentManager()
+ * // async updateDepartmentEmployees()
+ * // async deleteDepartment()
+ * // async getEmployees()
+ * // async getDepartment()
+ * // async getDepartments()
+ * // async getManagers()
+ * // async getChosenEmployee()
+ */
+
+

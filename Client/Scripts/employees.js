@@ -196,7 +196,10 @@ const getEmployeeShiftsNames = async (shiftsIds, allShifts) => {
 };
 
 
-
-
 // Call the getEmployees function when the page loads
 window.onload = startUpEmployees;
+
+//Requests to the server:
+// /departments - GET - get all departments
+// /employees - GET - get all employees
+// /shifts - GET - get all shifts

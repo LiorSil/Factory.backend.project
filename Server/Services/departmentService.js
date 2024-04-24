@@ -30,15 +30,6 @@ const deleteDepartmentAndEmployees = async (departmentId) => {
   await departmentRepo.deleteDepartment(departmentId);
 };
 
-const isManager = async (employeeId) => {
-  const managers = await departmentRepo.getAllManagers();
-
-  // Convert ObjectIDs to strings
-  const managerStrings = managers.map((manager) => manager.toString());
-
-  // Check if the string employeeId is included in the managerStrings array
-  return managerStrings.includes(employeeId);
-};
 
 const createDepartment = async (newDepartmentName, managerId) => {
   if (!newDepartmentName) return null;
@@ -62,6 +53,6 @@ module.exports = {
   getDepartmentByID,
   setDepartmentManager,
   deleteDepartmentAndEmployees,
-  isManager,
   createDepartment,
 };
+

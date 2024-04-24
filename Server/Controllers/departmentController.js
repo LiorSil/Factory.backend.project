@@ -69,8 +69,11 @@ router.put("/updateManager", async (req, res) => {
   }
 });
 
-
-
-
-
 module.exports = router;
+
+// Routes http://localhost:3000/departments/
+// / - GET
+// / - POST
+// / - DELETE
+// /:id - GET
+// /updateManager - PUT

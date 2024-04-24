@@ -83,5 +83,8 @@ const unassignShiftHandler = async (shift) => {
   }
 };
   
-
 window.onload = loadShifts;
+
+// requests to the server: 
+// /shifts - GET - get all shifts
+// /employees/unassignShift - PUT - unassign a shift from an employee + unassign a shift from shifts

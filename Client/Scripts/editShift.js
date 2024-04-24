@@ -109,9 +109,9 @@ const updateShift = async (shift, employee) => {
 window.onload = editShiftLoad;
 
 /* requests to the server */
-// /shifts/:id - GET
-// /employees - GET
-// /shifts/assign - PUT
-// /shifts - PUT
-// /employees - PUT
-// /shifts - GET
+// /shifts/:id - GET - get shift by id
+// /employees - GET - get all employees
+// /shifts/assign - PUT - assign shift to employee
+// /shifts - PUT - update a shift
+// /employees - PUT - update an employee
+// /shifts - GET - get all shifts

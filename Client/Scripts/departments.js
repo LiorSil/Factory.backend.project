@@ -90,3 +90,7 @@ const getManager = async (department, employees) => {
 };
 
 window.onload = getDepartmentsPage;
+
+// Requests the server:
+// /departments - GET - get all departments
+// /employees - GET - get all employees

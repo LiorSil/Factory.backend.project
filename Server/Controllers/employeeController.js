@@ -63,25 +63,11 @@ router.get("/:id", async (req, res) => {
   return res.json(employee);
 });
 
-router.put("/updateDepartment", async (req, res) => {
-  try {
-    const { departmentId, employeeId } = req.body;
-    const employee = await employeeService.updateEmployeeDepartment(
-      departmentId,
-      employeeId
-    );
-
-    return res.json({ status: "success", employee: employee });
-  } catch (error) {
-    return res.json({ status: "error", message: error.message });
-  }
-});
 
 router.put("/unassignShift", async (req, res) => {
   const { shift } = req.body;
 
   const unassignShiftFromEmployee = await employeeService.unassignShift(shift);
-
   const unassignShiftFromShifts = await shiftService.unassignShift(shift);
 
   const result = {
@@ -91,20 +77,13 @@ router.put("/unassignShift", async (req, res) => {
   return res.json(result);
 });
 
-
-
-
-
-router.put("/assignShift", async (req, res) => {
-  try {
-    const { shift, employee } = req.body;
-    const result = await employeeService.assignShift(shift, employee);
-    return res.json(result);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
-
-
-
 module.exports = router;
+
+// Routes http://localhost:3000/employees
+// / - GET - get all employees
+// / - POST - create a new employee
+// / - DELETE - delete an employee
+// / - PUT - update an employee
+// /:id - GET - get employee by id
+// /unassignShift - PUT - unassign a shift from an employee + unassign a shift from shifts
+// * assignShift is in shiftController.js because it is a shift operation *
