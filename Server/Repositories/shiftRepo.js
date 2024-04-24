@@ -43,7 +43,9 @@ const unassignShift = async (shift) => {
 
 const updateShift = async (shiftId, updatedShift) => {
   const shift = await getShift(shiftId);
-  shift.date = updatedShift.date;
+  // update the shift date to Date and not ISODate string
+  const fDate = new Date(updatedShift.date).toLocaleDateString("he-IL");
+  shift.date = fDate;
   shift.startingHour = updatedShift.startingHour;
   shift.endingHour = updatedShift.endingHour;
   shift.assigned = updatedShift.assigned;

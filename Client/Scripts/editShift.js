@@ -14,8 +14,8 @@ const editShiftLoad = async () => {
   const endingHourInput = document.getElementById("editEndHour");
 
   //initialize the form with the shift's current date and time
-  //TODO: fix the date format
-  const fDate = shift.date
+  //the required format for the date input is "yyyy-mm-dd" so we need to convert it
+  let fDate = new Date(shift.date).toISOString().split("T")[0];
   dateInput.value = fDate;
   startingHourInput.value = shift.startingHour;
   endingHourInput.value = shift.endingHour;
