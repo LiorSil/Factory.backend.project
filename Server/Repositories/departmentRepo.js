@@ -4,14 +4,6 @@ const getDepartments = async () => {
   return await departmentModel.find();
 };
 
-const getDepartmentID = async (departmentName) => {
-  try {
-    const department = await departmentModel.findOne({
-      name: departmentName,
-    });
-    return department._id;
-  } catch (error) {}
-};
 
 const getDepartmentName = async (id) => {
   const department = await departmentModel.findById(id);
@@ -45,15 +37,6 @@ name, manager
 };
 
 
-const getAllManagers = async () => {
-  const departments = await departmentModel.find();
-  let managers = [];
-  departments.forEach((department) => {
-    managers.push(department.manager);
-  });
-  return managers;
-};
-
 const updateManager = async (departmentId, employeeId) => {
   const department = await departmentModel.findById(departmentId);
   department.manager = employeeId;
@@ -67,28 +50,22 @@ const getDepartmentByName = async (name) => {
 };
 
 module.exports = {
-  getDepartmentName,
   getDepartment,
   updateDepartment,
   deleteDepartment,
   createDepartment,
-
-  getDepartmentID,
   updateManager,
-  getAllManagers,
   getDepartments,
   getDepartmentByName,
 };
 /**
- getDepartmentName
-getDepartment
-updateDepartment
-deleteDepartment
-createDepartment
-
-getDepartmentID
-updateManager
+ 
+getDepartmentV 
+updateDepartment V
+deleteDepartment V
+createDepartment V
+updateManager V
 getAllManagers
 getDepartments
-getDepartmentByName
+getDepartmentByName V
  */
