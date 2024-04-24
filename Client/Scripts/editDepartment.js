@@ -8,6 +8,7 @@ const getEditDepartment = async () => {
   // create global employees variable
   window.employees = employees;
   const departments = await getDepartments();
+  window.departments = departments;
 
   //get the department as an object (_id, name, managerId)
   const department = await getDepartment(departmentId);
@@ -58,7 +59,7 @@ const fillOptionsWithEmployees = async (employees, dropdown) => {
   employees.forEach(async (employee) => {
     const option = document.createElement("option");
     const fullName = `${employee.firstName} ${employee.lastName}`;
-    option.value = fullName;
+    option.value = employee._id;
     option.text = fullName;
     option.id = employee._id;
     dropdown.add(option);
@@ -95,21 +96,22 @@ const availableManagersToSelect = async (
 };
 
 const updateDepartmentManager = async (newManagerId, departmentId) => {
+  const department = window.departments.find(
+    (department) => department._id === departmentId
+  );
+  department.manager = newManagerId;
   try {
-    const resp = await fetch(
-      "http://localhost:3000/departments/updateManager",
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "x-access-token": editDepartmentToken,
-        },
-        body: JSON.stringify({
-          departmentId: departmentId,
-          employeeId: newManagerId,
-        }),
-      }
-    );
+    const resp = await fetch("http://localhost:3000/departments/", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": editDepartmentToken,
+      },
+      body: JSON.stringify({
+        department: department,
+      }),
+    });
+    return resp;
   } catch (error) {
     console.log(`Error1: ${error}`);
   }
@@ -117,20 +119,22 @@ const updateDepartmentManager = async (newManagerId, departmentId) => {
 
 const updateDepartmentEmployees = async (employee, departmentId) => {
   const globalEmployees = await window.employees;
-  employee = globalEmployees.find((e) => e._id === employee);
+
+  employee = globalEmployees.find((e) => e._id.includes(employee));
   employee.departmentId = departmentId;
+
   try {
-    const resp = await fetch("http://localhost:3000/employees/", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": editDepartmentToken,
-      },
-      body: JSON.stringify({
-        employee,
-      }),
-    });
-    return resp;
+  const resp = await fetch("http://localhost:3000/employees/", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": editDepartmentToken,
+    },
+    body: JSON.stringify({
+      employee,
+    }),
+  });
+  return resp;
   } catch (error) {
     console.log(`Error: ${error}`);
   }

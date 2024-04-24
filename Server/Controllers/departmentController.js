@@ -1,10 +1,17 @@
+/**
+ * Module for handling HTTP routes related to departments.
+ * @module departmentRoutes
+ */
+
 const departmentService = require("../Services/departmentService");
 const express = require("express");
 const router = express.Router();
 
-// http://localhost:3000/departments/
-
-//get all
+/**
+ * Route: GET /departments/
+ * Retrieves all departments.
+ * @returns {Array<Object>} An array of department objects.
+ */
 router.get("/", async (req, res) => {
   try {
     const departments = await departmentService.getDepartments();
@@ -14,22 +21,31 @@ router.get("/", async (req, res) => {
   }
 });
 
-//create
+/**
+ * Route: POST /departments/
+ * Creates a new department.
+ * @param {string} departmentName - The name of the new department.
+ * @param {string} manager - The ID of the manager for the new department.
+ * @returns {Object} The newly created department object.
+ */
 router.post("/", async (req, res) => {
   try {
-    const { departmentName, managerId } = req.body;
+    const { departmentName, manager } = req.body;
     const newDepartment = await departmentService.createDepartment(
       departmentName,
-      managerId
+      manager
     );
-    console.log(`New Department: ${newDepartment}`);
+  
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 });
 
-
-//delete
+/**
+ * Route: DELETE /departments/
+ * Deletes a department and its employees.
+ * @param {string} departmentId - The ID of the department to delete.
+ */
 router.delete("/", async (req, res) => {
   try {
     const departmentId = req.body.departmentId;
@@ -41,7 +57,12 @@ router.delete("/", async (req, res) => {
   }
 });
 
-//get by id
+/**
+ * Route: GET /departments/:id
+ * Retrieves a department by its ID.
+ * @param {string} id - The ID of the department to retrieve.
+ * @returns {Object} The department object.
+ */
 router.get("/:id", async (req, res) => {
   try {
     const department = await departmentService.getDepartmentByID(req.params.id);
@@ -51,19 +72,19 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.put("/updateManager", async (req, res) => {
+/**
+ * Route: PUT /departments/
+ * Updates a department.
+ * @param {Object} department - The updated department object.
+ * @returns {Object} The updated department object.
+ */
+router.put("/", async (req, res) => {
+  const { department } = req.body;
   try {
-    const { departmentId, employeeId } = req.body;
-    const employee = await departmentService.setDepartmentManager(
-      departmentId,
-      employeeId
+    const updatedDepartment = await departmentService.updateDepartment(
+      department
     );
-    const status = {
-      success: " true",
-      message: "department Manager updated successfully",
-      employee: employee,
-    };
-    return res.json(status);
+    return res.json(updatedDepartment);
   } catch (error) {
     console.log(`Service error: ${error}`);
   }
@@ -71,9 +92,11 @@ router.put("/updateManager", async (req, res) => {
 
 module.exports = router;
 
-// Routes http://localhost:3000/departments/
-// / - GET
-// / - POST
-// / - DELETE
-// /:id - GET
-// /updateManager - PUT
+/**
+ * Routes for Departments:
+ * - GET /departments/
+ * - POST /departments/
+ * - DELETE /departments/
+ * - GET /departments/:id
+ * - PUT /departments/
+ */

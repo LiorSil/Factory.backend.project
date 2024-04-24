@@ -86,7 +86,8 @@ async function filterByDepartment(filterId) {
       : allEmployees;
 
   const gDepartments = window.departments;
-  fillTable(filteredEmployees, gDepartments, allEmployees);
+
+  fillTable(filteredEmployees, gDepartments, shifts);
 }
 
 const employeeShifts = async (shiftsIds) => {

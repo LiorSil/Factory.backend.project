@@ -55,7 +55,9 @@
     <script src="../Scripts/editDepartment.js"></script>
 
     <script>
-      let employee = null;
+      //get the dropdown default value
+      
+      let employee = null
       let chosenManager = null;
       const urlParams = new URLSearchParams(window.location.search);
       const departmentId = urlParams.get("id");
@@ -74,8 +76,10 @@
         .addEventListener("click", async (e) => {
           e.preventDefault();
           if(chosenManager === null) {
-            alert("Please select a manager");
-            return;
+            chosenManager = document.getElementById("departmentManagerDropdown").value;
+            const userConfirmed = confirm(  "Are you sure you want to update the manager?")
+            if(!userConfirmed) 
+              return;
           }
           await updateDepartmentManager(chosenManager, departmentId);
           window.location.reload();
@@ -86,7 +90,7 @@
       document
         .getElementById("employeeDropdown")
         .addEventListener("change", async () => {
-          employee = await getChosenEmployee("employeeDropdown");
+          employee = await getChosenEmployee("employeeDropdown") 
         });
 
           
@@ -95,13 +99,19 @@
         .addEventListener("click", async (e) => {
           e.preventDefault();
           if(employee === null) {
-            alert("Please select an employee");
-            return;
-          } else {
-
+            employee = document.getElementById("employeeDropdown").value;
+            //are you sure you want to add this employee?
+            const userConfirmed = confirm(
+              "Are you sure you want to add this employee?"
+            )
+            if(!userConfirmed) {
+              return;
+            }
+          } 
+           
           await updateDepartmentEmployees(employee, departmentId);
           window.location.reload();
-          }
+          
         });
 
       //Handling Delete Department Button
@@ -117,7 +127,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             const departmentId = urlParams.get("id");
             deleteDepartment(departmentId);
-            window.location.href = "employees.html";
+            window.location.href = "departments.html";
           }
         });
     </script>

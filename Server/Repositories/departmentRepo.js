@@ -22,12 +22,12 @@ const getDepartment = async (id) => {
   return await departmentModel.findById(id);
 };
 
-const updateDepartment = async (id, name, manager) => {
-  const department = await departmentModel.findById(id);
-  department.name = name;
-  department.manager = manager;
-
-  await department.save();
+const updateDepartment = async (department) => {
+  const id = department._id;
+  const updatedDepartment = await departmentModel.findById(id);
+  updatedDepartment.name = department.name;
+  updatedDepartment.manager = department.manager;
+  await updatedDepartment.save();
 };
 
 const deleteDepartment = async (id) => {
@@ -36,15 +36,14 @@ const deleteDepartment = async (id) => {
 };
 
 const createDepartment = async (name, manager) => {
-  const newDepartment = new departmentModel({ name, manager });
+  const newDepartment = new departmentModel({
+name, manager
+  });
   await newDepartment.save();
-  return newDepartment;
+  return newDepartment._id
+  
 };
 
-const getManager = async (id) => {
-  const department = await departmentModel.findById(id);
-  return department.manager; // returns the id of the manager
-};
 
 const getAllManagers = async () => {
   const departments = await departmentModel.find();
@@ -73,10 +72,23 @@ module.exports = {
   updateDepartment,
   deleteDepartment,
   createDepartment,
-  getManager,
+
   getDepartmentID,
   updateManager,
   getAllManagers,
   getDepartments,
   getDepartmentByName,
 };
+/**
+ getDepartmentName
+getDepartment
+updateDepartment
+deleteDepartment
+createDepartment
+
+getDepartmentID
+updateManager
+getAllManagers
+getDepartments
+getDepartmentByName
+ */

@@ -42,10 +42,10 @@ router.delete("/", async (req, res) => {
 });
 
 router.put("/", async (req, res) => {
-  //update employee without know what parms are being passed
+  const { employee } = req.body;
   try {
-    const { employee } = req.body;
     const isUpdated = await employeeService.updateEmployee(employee);
+
     if (isUpdated) {
       return res.json({ message: "Employee updated successfully" });
     } else {

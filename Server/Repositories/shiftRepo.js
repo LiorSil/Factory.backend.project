@@ -25,13 +25,10 @@ const assignShift = async (shiftId) => {
   }
 };
 
-const getUnassignedShifts = async () => {
-  return shiftModel.find({ assigned: false });
-};
 
-const unassignShift = async (shift) => {
+const unassignShift = async (shiftId) => {
   try {
-    const updatedShift = await getShift(shift._id);
+    const updatedShift = await getShift(shiftId);
     updatedShift.assigned = false;
     await updatedShift.save();
     return updatedShift;
@@ -59,6 +56,6 @@ module.exports = {
   getShift,
   assignShift,
   unassignShift,
-  getUnassignedShifts,
+
   updateShift,
 };

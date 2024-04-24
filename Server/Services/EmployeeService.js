@@ -1,55 +1,38 @@
+/**
+ * Module for handling employee-related business logic and interactions.
+ * @module employeeService
+ */
+
 const employeeRepo = require("../Repositories/employeeRepo");
-const departmentRepo = require("../Repositories/departmentRepo");
 const shiftService = require("./shiftService");
 
+/**
+ * Retrieves an employee by their ID from the database.
+ * @param {string} id - The ID of the employee to retrieve.
+ * @returns {Object} The employee object.
+ */
 const getEmployeeByID = async (id) => {
   const employee = await employeeRepo.getEmployee(id);
   return employee;
 };
 
+/**
+ * Retrieves all employees from the database.
+ * @returns {Array<Object>} An array of employee objects.
+ */
 const getEmployees = async () => {
   const employees = await employeeRepo.getEmployees();
   return employees;
 };
-const getEmployeesByDepartment = async (departmentName) => {
-  const departmentId = await departmentRepo.getDepartmentID(departmentName);
 
-  const employees = await getEmployees();
-
-  const employeesInDepartment = employees.filter((employee) =>
-    employee.departmentId.equals(departmentId)
-  );
-
-  return employeesInDepartment;
-};
-
-const updateEmployeeDepartment = async (departmentId, employeeId) => {
-  const departmentIdStr = departmentId.toString();
-
+/**
+ * Deletes an employee from the database.
+ * @param {Object} employee - The employee object to delete.
+ * @returns {Object} An object indicating the status of the operation.
+ */
+const deleteEmployee = async (deleteEmployee) => {
   try {
-    const department = await employeeRepo.updateEmployeeDepartment(
-      employeeId,
-      departmentIdStr
-    );
-    return department;
-  } catch (error) {
-    console.log(`Service error: ${error}`);
-  }
-};
-
-const updateEmployee = async (newEmployee) => {
-  try {
-    const employee = await employeeRepo.updateEmployee(newEmployee);
-    return employee;
-  } catch (error) {
-    console.log(`Service error: ${error}`);
-    return null;
-  }
-};
-
-const deleteEmployee = async (employee) => {
-  try {
-    const employee = await getEmployeeByID(employeeId);
+    const employee = await getEmployeeByID(deleteEmployee._id);
     employee.shifts.forEach(async (shiftId) => {
       await shiftService.unassignShift(shiftId);
     });
@@ -65,23 +48,19 @@ const deleteEmployee = async (employee) => {
   }
 };
 
-const assignShift = async (shift, employee) => {
-  try {
-    await employeeRepo.addShiftToEmployee(shift._id, employee._id);
-    return shift;
-  } catch (error) {
-    console.error("Error assigning shift to employee:", error.message);
-    return null;
-  }
-};
-
+/**
+ * Unassigns a shift from all employees who are assigned to it.
+ * @param {Object} shift - The shift object to unassign.
+ * @returns {Object|null} The unassigned shift object, or null if an error occurs.
+ */
 const unassignShift = async (shift) => {
   const employees = await getEmployees();
 
   try {
     employees.forEach(async (employee) => {
       if (employee.shifts.includes(shift._id)) {
-        await employeeRepo.removeShiftFromEmployee(shift._id, employee._id);
+        employee.shifts = employee.shifts.filter((id) => !id.equals(shift._id));
+        await employeeRepo.updateEmployee(employee);
         return shift;
       }
     });
@@ -91,25 +70,14 @@ const unassignShift = async (shift) => {
   }
 };
 
-const getEmployeesExceptManagers = async () => {
-  const employees = await employeeRepo.getEmployees();
-  const managersStr = await departmentRepo.getAllManagers();
-  const managers = await Promise.all(
-    managersStr.map(async (manager) => await getEmployeeByID(manager))
-  );
-
-  // Filter out the managers
-  const employeesExceptManagers = employees.filter((employee) =>
-    managers.every((manager) => !manager._id.equals(employee._id))
-  );
-  return employeesExceptManagers;
-};
-
-const getDepartmentsForEmployees = async () => {
-  const departments = await departmentRepo.getDepartments();
-  return departments;
-};
-
+/**
+ * Creates a new employee in the database.
+ * @param {string} firstName - The first name of the new employee.
+ * @param {string} lastName - The last name of the new employee.
+ * @param {number} startWorkYear - The year the employee started working.
+ * @param {string} departmentId - The ID of the department the employee belongs to.
+ * @returns {Object} An object indicating the status of the operation.
+ */
 const createEmployee = async (
   firstName,
   lastName,
@@ -133,16 +101,21 @@ const createEmployee = async (
   }
 };
 
+/**
+ * Updates an existing employee in the database.
+ * @param {Object} employee - The updated employee object.
+ * @returns {Object} The updated employee object.
+ */
+const updateEmployee = async (employee) => {
+  const updatedEmployee = await employeeRepo.updateEmployee(employee);
+  return updatedEmployee;
+};
+
 module.exports = {
-  getEmployeesExceptManagers,
   getEmployeeByID,
   getEmployees,
-  getEmployeesByDepartment,
-  updateEmployeeDepartment,
-  updateEmployee,
   deleteEmployee,
-  assignShift,
   unassignShift,
-  getDepartmentsForEmployees,
   createEmployee,
+  updateEmployee,
 };

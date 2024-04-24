@@ -23,13 +23,13 @@ const addDepartmentPage = async () => {
       alert("Please fill in all fields");
       return;
     } else {
-      await createDepartment(newDepartmentName, managerId);
-    
+      const manager = employees.find((employee) => employee._id === managerId);
+      await createDepartment(newDepartmentName, manager);
     }
   });
 };
 
-const createDepartment = async (newDepartmentName, managerId) => {
+const createDepartment = async (newDepartmentName, manager) => {
   try {
     const resp = await fetch("http://localhost:3000/departments", {
       method: "POST",
@@ -39,7 +39,7 @@ const createDepartment = async (newDepartmentName, managerId) => {
       },
       body: JSON.stringify({
         departmentName: newDepartmentName,
-        managerId: managerId,
+        manager: manager,
       }),
     });
     console.log(`Response: ${resp.status}`);
