@@ -44,36 +44,52 @@ const createDepartment = async (newDepartmentName, manager) => {
         manager: manager,
       }),
     });
-    console.log(`Response: ${resp.status}`);
+    if (!resp.ok) {
+      if (resp.status === 429) {
+        alert("User has no remaining actions");
+        window.location.href = "./login.html";
+      } else {
+        throw new Error(`Failed to fetch data: ${resp.statusText}`);
+      }
+    }
+    alert("Department created successfully");
+
+    window.location.href = "./departments.html";
   } catch (error) {
-    // Handle errors
     console.error("Error creating department:", error.message);
-    // Optionally show an error message to the user
   }
 };
 
 const getEmployees = async () => {
-  const response = await fetch("http://localhost:3000/employees", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": addDepartmentToken,
-    },
-  });
-  const employees = await response.json();
-  return employees;
+  try {
+    const resp = await fetch("http://localhost:3000/employees", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": addDepartmentToken,
+      },
+    });
+    const employees = await resp.json();
+    return employees;
+  } catch (error) {
+    console.error("Error getting employees:", error.message);
+  }
 };
 
 const getDepartments = async () => {
-  const response = await fetch("http://localhost:3000/departments", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": addDepartmentToken,
-    },
-  });
-  const departments = await response.json();
-  return departments;
+  try {
+    const resp = await fetch("http://localhost:3000/departments", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": addDepartmentToken,
+      },
+    });
+    const departments = await resp.json();
+    return departments;
+  } catch (error) {
+    console.error("Error getting departments:", error.message);
+  }
 };
 
 const getEmployeesThatAreNotManagers = async () => {

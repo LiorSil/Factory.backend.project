@@ -34,7 +34,7 @@
       <div class="form-buttons">
         
         <button  id="updateEmployeeButton" type="button" class="btn btn-primary" >Update</button>
-        <button id ="deleteEmployee" type="button" class="btn btn-danger" >Delete</button>
+        <button id ="deleteEmployee" type="button" class="btn btn-danger">Delete</button>
       </div>
     </form>
 
@@ -61,15 +61,6 @@
     </div>
   </div>
 
-  <script>
-    const deleteEmployeeFunc = async () => {
-      const url = new URL(window.location.href);
-      const employeeId = url.searchParams.get("id");
-      await deleteEmployeeById(employeeId)
-      window.location.href = "./departments.html";
-    } 
-    
-  </script>
   <script src="../Utils/clientPageOnLoadFunctions.js"></script>
   <script src="../Scripts/editEmployee.js"></script>
   

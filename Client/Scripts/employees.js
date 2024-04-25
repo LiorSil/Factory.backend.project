@@ -164,7 +164,12 @@ const getShifts = async () => {
     });
 
     if (!resp.ok) {
-      throw new Error(`Failed to fetch data: ${resp.statusText}`);
+      if (resp.status === 429) {
+        alert("User has no remaining actions");
+        window.location.href = "./login.html";
+      } else {
+        throw new Error(`Failed to fetch data: ${resp.statusText}`);
+      }
     }
 
     const shifts = await resp.json();

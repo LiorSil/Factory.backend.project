@@ -62,28 +62,37 @@ const getDepartmentsPage = async () => {
 };
 
 const getDepartments = async () => {
-  const response = await fetch("http://localhost:3000/departments", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": departmentsToken,
-    },
-  });
-  const departments = await response.json();
-  return departments;
+  try {
+    const resp = await fetch("http://localhost:3000/departments", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": departmentsToken,
+      },
+    });
+    const departments = await resp.json();
+    return departments;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const getEmployees = async () => {
-  const response = await fetch("http://localhost:3000/employees", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": departmentsToken,
-    },
-  });
-  const employees = await response.json();
-  return employees;
+  try {
+    const resp = await fetch("http://localhost:3000/employees", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": departmentsToken,
+      },
+    });
+    const employees = await resp.json();
+    return employees;
+  } catch (error) {
+    console.error(error);
+  }
 };
+
 
 const getManager = async (department, employees) => {
   const manager = await employees.find(

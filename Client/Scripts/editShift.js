@@ -50,7 +50,7 @@ const editShiftLoad = async () => {
     };
 
     const result = await updateShift(updatedShift, employee);
-    window.location.href = "shifts.html";
+    window.location.href = "./shifts.html";
   };
 };
 
@@ -59,16 +59,28 @@ const editShiftLoad = async () => {
 //get the shift details
 const getShift = async (shiftId) => {
   const userId = sessionStorage.getItem("id");
-  const resp = await fetch(`http://localhost:3000/shifts/${shiftId}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": editShiftToken,
-      id: userId,
-    },
-  });
-  const shift = await resp.json();
-  return shift;
+  try {
+    const resp = await fetch(`http://localhost:3000/shifts/${shiftId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": editShiftToken,
+        id: userId,
+      },
+    });
+    if (!resp.ok) {
+      if (resp.status === 429) {
+        alert("User has no remaining actions");
+        window.location.href = "./login.html";
+      } else {
+        throw new Error(`Failed to fetch data: ${resp.statusText}`);
+      }
+    }
+    const shift = await resp.json();
+    return shift;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 //get the employees
@@ -96,17 +108,30 @@ const setEmployeesSelect = async (employees) => {
 };
 //update the shift
 const updateShift = async (shift, employee) => {
-  const resp = await fetch(`http://localhost:3000/shifts/assign`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": editShiftToken,
-    },
-    body: JSON.stringify({ shift, employee }),
-  });
-  const result = await resp.json();
-  return result;
+  try {
+    const resp = await fetch(`http://localhost:3000/shifts/assign`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": editShiftToken,
+      },
+      body: JSON.stringify({ shift, employee }),
+    });
+    if (!resp.ok) {
+      if (resp.status === 429) {
+        alert("User has no remaining actions");
+        window.location.href = "./login.html";
+      } else {
+        throw new Error(`Failed to fetch data: ${resp.statusText}`);
+      }
+    }
+    const result = await resp.json();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
 };
+
 
 window.onload = editShiftLoad;
 

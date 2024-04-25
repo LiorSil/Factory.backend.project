@@ -15,7 +15,6 @@ app.use(cors());
 app.use(express.json());
 app.options("*", cors());
 
-let previousURL = "";
 app.use(async (req, res, next) => {
   const path = req.url;
 
@@ -47,7 +46,9 @@ app.use(async (req, res, next) => {
   }
 
   if (ans == false) {
-    return res.send(false);
+    console.log(`User has no remaining actions`);
+    //redirect to another html page
+    res.status(429).send("User has no remaining actions");
   } else {
     next();
   }

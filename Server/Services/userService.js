@@ -7,8 +7,28 @@ const jsonfile = require("jsonfile");
 const NodeCache = require("node-cache");
 
 
-// Create a cache with a 5-minute expiration
-const cache = new NodeCache({ stdTTL: 300 });
+
+const secondsUntilMidnight = () => {
+  // Get current date and time
+  const now = new Date();
+
+  // Get tomorrow's date at midnight
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(0, 0, 0, 0);
+
+  // Calculate the difference in milliseconds
+  const differenceMs = tomorrow.getTime() - now.getTime();
+
+  // Convert milliseconds to seconds
+  const differenceSec = Math.floor(differenceMs / 1000);
+
+  return differenceSec;
+};
+
+const secondsLeft = secondsUntilMidnight();
+
+const cache = new NodeCache({ stdTTL: secondsLeft });
 
 //Retrieves a user by their ID from the re
 const getUserById = async (userId) => {
@@ -37,7 +57,6 @@ const isRemainingActions = async (userId) => {
 
   // If user is not in cache, get remaining actions from DB (initialization)
   if (remainingActions === undefined) {
-    
     remainingActions = dbUser.num_of_actions;
     cache.set(user.name, remainingActions);
 
@@ -116,6 +135,8 @@ const updateRemainingActions = async (userId, remainingActions) => {
     };
   }
 };
+
+
 
 // Export the functions
 module.exports = {

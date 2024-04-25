@@ -118,9 +118,16 @@ const updateDepartmentManager = async (newManagerId, departmentId) => {
         department: department,
       }),
     });
-    return resp;
+    if (!resp.ok) {
+      if (resp.status === 429) {
+        alert("User has no remaining actions");
+        window.location.href = "./login.html";
+      } else {
+        throw new Error(`Failed to fetch data: ${resp.statusText}`);
+      }
+    } else return resp;
   } catch (error) {
-    console.log(`Error1: ${error}`);
+    console.log(`Error Update Department Manager: ${error}`);
   }
 };
 
@@ -143,7 +150,14 @@ const updateDepartmentEmployees = async (employee, departmentId) => {
         employee,
       }),
     });
-    return resp;
+    if (!resp.ok) {
+      if (resp.status === 429) {
+        alert("User has no remaining actions");
+        window.location.href = "./login.html";
+      } else {
+        throw new Error(`Failed to fetch data: ${resp.statusText}`);
+      }
+    } else return resp;
   } catch (error) {
     console.log(`Error: ${error}`);
   }
@@ -163,6 +177,17 @@ const deleteDepartment = async (departmentId) => {
         departmentId: departmentId,
       }),
     });
+    if (!resp.ok) {
+      if (resp.status === 429) {
+        alert("User has no remaining actions");
+        window.location.href = "./login.html";
+      } else {
+        throw new Error(`Failed to fetch data: ${resp.statusText}`);
+      }
+    } else {
+      alert("Department deleted successfully");
+      window.location.href = "./departments.html";
+    }
   } catch (error) {
     console.log(`Error: ${error}`);
   }
@@ -171,39 +196,47 @@ const deleteDepartment = async (departmentId) => {
 // Call the getEmployees function when the page loads
 
 const getEmployees = async () => {
-  const resp = await fetch("http://localhost:3000/employees", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": editDepartmentToken,
-    },
-  });
-
-  if (!resp.ok) {
-    throw new Error(`Failed to fetch data: ${resp.statusText}`);
-  } else {
-    const employees = await resp.json();
-    return employees;
-  }
-};
-
-const getDepartment = async (departmentId) => {
-  const resp = await fetch(
-    `http://localhost:3000/departments/${departmentId}`,
-    {
+  try {
+    const resp = await fetch("http://localhost:3000/employees", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": editDepartmentToken,
       },
-    }
-  );
+    });
 
-  if (!resp.ok) {
-    throw new Error(`Failed to fetch data: ${resp.statusText}`);
-  } else {
-    const department = await resp.json();
-    return department;
+    if (!resp.ok) {
+      throw new Error(`Failed to fetch data: ${resp.statusText}`);
+    } else {
+      const employees = await resp.json();
+      return employees;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const getDepartment = async (departmentId) => {
+  try {
+    const resp = await fetch(
+      `http://localhost:3000/departments/${departmentId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": editDepartmentToken,
+        },
+      }
+    );
+
+    if (!resp.ok) {
+      throw new Error(`Failed to fetch data: ${resp.statusText}`);
+    } else {
+      const department = await resp.json();
+      return department;
+    }
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -241,10 +274,9 @@ const getChosenEmployee = async (dropdownId) => {
 
 window.onload = getEditDepartment;
 
-
 /**
  * Requests to the server:
- * 
+ *
  * // /employees - GET - get all employees
  * // /departments - GET - get all departments
  * // /departments/:id - GET - get department by id
@@ -255,7 +287,7 @@ window.onload = getEditDepartment;
 
 /**
  * List of functions:
- * 
+ *
  * // async getEditDepartment()
  * // async departmentNamePlaceholder()
  * // async fillOptionsWithEmployees()
@@ -270,5 +302,3 @@ window.onload = getEditDepartment;
  * // async getManagers()
  * // async getChosenEmployee()
  */
-
-

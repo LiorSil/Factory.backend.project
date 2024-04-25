@@ -87,15 +87,20 @@ const updateDepartment = async (department) => {
 
 const deleteManager = async (employee) => {
   const departments = await departmentRepo.getDepartments();
-  console.log(`${employee} employee: ${employee._id}`);
-  
-  departments.forEach(async (department) => {
-    if (department.manager.equals(employee._id)) {
-      department.manager = null;
-      await departmentRepo.updateDepartment(department);
-    } else {
-    }
-  });
+  try {
+    departments.forEach(async (department) => {
+      if (department.manager.equals(employee._id)) {
+        department.manager = null;
+        await departmentRepo.updateDepartment(department);
+      } else {
+        // employee is not a manager and it's safe to delete
+        return true;
+      }
+    });
+  } catch (error) {
+    console.error("Error deleting manager:", error.message);
+    return false;
+  }
 };
 
 module.exports = {

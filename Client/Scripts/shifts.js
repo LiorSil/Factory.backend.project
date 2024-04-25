@@ -52,38 +52,56 @@ const loadShifts = async () => {
 
 const getShifts = async () => {
   const userId = sessionStorage.getItem("id");
-  const resp = await fetch("http://localhost:3000/shifts", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": shiftsToken,
-      id: userId,
-    },
-  });
-  if (!resp.ok) {
-    throw new Error(`Failed to fetch data: ${resp.statusText}`);
+  try {
+    const resp = await fetch("http://localhost:3000/shifts", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": shiftsToken,
+        id: userId,
+      },
+    });
+    if (!resp.ok) {
+      if (resp.status === 429) {
+        alert("User has no remaining actions");
+        window.location.href = "./login.html";
+      } else {
+        throw new Error(`Failed to fetch data: ${resp.statusText}`);
+      }
+    } else {
+      // return the shifts array
+      return await resp.json();
+    }
+  } catch (error) {
+    console.error(error);
   }
-  const shifts = await resp.json();
-  return shifts;
 };
 
 const unassignShiftHandler = async (shift) => {
   const userId = sessionStorage.getItem("id");
-  const resp = await fetch(`http://localhost:3000/employees/unassignShift`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": shiftsToken,
-      id: userId,
-    },
-    body: JSON.stringify({ shift }),
-  });
-  if (!resp.ok) {
-    throw new Error(
-      `Failed To unassign shift for employee: ${resp.statusText}`
-    );
-  } else {
-    location.reload();
+  try {
+    const resp = await fetch(`http://localhost:3000/employees/unassignShift`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": shiftsToken,
+        id: userId,
+      },
+      body: JSON.stringify({ shift }),
+    });
+    if (!resp.ok) {
+      if (resp.status === 429) {
+        alert("User has no remaining actions");
+        window.location.href = "./login.html";
+      } else {
+        throw new Error(`Failed to fetch data: ${resp.statusText}`);
+      }
+    } else {
+      // reload the page to reflect the changes
+      location.reload();
+    }
+  } catch (error) {
+    console.error(error);
   }
 };
   

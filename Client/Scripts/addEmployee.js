@@ -27,22 +27,26 @@ const addEmployeePage = async () => {
     );
     if (isEmployeeCreated) {
       alert("Employee created successfully");
-      window.location.href = "employees.html";
+      window.location.href = "./employees.html";
     } else
       alert("Error creating employee, please check the data and try again");
   });
 };
 
 const getDepartments = async () => {
-  const resp = await fetch("http://localhost:3000/departments", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": addEmployeeToken,
-    },
-  });
-  const departments = await resp.json();
-  return departments;
+  try {
+    const resp = await fetch("http://localhost:3000/departments", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": addEmployeeToken,
+      },
+    });
+    const departments = await resp.json();
+    return departments;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const createDepartmentsSelector = async () => {
@@ -81,9 +85,15 @@ const createEmployee = async (
       }),
     });
     if (!resp.ok) {
-      throw new Error(`Failed to create employee: ${resp.statusText}`);
+      if (resp.status === 429) {
+        alert("User has no remaining actions");
+        window.location.href = "./login.html";
+      } else {
+        throw new Error(`Failed to fetch data: ${resp.statusText}`);
+      }
     }
-    return true;
+    // return true if the employee was created successfully
+    else return true;
   } catch (error) {
     console.error(error);
     return false;

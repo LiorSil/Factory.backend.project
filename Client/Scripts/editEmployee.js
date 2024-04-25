@@ -87,7 +87,7 @@ const editEmployee = async () => {
     );
     if (updatedEmployee) {
       alert("Employee updated successfully");
-      window.location.href = "employees.html";
+      window.location.href = "./employees.html";
     } else {
       alert("Error updating employee");
     }
@@ -95,12 +95,18 @@ const editEmployee = async () => {
 
   // handling the delete button
   const deleteButton = document.getElementById("deleteEmployee");
-  deleteButton.addEventListener("click", async (e) => {
-    e.preventDefault();
+  deleteButton.addEventListener("click", async (event) => {
+    event.preventDefault();
     const confirmDelete = confirm("Are you sure you want to delete?");
     if (confirmDelete) {
-      await deleteEmployee(employee);
-      window.location.href = "employees.html";
+      const isEmployeeDeleted = await deleteEmployee(employee);
+      if (isEmployeeDeleted) {
+        console.log(`isEmployeeDeleted: ${isEmployeeDeleted}`);
+        alert("Employee deleted successfully");
+        window.location.href = "./employees.html";
+      } else {
+        alert("Error deleting employee");
+      }
     }
   });
 
@@ -118,7 +124,7 @@ const editEmployee = async () => {
     );
     if (assignedShiftToEmployee) {
       alert("Shift assigned successfully");
-      window.location.href = `employees.html`;
+      window.location.href = `./employees.html`;
     } else {
       alert("Error assigning shift to employee");
     }
@@ -128,54 +134,71 @@ const editEmployee = async () => {
 //*******************  Helper functions *******************//
 
 const getEmployee = async (employeeId) => {
-  const resp = await fetch(`http://localhost:3000/employees/${employeeId}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": editEmployeeToken,
-    },
-  });
-  if (!resp.ok) {
-    throw new Error(`Failed to fetch data: ${resp.statusText}`);
-  } else {
-    const employee = await resp.json();
-    return employee;
+  try {
+    const resp = await fetch(`http://localhost:3000/employees/${employeeId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": editEmployeeToken,
+      },
+    });
+    if (!resp.ok) {
+      throw new Error(`Failed to fetch data: ${resp.statusText}`);
+    } else {
+      // return the employee object
+      return await resp.json();
+    }
+  } catch (error) {
+    console.error("Error getting employee:", error.message);
   }
 };
 
 const getDepartments = async () => {
-  const resp = await fetch("http://localhost:3000/departments", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": editEmployeeToken,
-    },
-  });
+  try {
+    const resp = await fetch("http://localhost:3000/departments", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": editEmployeeToken,
+      },
+    });
 
-  if (!resp.ok) {
-    throw new Error(`Failed to fetch data: ${resp.statusText}`);
-  } else {
-    const departments = await resp.json();
-    return departments;
+    if (!resp.ok) {
+      throw new Error(`Failed to fetch data: ${resp.statusText}`);
+    } else {
+      // return the departments array
+      return await resp.json();
+    }
+  } catch (error) {
+    console.error("Error getting departments:", error.message);
   }
 };
 
 const getShifts = async () => {
   const userId = sessionStorage.getItem("id");
-  const resp = await fetch("http://localhost:3000/shifts", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": editEmployeeToken,
-      id: userId,
-    },
-  });
+  try {
+    const resp = await fetch("http://localhost:3000/shifts", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": editEmployeeToken,
+        id: userId,
+      },
+    });
 
-  if (!resp.ok) {
-    throw new Error(`Failed to fetch data: ${resp.statusText}`);
-  } else {
-    const shifts = await resp.json();
-    return shifts;
+    if (!resp.ok) {
+      if (resp.status === 429) {
+        alert("User has no remaining actions");
+        window.location.href = "./login.html";
+      } else {
+        throw new Error(`Failed to fetch data: ${resp.statusText}`);
+      }
+    } else {
+      // return the shifts array
+      return await resp.json();
+    }
+  } catch (error) {
+    console.error("Error getting shifts:", error.message);
   }
 };
 
@@ -191,54 +214,89 @@ const updateEmployeeFullname = async (employee, firstName, lastName) => {
     employee.lastName = lastName;
   }
   const userId = sessionStorage.getItem("id");
-  const resp = await fetch(`http://localhost:3000/employees`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": editEmployeeToken,
-      id: userId,
-    },
-    body: JSON.stringify({ employee }),
-  });
+  try {
+    const resp = await fetch(`http://localhost:3000/employees`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": editEmployeeToken,
+        id: userId,
+      },
+      body: JSON.stringify({ employee }),
+    });
 
-  if (!resp.ok) {
-    throw new Error(`Failed to update employee: ${resp.statusText}`);
-  } else {
-    const updatedEmployee = await resp.json();
-    return updatedEmployee;
+    if (!resp.ok) {
+      if (resp.status === 429) {
+        alert("User has no remaining actions");
+        window.location.href = "./login.html";
+      } else {
+        throw new Error(`Failed to fetch data: ${resp.statusText}`);
+      }
+    } else {
+      const updatedEmployee = await resp.json();
+      alert("Employee updated successfully");
+      return updatedEmployee;
+    }
+  } catch (error) {
+    console.error("Error updating employee:", error.message);
   }
 };
 
 const deleteEmployee = async (employee) => {
-  const resp = await fetch(`http://localhost:3000/employees`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": editEmployeeToken,
-    },
-    body: JSON.stringify({ employee }),
-  });
+  const userId = sessionStorage.getItem("id");
+  try {
+    const resp = await fetch(`http://localhost:3000/employees`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": editEmployeeToken,
+        id: userId,
+      },
+      body: JSON.stringify({ employee }),
+    });
 
-  if (!resp.ok) {
-    throw new Error(`Failed to delete employee: ${resp.statusText}`);
-  } else {
-    return;
+    if (!resp.ok) {
+      if (resp.status === 429) {
+        alert("User has no remaining actions");
+        window.location.href = "./login.html";
+      } else {
+        throw new Error(`Failed to fetch data: ${resp.statusText}`);
+      }
+    }
+    // Employee was deleted successfully
+    else return true;
+  } catch (error) {
+    console.error("Error deleting employee:", error.message);
+    return false;
   }
 };
 
 const assignShiftToEmployee = async (shift, employee) => {
   const userId = sessionStorage.getItem("id");
-  const resp = await fetch(`http://localhost:3000/shifts/assign`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": editEmployeeToken,
-      id: userId,
-    },
-    body: JSON.stringify({ shift, employee }),
-  });
-  const result = await resp.json();
-  return result;
+  try {
+    const resp = await fetch(`http://localhost:3000/shifts/assign`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": editEmployeeToken,
+        id: userId,
+      },
+      body: JSON.stringify({ shift, employee }),
+    });
+    if (!resp.ok) {
+      if (resp.status === 429) {
+        alert("User has no remaining actions");
+        window.location.href = "./login.html";
+      } else {
+        throw new Error(`Failed to fetch data: ${resp.statusText}`);
+      }
+    } else {
+      // Assigning the shift to the employee was successful
+      return true;
+    }
+  } catch (error) {
+    console.error("Error assigning shift to employee:", error.message);
+  }
 };
 
 window.onload = editEmployee;

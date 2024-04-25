@@ -33,7 +33,10 @@ router.delete("/", async (req, res) => {
 
     await employeeService.deleteEmployee(employee);
     await departmentService.deleteManager(employee);
-    return res.status;
+    return res.json({
+      status: "success",
+      message: "Employee deleted successfully",
+    });
   } catch (error) {
     return res.json({
       status: "error",
