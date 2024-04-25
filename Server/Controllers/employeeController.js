@@ -1,4 +1,5 @@
 const employeeService = require("../Services/EmployeeService");
+const departmentService = require("../Services/departmentService");
 
 const shiftService = require("../Services/shiftService");
 const express = require("express");
@@ -26,12 +27,12 @@ router.post("/", async (req, res) => {
   }
 });
 
-
 router.delete("/", async (req, res) => {
   try {
     const { employee } = req.body;
 
     await employeeService.deleteEmployee(employee);
+    await departmentService.deleteManager(employee);
     return res.status;
   } catch (error) {
     return res.json({

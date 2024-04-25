@@ -65,12 +65,8 @@
     const deleteEmployeeFunc = async () => {
       const url = new URL(window.location.href);
       const employeeId = url.searchParams.get("id");
-      const status = deleteEmployeeById(employeeId)
-      if (status) {
-        window.location.href = "./employees.html";
-      } else {
-        alert("Failed to delete employee");
-      }
+      await deleteEmployeeById(employeeId)
+      window.location.href = "./departments.html";
     } 
     
   </script>

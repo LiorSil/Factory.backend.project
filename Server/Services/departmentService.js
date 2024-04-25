@@ -32,13 +32,6 @@ const getDepartmentByID = async (id) => {
  * @param {string} employeeId - The ID of the new manager.
  * @returns {Promise<Object>} A promise that resolves to the updated department object.
  */
-const setDepartmentManager = async (departmentId, employeeId) => {
-  const department = await departmentRepo.updateManager(
-    departmentId,
-    employeeId
-  );
-  return department;
-};
 
 /**
  * Deletes a department and all its employees from the database.
@@ -92,10 +85,24 @@ const updateDepartment = async (department) => {
   return updatedDepartment;
 };
 
+const deleteManager = async (employee) => {
+  const departments = await departmentRepo.getDepartments();
+  console.log(`${employee} employee: ${employee._id}`);
+  
+  departments.forEach(async (department) => {
+    if (department.manager.equals(employee._id)) {
+      department.manager = null;
+      await departmentRepo.updateDepartment(department);
+    } else {
+    }
+  });
+};
+
 module.exports = {
   getDepartments,
   getDepartmentByID,
   updateDepartment,
   deleteDepartmentAndEmployees,
   createDepartment,
+  deleteManager,
 };
