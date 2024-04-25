@@ -101,16 +101,18 @@ const availableManagersToSelect = async (
 };
 
 const updateDepartmentManager = async (newManagerId, departmentId) => {
+  const userId = sessionStorage.getItem("id");
   const department = window.departments.find(
     (department) => department._id === departmentId
   );
   department.manager = newManagerId;
   try {
-    const resp = await fetch("http://localhost:3000/departments/", {
+    const resp = await fetch("http://localhost:3000/departments", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": editDepartmentToken,
+        id: userId,
       },
       body: JSON.stringify({
         department: department,
@@ -123,35 +125,39 @@ const updateDepartmentManager = async (newManagerId, departmentId) => {
 };
 
 const updateDepartmentEmployees = async (employee, departmentId) => {
+  const userId = sessionStorage.getItem("id");
   const globalEmployees = await window.employees;
 
   employee = globalEmployees.find((e) => e._id.includes(employee));
   employee.departmentId = departmentId;
 
   try {
-  const resp = await fetch("http://localhost:3000/employees/", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": editDepartmentToken,
-    },
-    body: JSON.stringify({
-      employee,
-    }),
-  });
-  return resp;
+    const resp = await fetch("http://localhost:3000/employees", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": editDepartmentToken,
+        id: userId,
+      },
+      body: JSON.stringify({
+        employee,
+      }),
+    });
+    return resp;
   } catch (error) {
     console.log(`Error: ${error}`);
   }
 };
 
 const deleteDepartment = async (departmentId) => {
+  const userId = sessionStorage.getItem("id");
   try {
     const resp = await fetch(`http://localhost:3000/departments`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": editDepartmentToken,
+        id: userId,
       },
       body: JSON.stringify({
         departmentId: departmentId,

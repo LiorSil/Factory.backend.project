@@ -12,7 +12,7 @@ const authUser = async (username, email) => {
     success: true,
     message: "Login successful",
     name: wsUser.name,
-    wsId: wsUser.id,
+    id: wsUser.id,
   };
 }
 

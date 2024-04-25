@@ -4,7 +4,7 @@ const router = express.Router();
 
 
 
-router.get("/get_users", async (req, res) => {
+router.get("/", async (req, res) => {
   const users = await userService.getUsers();
 
   res.send(users);

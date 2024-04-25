@@ -161,11 +161,13 @@ const getDepartments = async () => {
 };
 
 const getShifts = async () => {
+  const userId = sessionStorage.getItem("id");
   const resp = await fetch("http://localhost:3000/shifts", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       "x-access-token": editEmployeeToken,
+      id: userId,
     },
   });
 
@@ -188,12 +190,13 @@ const updateEmployeeFullname = async (employee, firstName, lastName) => {
     employee.firstName = firstName;
     employee.lastName = lastName;
   }
-
+  const userId = sessionStorage.getItem("id");
   const resp = await fetch(`http://localhost:3000/employees`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       "x-access-token": editEmployeeToken,
+      id: userId,
     },
     body: JSON.stringify({ employee }),
   });
@@ -224,11 +227,13 @@ const deleteEmployee = async (employee) => {
 };
 
 const assignShiftToEmployee = async (shift, employee) => {
+  const userId = sessionStorage.getItem("id");
   const resp = await fetch(`http://localhost:3000/shifts/assign`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       "x-access-token": editEmployeeToken,
+      id: userId,
     },
     body: JSON.stringify({ shift, employee }),
   });

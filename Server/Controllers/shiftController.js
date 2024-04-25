@@ -13,6 +13,29 @@ router.get("/", async (req, res) => {
   }
 });
 
+//create
+router.post("/", async (req, res) => {
+  try {
+    const shift = req.body;
+    const result = await shiftService.createShift(shift);
+
+    return res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+//get by id
+router.get("/:id", async (req, res) => {
+  try {
+    const shift = await shiftService.getShiftByID(req.params.id);
+
+    return res.json(shift);
+  } catch (error) {
+    return res.status(500).json({ message: error.message, test: "test" });
+  }
+});
+
 router.put("/assign", async (req, res) => {
   try {
     const { shift, employee } = req.body;
@@ -28,30 +51,11 @@ router.put("/assign", async (req, res) => {
   }
 });
 
-//get by id
-router.get("/:id", async (req, res) => {
-  try {
-    const shift = await shiftService.getShiftByID(req.params.id);
-
-    return res.json(shift);
-  } catch (error) {
-    return res.status(500).json({ message: error.message, test: "test" });
-  }
-});
 
 
 
-//create
-router.post("/", async (req, res) => {
-  try {
-    const shift = req.body;
-    const result = await shiftService.createShift(shift);
 
-    return res.json(result);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
+
 
 module.exports = router;
 

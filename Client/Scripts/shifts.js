@@ -51,11 +51,13 @@ const loadShifts = async () => {
 };
 
 const getShifts = async () => {
+  const userId = sessionStorage.getItem("id");
   const resp = await fetch("http://localhost:3000/shifts", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       "x-access-token": shiftsToken,
+      id: userId,
     },
   });
   if (!resp.ok) {
@@ -66,11 +68,13 @@ const getShifts = async () => {
 };
 
 const unassignShiftHandler = async (shift) => {
+  const userId = sessionStorage.getItem("id");
   const resp = await fetch(`http://localhost:3000/employees/unassignShift`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       "x-access-token": shiftsToken,
+      id: userId,
     },
     body: JSON.stringify({ shift }),
   });

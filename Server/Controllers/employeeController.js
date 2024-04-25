@@ -64,7 +64,6 @@ router.get("/:id", async (req, res) => {
   return res.json(employee);
 });
 
-
 router.put("/unassignShift", async (req, res) => {
   const { shift } = req.body;
 
@@ -87,4 +86,5 @@ module.exports = router;
 // / - PUT - update an employee
 // /:id - GET - get employee by id
 // /unassignShift - PUT - unassign a shift from an employee + unassign a shift from shifts
+
 // * assignShift is in shiftController.js because it is a shift operation *

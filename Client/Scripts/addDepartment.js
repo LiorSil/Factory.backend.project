@@ -30,12 +30,14 @@ const addDepartmentPage = async () => {
 };
 
 const createDepartment = async (newDepartmentName, manager) => {
+  const userId = sessionStorage.getItem("id");
   try {
     const resp = await fetch("http://localhost:3000/departments", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": addDepartmentToken,
+        id: userId,
       },
       body: JSON.stringify({
         departmentName: newDepartmentName,

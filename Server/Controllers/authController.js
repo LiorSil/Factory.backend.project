@@ -15,12 +15,12 @@ router.post("/login", async (req, res) => {
     return res
       .status(401)
       .json({ message: "user not found", success: resp.success });
-  const { name, wsId } = resp;
+  const { name, id } = resp;
 
   // Generate JWT token upon successful authentication
   const token = jwt.sign({ username }, "secret", { expiresIn: "1h" });
 
-  res.send({ token, name, wsId });
+  res.send({ token, name, id });
 });
 
 

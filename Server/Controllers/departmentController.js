@@ -58,21 +58,6 @@ router.delete("/", async (req, res) => {
 });
 
 /**
- * Route: GET /departments/:id
- * Retrieves a department by its ID.
- * @param {string} id - The ID of the department to retrieve.
- * @returns {Object} The department object.
- */
-router.get("/:id", async (req, res) => {
-  try {
-    const department = await departmentService.getDepartmentByID(req.params.id);
-    return res.json(department);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
-
-/**
  * Route: PUT /departments/
  * Updates a department.
  * @param {Object} department - The updated department object.
@@ -89,6 +74,23 @@ router.put("/", async (req, res) => {
     console.log(`Service error: ${error}`);
   }
 });
+
+/**
+ * Route: GET /departments/:id
+ * Retrieves a department by its ID.
+ * @param {string} id - The ID of the department to retrieve.
+ * @returns {Object} The department object.
+ */
+router.get("/:id", async (req, res) => {
+  try {
+    const department = await departmentService.getDepartmentByID(req.params.id);
+    return res.json(department);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+
 
 module.exports = router;
 

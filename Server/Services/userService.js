@@ -74,10 +74,11 @@ const updateRemainingActions = async (userId, remainingActions) => {
   const dbUser = await userRepo.getUserByFullName(user.name);
 
   //decrement the remaining actions
-  //remainingActions--;
+  remainingActions--;
 
   //update the cache
   cache.set(user.name, remainingActions);
+  console.log(`cache: ${user.name} ${cache.get(user.name)}`);
 
   try {
     //new data to be added to the json file

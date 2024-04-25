@@ -26,10 +26,19 @@ app.use(async (req, res, next) => {
 
   switch (true) {
     case path === "/employees":
-      ans = await takeAction(userId, path);
+      if (method === "POST" || method === "DELETE" || method === "PUT") {
+        ans = await takeAction(userId, path);
+      }
       break;
-    case path === "/departments":
-      ans = await takeAction(userId, path);
+    case path.startsWith("/shifts"):
+      if (method === "GET" || method === "POST" || method === "PUT") {
+        ans = await takeAction(userId, path);
+      }
+      break;
+    case path.startsWith("/departments"):
+      if (method === "POST" || method === "DELETE" || method === "PUT") {
+        ans = await takeAction(userId, path);
+      }
       break;
 
     default:
@@ -45,28 +54,23 @@ app.use(async (req, res, next) => {
 });
 
 async function takeAction(userId, path) {
-  //do nothing:
-  return true;
-  // if (path === undefined) return;
+  if (path === undefined) return;
+  console.log(`path: ${path}`);
+  try {
+    const resp = await isRemainingActions(userId);
+    //add line to json
+    let { isNewActionAllowed, remainingActions } = resp;
 
-  // console.log(`path: ${path}`);
-  // // Check if user has remaining actions
-  // try {
-  //   const resp = await isRemainingActions(userId);
-  //   //add line to json
-  //   let { isNewActionAllowed, remainingActions, fullname } = resp;
-  //   //console.log(`User: ${fullname} has ${remainingActions - 1} remaining actions`);
-  //   if (isNewActionAllowed) {
-  //     // Decrement remaining actions
-  //     await updateRemainingActions(userId, remainingActions);
-  //     return true;
-  //   } else {
-  //     //console.log(`User has no remaining actions`);
-  //     return false;
-  //   }
-  // } catch (e) {
-  //   console.log(`Error: ${e.message}`);
-  // }
+    if (isNewActionAllowed) {
+      // Decrement remaining actions
+      await updateRemainingActions(userId, remainingActions);
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    console.log(`Error Server: ${e.message}`);
+  }
 }
 
 //controllers or routes

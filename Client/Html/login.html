@@ -26,12 +26,12 @@
             email,
           }),
         });
-        const {token, name, wsId} = await resp.json();
+        const {token, name, id} = await resp.json();
         
         sessionStorage.setItem("token",token);
         sessionStorage.setItem("username", username);
         sessionStorage.setItem("name", name);
-        sessionStorage.setItem("id", wsId);
+        sessionStorage.setItem("id", id);
         
 
         if (token) {

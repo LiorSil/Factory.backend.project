@@ -5,7 +5,7 @@ const onLoadUsersPage = async () => {
 };
 
 const getUsers = async () => {
-  const resp = await fetch("http://localhost:3000/users/get_users", {
+  const resp = await fetch("http://localhost:3000/users", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

@@ -64,12 +64,14 @@ const createEmployee = async (
   startWorkYear,
   departmentId
 ) => {
+  const userId = sessionStorage.getItem("id");
   try {
     const resp = await fetch("http://localhost:3000/employees", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": addEmployeeToken,
+        id: userId,
       },
       body: JSON.stringify({
         firstName,

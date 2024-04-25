@@ -58,11 +58,13 @@ const editShiftLoad = async () => {
 
 //get the shift details
 const getShift = async (shiftId) => {
+  const userId = sessionStorage.getItem("id");
   const resp = await fetch(`http://localhost:3000/shifts/${shiftId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       "x-access-token": editShiftToken,
+      id: userId,
     },
   });
   const shift = await resp.json();
