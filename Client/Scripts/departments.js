@@ -27,10 +27,13 @@ const getDepartmentsPage = async () => {
 
     // Retrieve manager information asynchronously
     const managerEmployee = await getManager(department, employees);
-
     const managerName = document.createElement("p");
-    managerName.id = managerEmployee;
-    managerName.textContent = `${managerEmployee.firstName} ${managerEmployee.lastName}`;
+    if (managerEmployee) {
+      managerName.id = managerEmployee;
+      managerName.textContent = `${managerEmployee.firstName} ${managerEmployee.lastName}`;
+    } else {
+      managerName.textContent = "No manager assigned";
+    }
     manager.appendChild(managerName);
 
     // Retrieve employees in department asynchronously

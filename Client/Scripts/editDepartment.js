@@ -15,15 +15,20 @@ const getEditDepartment = async () => {
   await departmentNamePlaceholder(department.name);
 
   //get the department manager (id)
-  const departmentManager = department.manager;
-  const departmentManagerEmployee = await employees.find(
-    (employee) => employee._id === departmentManager
-  );
-
   const departmentManagerLabel = document.getElementById(
     "departmentManagerLabel"
   );
-  departmentManagerLabel.innerHTML = `Current Manager: ${departmentManagerEmployee.firstName} ${departmentManagerEmployee.lastName}`;
+
+  const departmentManager = null;
+  if (department.manager) {
+    const departmentManager = department.manager;
+    const departmentManagerEmployee = await employees.find(
+      (employee) => employee._id === departmentManager
+    );
+    departmentManagerLabel.innerHTML = `Current Manager: ${departmentManagerEmployee.firstName} ${departmentManagerEmployee.lastName}`;
+  } else {
+    departmentManagerLabel.innerHTML = `Current Manager: No manager assigned`;
+  }
 
   //Handling available employees to be department managers
   const availableManagers = await availableManagersToSelect(
