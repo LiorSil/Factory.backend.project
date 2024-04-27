@@ -1,8 +1,12 @@
-Link to overview project - https://drive.google.com/file/d/1n2Y26cmCG_RBuJIB84hIYJzmfTfkCWTN/view?usp=drive_link
+
+
 
 # Factory Management System
 
 Welcome to the Factory Management System! This system is designed to help manage employees, departments, and shifts within a factory setting. Below are the details of the system architecture and the various pages it includes.
+## Link to overview project 
+
+[Running In Production Video](https://drive.google.com/file/d/1n2Y26cmCG_RBuJIB84hIYJzmfTfkCWTN/view?usp=drive_link)
 
 ## System Architecture
 
@@ -74,9 +78,4 @@ Welcome to the Factory Management System! This system is designed to help manage
 - Logs all user actions, such as viewing pages, adding departments, and deleting employees, in a JSON file on the server.
 - Users are logged out when they reach their maximum allowed actions for the day.
 
-## Project Delivery
-
-To deliver the project, please send a link to your repository (e.g., git, Google Drive) to [devprojects2000@gmail.com](mailto:devprojects2000@gmail.com) with the subject "[Course Name] - [Your name] – Node.JS Final Project". For example: "Full Stack 32 – Ron Gabay – Node.JS Final Project".
-
-Good Luck!
 
