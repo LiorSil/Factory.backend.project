@@ -1,32 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Users Page</title>
-<link rel="stylesheet" type="text/css" href="../CSS/users.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users Page</title>
+  <link rel="stylesheet" type="text/css" href="../CSS/users.css">
 </head>
 <body>
 
 <h2>Users Page</h2>
 
-<table>
+<table class="users-table">
   <thead>
     <tr>
-      <th>User Name</th>
-      <th>Maximum Actions Allowed</th>
-      <th>Current Actions Allowed Today</th>
+      <th class="header-cell">User Name</th>
+      <th class="header-cell">Maximum Actions Allowed</th>
+      <th class="header-cell">Current Actions Allowed Today</th>
     </tr>
   </thead>
-  <tbody id = "users-tbody">
-    
+  <tbody id="users-tbody">
     <!-- Add more rows for additional users -->
   </tbody>
 </table>
-<script src= "../Scripts/users.js"></script>
-<script src= "../Utils/clientPageOnLoadFunctions.js"></script>
 
-
+<script src="../Scripts/users.js"></script>
+<script src="../Utils/clientPageOnLoadFunctions.js"></script>
 
 </body>
 </html>

@@ -1,14 +1,42 @@
-table {
-    width: 100%;
-    border-collapse: collapse;
+/* users.css */
+
+/* Table */
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
-th, td {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
+/* Table Header */
+.header-cell {
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+  padding: 12px 16px;
 }
 
-th {
-    background-color: #f2f2f2;
+/* Table Body */
+.users-table td {
+  padding: 12px 16px;
+  font-size: 16px; /* Example font size */
+  color: #333; /* Example font color */
 }
+
+/* Alternate Row Color */
+.users-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Hover Effect on Rows */
+.users-table tbody tr:hover {
+  background-color: #ddd;
+}
+
+/* Specific styling for values */
+.users-table tbody tr td {
+  font-weight: normal; /* Remove bold for table values */
+}
+
+/* Add more specific styles as needed */

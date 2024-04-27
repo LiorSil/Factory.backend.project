@@ -22,4 +22,5 @@ const getUserById = async (userId) => {
 module.exports = {
   getEmployeeByUsername,
   getUserById,
+  getUsers,
 };
