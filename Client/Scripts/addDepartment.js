@@ -1,4 +1,4 @@
-const addDepartmentToken = sessionStorage.getItem("token");
+const addDepartmentToken = localStorage.getItem("token");
 
 const addDepartmentPage = async () => {
   //Handling the select manager dropdown

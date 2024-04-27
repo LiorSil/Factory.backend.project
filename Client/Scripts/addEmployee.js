@@ -1,4 +1,4 @@
-const addEmployeeToken = sessionStorage.getItem("token");
+const addEmployeeToken = localStorage.getItem("token");
 
 const addEmployeePage = async () => {
   // Initialize the form with the departments

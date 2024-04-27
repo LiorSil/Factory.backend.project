@@ -1,4 +1,4 @@
-const departmentsToken = sessionStorage.getItem("token");
+const departmentsToken = localStorage.getItem("token");
 
 const getDepartmentsPage = async () => {
   const departments = await getDepartments();
@@ -92,7 +92,6 @@ const getEmployees = async () => {
     console.error(error);
   }
 };
-
 
 const getManager = async (department, employees) => {
   const manager = await employees.find(

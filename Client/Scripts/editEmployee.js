@@ -1,4 +1,4 @@
-const editEmployeeToken = sessionStorage.getItem("token");
+const editEmployeeToken = localStorage.getItem("token");
 
 const editEmployee = async () => {
   const currentUrl = window.location.href;

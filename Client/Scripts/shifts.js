@@ -1,4 +1,4 @@
-const shiftsToken = sessionStorage.getItem("token");
+const shiftsToken = localStorage.getItem("token");
 
 const loadShifts = async () => {
   const shifts = await getShifts();
@@ -104,9 +104,9 @@ const unassignShiftHandler = async (shift) => {
     console.error(error);
   }
 };
-  
+
 window.onload = loadShifts;
 
-// requests to the server: 
+// requests to the server:
 // /shifts - GET - get all shifts
 // /employees/unassignShift - PUT - unassign a shift from an employee + unassign a shift from shifts

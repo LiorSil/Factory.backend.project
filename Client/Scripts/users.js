@@ -1,4 +1,4 @@
-const token = sessionStorage.getItem("token");
+const token = localStorage.getItem("token");
 const onLoadUsersPage = async () => {
   const users = await getUsers();
   await fillTbodyWithUsers(users);

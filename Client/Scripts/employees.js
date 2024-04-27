@@ -1,4 +1,5 @@
-const token = sessionStorage.getItem("token");
+const getEmployeesToken = localStorage.getItem("token");
+
 
 // Function to get employees from the server and fill the table
 const startUpEmployees = async () => {
@@ -114,7 +115,7 @@ const getDepartments = async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": token,
+        "x-access-token": getEmployeesToken,
       },
     });
 
@@ -130,12 +131,13 @@ const getDepartments = async () => {
 };
 
 const getEmployees = async () => {
+
   try {
     const resp = await fetch("http://localhost:3000/employees", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": token,
+        "x-access-token": getEmployeesToken,
       },
     });
 
@@ -158,7 +160,7 @@ const getShifts = async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": token,
+        "x-access-token": getEmployeesToken,
         id: id,
       },
     });
@@ -200,7 +202,6 @@ const getEmployeeShiftsNames = async (shiftsIds, allShifts) => {
   );
   return shiftsArray;
 };
-
 
 // Call the getEmployees function when the page loads
 window.onload = startUpEmployees;

@@ -1,4 +1,4 @@
-const editShiftToken = sessionStorage.getItem("token");
+const editShiftToken = localStorage.getItem("token");
 
 const editShiftLoad = async () => {
   //get the shift id from the url
@@ -131,7 +131,6 @@ const updateShift = async (shift, employee) => {
     console.error(error);
   }
 };
-
 
 window.onload = editShiftLoad;
 

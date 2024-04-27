@@ -1,4 +1,4 @@
-const editDepartmentToken = sessionStorage.getItem("token");
+const editDepartmentToken = localStorage.getItem("token");
 const getEditDepartment = async () => {
   //get the id from the url
   const urlParams = new URLSearchParams(window.location.search);
