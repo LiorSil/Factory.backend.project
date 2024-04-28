@@ -3,10 +3,7 @@
 const jwt = require("jsonwebtoken");
 const session = require("express-session");
 
-const userService = require("../Services/userService");
-
 const authMiddleware = (req, res, next) => {
-  // Get token from request header or query parameter or cookie
   const token = session.token;
 
   if (!token) {

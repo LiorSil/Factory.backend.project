@@ -93,12 +93,3 @@ router.get("/:id", async (req, res) => {
 
 
 module.exports = router;
-
-/**
- * Routes for Departments:
- * - GET /departments/
- * - POST /departments/
- * - DELETE /departments/
- * - GET /departments/:id
- * - PUT /departments/
- */

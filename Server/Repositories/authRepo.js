@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-//get all users from the API sas
+//get all users from the API endpoint
 const getUsers = async (username, email) => {
   const URL = `https://jsonplaceholder.typicode.com/users`;
   const response = await axios.get(URL);

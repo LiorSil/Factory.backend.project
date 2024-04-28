@@ -11,10 +11,17 @@ const {
 
 require("./Configs/database");
 const authenticateToken = require("./Middlewares/authenticateToken");
+
 app.use(cors());
 app.use(express.json());
 app.options("*", cors());
 
+/**
+ * Middleware to check if the user has remaining actions to perform certain actions
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ */
 app.use(async (req, res, next) => {
   const path = req.url;
 
@@ -23,6 +30,7 @@ app.use(async (req, res, next) => {
   const method = req.method;
   let ans = null;
 
+  // Check if the user has remaining actions to perform this action or not
   switch (true) {
     case path === "/employees":
       if (method === "POST" || method === "DELETE" || method === "PUT") {
@@ -39,27 +47,29 @@ app.use(async (req, res, next) => {
         ans = await takeAction(userId, path);
       }
       break;
-
     default:
       // Do nothing
       break;
   }
 
   if (ans == false) {
-    console.log(`User has no remaining actions`);
-    //redirect to another html page
+    // Redirect to another html page
     res.status(429).send("User has no remaining actions");
   } else {
     next();
   }
 });
 
+/**
+ * Check if the user has remaining actions to perform a certain action
+ * @param {string} userId - The user ID
+ * @param {string} path - The path of the action
+ * @returns {boolean} - True if the user has remaining actions, false otherwise
+ */
 async function takeAction(userId, path) {
   if (path === undefined) return;
-  console.log(`path: ${path}`);
   try {
     const resp = await isRemainingActions(userId);
-    //add line to json
     let { isNewActionAllowed, remainingActions } = resp;
 
     if (isNewActionAllowed) {
@@ -70,11 +80,11 @@ async function takeAction(userId, path) {
       return false;
     }
   } catch (e) {
-    console.log(`Error Server: ${e.message}`);
+    console.error(`Error Server: ${e.message}`);
   }
 }
 
-//controllers or routes
+// Controllers or routes
 const authController = require("./Controllers/authController");
 const employeeController = require("./Controllers/employeeController");
 const shiftController = require("./Controllers/shiftController");

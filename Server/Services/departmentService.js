@@ -43,7 +43,6 @@ const deleteDepartmentAndEmployees = async (departmentId) => {
   employees.forEach(async (employee) => {
     if (employee.departmentId.equals(departmentId)) {
       await employeeService.deleteEmployee(employee);
-      console.log(`User Deleted Successfully`);
     }
   });
   await departmentRepo.deleteDepartment(departmentId);

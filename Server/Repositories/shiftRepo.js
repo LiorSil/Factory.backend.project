@@ -56,6 +56,5 @@ module.exports = {
   getShift,
   assignShift,
   unassignShift,
-
   updateShift,
 };

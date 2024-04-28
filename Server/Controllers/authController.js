@@ -1,7 +1,6 @@
 // authController.js
 
 const authService = require("../Services/authService");
-const userService = require("../Services/userService");
 const express = require("express");
 
 //import secret key
@@ -20,7 +19,7 @@ router.post("/login", async (req, res) => {
       .json({ message: "user not found", success: resp.success });
   const { name, id } = resp;
 
-  // Generate JWT token upon successful
+  // Create a token
   const secret = process.env.SECRET_KEY;
   const token = jwt.sign({ name, id }, secret, { expiresIn: "1h" });
 

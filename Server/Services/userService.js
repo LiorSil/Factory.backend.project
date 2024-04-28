@@ -95,8 +95,7 @@
 
     //update the cache
     cache.set(user.name, remainingActions);
-    console.log(`cache: ${user.name} ${cache.get(user.name)}`);
-
+   
     try {
       //new data to be added to the json file
       const maxActions = dbUser.num_of_actions;

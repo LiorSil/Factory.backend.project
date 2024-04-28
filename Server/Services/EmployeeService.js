@@ -40,7 +40,7 @@ const deleteEmployee = async (deleteEmployee) => {
     await employeeRepo.deleteEmployee(employee);
     return { status: "success", message: `Employee deleted` };
   } catch (error) {
-    console.log(`Service error: ${error}`);
+    console.error(`Service error: ${error}`);
     return {
       status: "error",
       message: `Failed to delete employee: ${error.message}`,
@@ -93,7 +93,7 @@ const createEmployee = async (
     );
     return { status: "success", message: "Employee created" };
   } catch (error) {
-    console.log(`Service error: ${error}`);
+    console.error(`Service error: ${error}`);
     return {
       status: "error",
       message: `Failed to create employee: ${error.message}`,

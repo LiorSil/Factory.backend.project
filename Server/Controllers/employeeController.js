@@ -1,32 +1,50 @@
-const employeeService = require("../Services/EmployeeService");
-const departmentService = require("../Services/departmentService");
+// Import required services and modules
+const employeeService = require("../Services/EmployeeService"); // Import EmployeeService module
+const departmentService = require("../Services/departmentService"); // Import departmentService module
+const shiftService = require("../Services/shiftService"); // Import shiftService module
+const express = require("express"); // Import express framework
+const router = express.Router(); // Create an instance of Express router
 
-const shiftService = require("../Services/shiftService");
-const express = require("express");
-const router = express.Router();
+/**
+ * Route for managing employees.
+ * Base URL: http://localhost:3000/employees
+ */
 
-// http://localhost:3000/employees
-
+// Route to fetch all employees
 router.get("/", async (req, res) => {
+  /**
+   * Fetch all employees.
+   * @return {Array} Array of employee objects.
+   */
   const employees = await employeeService.getEmployees();
   return res.json(employees);
 });
 
+// Route to create a new employee
 router.post("/", async (req, res) => {
   try {
     const { firstName, lastName, startWorkYear, departmentId } = req.body;
+    /**
+     * Create a new employee.
+     * @param {string} firstName - First name of the employee.
+     * @param {string} lastName - Last name of the employee.
+     * @param {number} startWorkYear - Start year of employment.
+     * @param {string} departmentId - ID of the department to which the employee belongs.
+     * @return {Object} Object containing details of the created employee.
+     */
     const result = await employeeService.createEmployee(
       firstName,
       lastName,
       startWorkYear,
       departmentId
-    );
-    return res.json(result);
+    ); // Create new employee
+    return res.json(result); // Send response with created employee data
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 });
 
+// Route to delete an employee
 router.delete("/", async (req, res) => {
   try {
     const { employee } = req.body;
@@ -45,11 +63,16 @@ router.delete("/", async (req, res) => {
   }
 });
 
+// Route to update an employee
 router.put("/", async (req, res) => {
-  const { employee } = req.body;
+  const { employee } = req.body; // Destructure employee data from request body
   try {
+    /**
+     * Update an existing employee.
+     * @param {Object} employee - Updated details of the employee.
+     * @return {boolean} true if the update is successful, false otherwise.
+     */
     const isUpdated = await employeeService.updateEmployee(employee);
-
     if (isUpdated) {
       return res.json({ message: "Employee updated successfully" });
     } else {
@@ -60,34 +83,4 @@ router.put("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
-  const id = req.params.id;
-  const employee = await employeeService.getEmployeeByID(id);
-
-  return res.json(employee);
-});
-
-router.put("/unassignShift", async (req, res) => {
-  const { shift } = req.body;
-
-  const unassignShiftFromEmployee = await employeeService.unassignShift(shift);
-  const unassignShiftFromShifts = await shiftService.unassignShift(shift);
-
-  const result = {
-    employee: unassignShiftFromEmployee,
-    shift: unassignShiftFromShifts,
-  };
-  return res.json(result);
-});
-
 module.exports = router;
-
-// Routes http://localhost:3000/employees
-// / - GET - get all employees
-// / - POST - create a new employee
-// / - DELETE - delete an employee
-// / - PUT - update an employee
-// /:id - GET - get employee by id
-// /unassignShift - PUT - unassign a shift from an employee + unassign a shift from shifts
-
-// * assignShift is in shiftController.js because it is a shift operation *

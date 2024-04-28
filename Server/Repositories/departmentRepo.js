@@ -14,6 +14,8 @@ const getDepartment = async (id) => {
   return await departmentModel.findById(id);
 };
 
+
+
 const updateDepartment = async (department) => {
   const id = department._id;
   const updatedDepartment = await departmentModel.findById(id);
@@ -23,19 +25,17 @@ const updateDepartment = async (department) => {
 };
 
 const deleteDepartment = async (id) => {
-  const departmentName = await getDepartmentName(id);
   await departmentModel.findByIdAndDelete(id);
 };
 
 const createDepartment = async (name, manager) => {
   const newDepartment = new departmentModel({
-name, manager
+    name,
+    manager,
   });
   await newDepartment.save();
-  return newDepartment._id
-  
+  return newDepartment._id;
 };
-
 
 const updateManager = async (departmentId, employeeId) => {
   const department = await departmentModel.findById(departmentId);
@@ -58,14 +58,3 @@ module.exports = {
   getDepartments,
   getDepartmentByName,
 };
-/**
- 
-getDepartmentV 
-updateDepartment V
-deleteDepartment V
-createDepartment V
-updateManager V
-getAllManagers
-getDepartments
-getDepartmentByName V
- */
