@@ -16,12 +16,6 @@ app.use(cors());
 app.use(express.json());
 app.options("*", cors());
 
-/**
- * Middleware to check if the user has remaining actions to perform certain actions
- * @param {Object} req - The request object
- * @param {Object} res - The response object
- * @param {Function} next - The next middleware function
- */
 app.use(async (req, res, next) => {
   const path = req.url;
 
@@ -60,12 +54,7 @@ app.use(async (req, res, next) => {
   }
 });
 
-/**
- * Check if the user has remaining actions to perform a certain action
- * @param {string} userId - The user ID
- * @param {string} path - The path of the action
- * @returns {boolean} - True if the user has remaining actions, false otherwise
- */
+
 async function takeAction(userId, path) {
   if (path === undefined) return;
   try {
