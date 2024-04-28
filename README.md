@@ -8,6 +8,11 @@ Welcome to the Factory Management System! This system is designed to help manage
 
 [Running In Production Video](https://drive.google.com/file/d/1n2Y26cmCG_RBuJIB84hIYJzmfTfkCWTN/view?usp=drive_link)
 
+
+
+![image](https://github.com/LiorSil/Factory.backend.project/assets/79502469/75852ac7-a379-4d05-bbb3-e16103c6b723)
+
+
 ## System Architecture
 
 - **Server**: Node.js + Express
